@@ -25,8 +25,8 @@ services:
     network_mode: host
     volumes:
       - service_roamer:/roamer
-  wifi-connect:
-    build: ./wifi-connect
+  service_wifi-connect:
+    build: ./service/wifi-connect
     network_mode: "host"
     labels:
       io.balena.features.dbus: '1'
