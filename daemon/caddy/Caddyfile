@@ -1,0 +1,53 @@
+{
+    local_certs
+    auto_https disable_redirects
+    debug
+}
+
+(corsify) {
+    header {
+        Access-Control-Allow-Origin *
+        Access-Control-Allow-Credentials true
+        Access-Control-Allow-Methods *
+        Access-Control-Allow-Headers *
+    }
+}
+
+(harnessify) {
+    file_server {
+        root /harness/{args.0}
+    }
+}
+
+http:// {
+    @options {
+        method OPTIONS
+    }
+
+    @daemon_synapse {
+        header X-Intercepted-Subdomain synapse
+    }
+
+    @harness_cinny {
+        
+    }
+
+    handle @options {
+        import corsify
+        respond 204
+    }
+
+    handle @daemon_synapse {
+        reverse_proxy daemon_synapse
+    }
+
+    handle_path /harness/cinny* {
+        import corsify
+        import harnessify cinny
+    }
+
+    handle {
+        import corsify
+        reverse_proxy daemon_portal
+    }
+}
