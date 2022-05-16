@@ -4,7 +4,7 @@ import { NextApiRequest, NextApiResponse } from 'next'
 const time = (_req: NextApiRequest, res: NextApiResponse) => {
     const fs = require('fs')
     try {
-        const addresses = JSON.parse(fs.readFileSync('./roamer/addresses').toString('utf-8').trim())
+        const addresses = JSON.parse(fs.readFileSync('./service/roamer/addresses').toString('utf-8').trim())
         res.status(200).json({ addresses })
     } catch (e) {
         console.error(e)

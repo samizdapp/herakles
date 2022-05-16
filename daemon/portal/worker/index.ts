@@ -105,11 +105,10 @@ async function maybeRedirectFetch(event: any) {
     const body = ['GET', 'HEAD'].includes(method) ? undefined : await request.blob()
 
     const headerMap = new Map()
-    const [subdomain, _main, tld] = hostname.split('.')
+    const [subdomain] = hostname.split('.')
 
-    if (tld) {
-        headerMap.set("X-Intercepted-Subdomain", subdomain)
-    }
+    headerMap.set("X-Intercepted-Subdomain", subdomain)
+
     for (const [key, value] of _headers) {
         headerMap.set(key, value)
     }
@@ -144,9 +143,6 @@ function shouldHandle(event: any) {
 
 self.addEventListener('fetch', async function (event: any) {
     try {
-
-        // console.log("addre?", address, event.request)
-        // const path = event.request.url.split(event.request.referrer)[1]
         broadcast.postMessage({
             type: 'TRIED_ADDRESS',
             nonce: Date.now(),

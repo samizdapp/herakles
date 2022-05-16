@@ -42,6 +42,6 @@ services:
     build: ./daemon/synapse
     restart: "on-failure"
     expose:
-      - "80"
+      - "8008"
     volumes:
       - daemon_synapse:/data

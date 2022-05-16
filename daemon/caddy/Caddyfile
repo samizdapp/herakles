@@ -28,17 +28,13 @@ http:// {
         header X-Intercepted-Subdomain synapse
     }
 
-    @harness_cinny {
-        
-    }
-
     handle @options {
         import corsify
         respond 204
     }
 
     handle @daemon_synapse {
-        reverse_proxy daemon_synapse
+        reverse_proxy daemon_synapse:8008
     }
 
     handle_path /harness/cinny* {
