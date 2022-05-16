@@ -3006,14 +3006,14 @@ var __webpack_exports__ = {};
 (() => {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _home_ryan_work_roanext_next_node_modules_next_dist_compiled_babel_runtime_helpers_esm_defineProperty__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(1);
+/* harmony import */ var _home_ryan_work_roanext_daemon_portal_node_modules_next_dist_compiled_babel_runtime_helpers_esm_defineProperty__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(1);
 /* harmony import */ var localforage__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(2);
 /* harmony import */ var localforage__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(localforage__WEBPACK_IMPORTED_MODULE_1__);
 
 
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
 
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { (0,_home_ryan_work_roanext_next_node_modules_next_dist_compiled_babel_runtime_helpers_esm_defineProperty__WEBPACK_IMPORTED_MODULE_0__["default"])(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { (0,_home_ryan_work_roanext_daemon_portal_node_modules_next_dist_compiled_babel_runtime_helpers_esm_defineProperty__WEBPACK_IMPORTED_MODULE_0__["default"])(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
 
 
 
@@ -3039,8 +3039,11 @@ self.addEventListener('push', event => {
 });
 const broadcast = new BroadcastChannel('address-channel');
 
-async function getAddress() {
-  const bootstrap = ["localhost", "sam.localhost"];
+async function getAddress(event) {
+  const {
+    hostname
+  } = new URL(event.request.url);
+  const bootstrap = hostname.endsWith('localhost') ? ['192.168.42.1', '127.0.0.1'] : [hostname];
   let addresses = (await localforage__WEBPACK_IMPORTED_MODULE_1___default().getItem('addresses')) || bootstrap; // do {
 
   broadcast.postMessage({
@@ -3049,7 +3052,9 @@ async function getAddress() {
     addresses
   });
   const returned = await Promise.race(addresses.map((addr, i) => {
-    return fetch(`http://${addr}/api/addresses`).then(r => {
+    return fetch(`http://${addr}/api/addresses`, {
+      referrerPolicy: "unsafe-url"
+    }).then(r => {
       broadcast.postMessage({
         type: 'TRIED_ADDRESS',
         nonce: Date.now(),
@@ -3068,12 +3073,12 @@ async function getAddress() {
         addr,
         error: e.toString()
       });
-      return new Promise(r => setTimeout(r, 10000));
+      return new Promise(r => setTimeout(r, 100000));
     });
   }));
 
   if (!returned) {
-    return getAddress();
+    return getAddress(event);
   }
 
   const preferred = addresses[(returned === null || returned === void 0 ? void 0 : returned.index) || 0];
@@ -3086,21 +3091,65 @@ async function getAddress() {
 
   addresses = returned !== null && returned !== void 0 && returned.addresses ? bootstrap.concat(returned.addresses).map(s => s.trim()) : addresses;
   await localforage__WEBPACK_IMPORTED_MODULE_1___default().setItem('addresses', addresses);
-  return preferred; // } while (true)
+  return preferred === 'localhost' ? '127.0.0.1' : preferred; // } while (true)
 }
 
 async function maybeRedirectFetch(event) {
-  const address = await getAddress();
-  const path = event.request.url.split(event.request.referrer)[1];
-  const url = `http://${address}/${path}`;
-  return fetch(url);
+  const address = await getAddress(event);
+  const request = event.request;
+  const {
+    hostname,
+    pathname,
+    searchParams
+  } = new URL(event.request.url);
+  const _headers = request.headers;
+  const mode = request.mode;
+  const method = request.method;
+  const keepalive = request.keepalive;
+  const redirect = request.redirect;
+  const referrer = request.referrer;
+  const referrerPolicy = request.referrerPolicy;
+  const body = ['GET', 'HEAD'].includes(method) ? undefined : await request.blob();
+  const headerMap = new Map();
+  const [subdomain] = hostname.split('.');
+  headerMap.set("X-Intercepted-Subdomain", subdomain);
+
+  for (const [key, value] of _headers) {
+    headerMap.set(key, value);
+  }
+
+  const headers = Object.fromEntries(headerMap);
+  const args = {
+    headers,
+    mode: mode === 'navigate' ? undefined : mode,
+    method,
+    keepalive,
+    redirect,
+    referrer,
+    referrerPolicy,
+    body
+  };
+  const url = `http://${address}${pathname}${searchParams ? `?${searchParams}` : ''}`;
+  console.log(url, args, event.request);
+  return fetch(url, args);
+}
+
+function shouldHandle(event) {
+  const {
+    hostname
+  } = new URL(event.request.url);
+  return hostname.endsWith(self.location.hostname);
 }
 
 self.addEventListener('fetch', async function (event) {
   try {
-    // console.log("addre?", address, event.request)
-    // const path = event.request.url.split(event.request.referrer)[1]
-    if (event.request.url.indexOf('http://localhost/api') == 0 || event.request.url.indexOf('http://sam.localhost/api') == 0) {
+    broadcast.postMessage({
+      type: 'TRIED_ADDRESS',
+      nonce: Date.now(),
+      addr: event.request.url
+    });
+
+    if (shouldHandle(event)) {
       // const url = `http://${preferredAddress}/${path}`
       // console.log('redirect to address', preferredAddress)
       event.respondWith(maybeRedirectFetch(event));

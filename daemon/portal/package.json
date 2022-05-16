@@ -6,6 +6,12 @@
     "start": "next start -p 80"
   },
   "dependencies": {
+    "@emotion/cache": "^11.7.1",
+    "@emotion/react": "^11.9.0",
+    "@emotion/server": "^11.4.0",
+    "@emotion/styled": "^11.8.1",
+    "@mui/icons-material": "^5.0.0-rc.1",
+    "@mui/material": "^5.0.0-rc.1",
     "localforage": "^1.10.0",
     "next": "latest",
     "next-pwa": "^5.4.1",
