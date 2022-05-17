@@ -8,25 +8,7 @@ declare const self: ServiceWorkerGlobalScope
 //
 // self.__WB_DISABLE_DEV_LOGS = true
 
-// listen to message event from window
-self.addEventListener('message', (event: any) => {
-    // HOW TO TEST THIS?
-    // Run this in your browser console:
-    //     window.navigator.serviceWorker.controller.postMessage({command: 'log', message: 'hello world'})
-    // OR use next-pwa injected workbox object
-    //     window.workbox.messageSW({command: 'log', message: 'hello world'})
-    console.log(event?.data);
-});
-
-self.addEventListener('push', (event: any) => {
-    const data = JSON.parse(event?.data.text() || '{}')
-    event?.waitUntil(
-        self.registration.showNotification(data.title, {
-            body: data.message,
-            icon: '/icons/android-chrome-192x192.png'
-        })
-    )
-})
+const _fetch = self.fetch
 
 interface AddressesResponse {
     addresses: Array<string>,
@@ -36,8 +18,8 @@ interface AddressesResponse {
 
 const broadcast = new BroadcastChannel('address-channel');
 
-async function getAddress(event: any): Promise<string> {
-    const { hostname } = new URL(event.request.url)
+async function getAddress(request: any): Promise<string> {
+    const { hostname } = new URL(request.url)
     const bootstrap = hostname.endsWith('localhost') ? ['192.168.42.1', '127.0.0.1'] : [hostname]
     let addresses: Array<string> = (await localforage.getItem('addresses')) || bootstrap
 
@@ -49,7 +31,7 @@ async function getAddress(event: any): Promise<string> {
     })
     const returned: AddressesResponse = await Promise.race(addresses.map((addr, i) => {
 
-        return fetch(`http://${addr}/api/addresses`, { referrerPolicy: "unsafe-url" }).then(r => {
+        return _fetch(`http://${addr}/api/addresses`, { referrerPolicy: "unsafe-url" }).then(r => {
             broadcast.postMessage({
                 type: 'TRIED_ADDRESS',
                 nonce: Date.now(),
@@ -73,7 +55,7 @@ async function getAddress(event: any): Promise<string> {
         })
     }))
     if (!returned) {
-        return getAddress(event)
+        return getAddress(request)
     }
     const preferred = addresses[returned?.index || 0]
     broadcast.postMessage({
@@ -89,12 +71,18 @@ async function getAddress(event: any): Promise<string> {
     // } while (true)
 }
 
-async function maybeRedirectFetch(event: any) {
-    const address = await getAddress(event)
-    const request = event.request
-    const { hostname, pathname, searchParams } = new URL(event.request.url)
+function shouldHandle(request: any) {
+    const { hostname } = new URL(request.url)
 
+    return hostname.endsWith(self.location.hostname) && request.url !== `http://${self.location.hostname}/`
+}
 
+self.fetch = async function maybeRedirectFetch(request: any, options: object) {
+    if (!shouldHandle(request)) {
+        return _fetch(request, options)
+    }
+    const address = await getAddress(request)
+    const { hostname, pathname, searchParams } = new URL(request.url)
     const _headers = request.headers
     const mode = request.mode
     const method = request.method
@@ -123,56 +111,12 @@ async function maybeRedirectFetch(event: any) {
         redirect,
         referrer,
         referrerPolicy,
-        body
+        body,
+        ...options
     }
-
-
-
 
     const url = `http://${address}${pathname}${searchParams ? `?${searchParams}` : ''}`
 
-    console.log(url, args, event.request)
-    return fetch(url, args)
+    return _fetch(url, args)
 }
 
-function shouldHandle(event: any) {
-    const { hostname } = new URL(event.request.url)
-
-    return hostname.endsWith(self.location.hostname) && event.request.url !== `http://${self.location.hostname}/`
-}
-
-self.addEventListener('fetch', async function (event: any) {
-    try {
-        broadcast.postMessage({
-            type: 'TRIED_ADDRESS',
-            nonce: Date.now(),
-            addr: event.request.url
-        });
-
-        if (shouldHandle(event)) {
-            // const url = `http://${preferredAddress}/${path}`
-            // console.log('redirect to address', preferredAddress)
-            event.respondWith(maybeRedirectFetch(event));
-        }
-    } catch (e) {
-        console.error(e)
-    }
-});
-
-self.addEventListener('notificationclick', (event: any) => {
-    event?.notification.close()
-    event?.waitUntil(
-        self.clients.matchAll({ type: 'window', includeUncontrolled: true }).then(function (clientList: any) {
-            if (clientList.length > 0) {
-                let client = clientList[0]
-                for (let i = 0; i < clientList.length; i++) {
-                    if (clientList[i].focused) {
-                        client = clientList[i]
-                    }
-                }
-                return client.focus()
-            }
-            return self.clients.openWindow('/')
-        })
-    )
-})
