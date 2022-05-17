@@ -4,3 +4,6 @@
 [submodule "harness/cinny"]
 	path = harness/cinny
 	url = https://github.com/ajbura/cinny
+[submodule "service/hostname"]
+	path = service/hostname
+	url = https://github.com/balenablocks/hostname

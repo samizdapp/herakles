@@ -3021,28 +3021,13 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 // https://developers.google.com/web/tools/workbox/guides/configure-workbox#disable_logging
 //
 // self.__WB_DISABLE_DEV_LOGS = true
-// listen to message event from window
-self.addEventListener('message', event => {
-  // HOW TO TEST THIS?
-  // Run this in your browser console:
-  //     window.navigator.serviceWorker.controller.postMessage({command: 'log', message: 'hello world'})
-  // OR use next-pwa injected workbox object
-  //     window.workbox.messageSW({command: 'log', message: 'hello world'})
-  console.log(event === null || event === void 0 ? void 0 : event.data);
-});
-self.addEventListener('push', event => {
-  const data = JSON.parse((event === null || event === void 0 ? void 0 : event.data.text()) || '{}');
-  event === null || event === void 0 ? void 0 : event.waitUntil(self.registration.showNotification(data.title, {
-    body: data.message,
-    icon: '/icons/android-chrome-192x192.png'
-  }));
-});
+const _fetch = self.fetch;
 const broadcast = new BroadcastChannel('address-channel');
 
-async function getAddress(event) {
+async function getAddress(request) {
   const {
     hostname
-  } = new URL(event.request.url);
+  } = new URL(request.url);
   const bootstrap = hostname.endsWith('localhost') ? ['192.168.42.1', '127.0.0.1'] : [hostname];
   let addresses = (await localforage__WEBPACK_IMPORTED_MODULE_1___default().getItem('addresses')) || bootstrap; // do {
 
@@ -3052,7 +3037,7 @@ async function getAddress(event) {
     addresses
   });
   const returned = await Promise.race(addresses.map((addr, i) => {
-    return fetch(`http://${addr}/api/addresses`, {
+    return _fetch(`http://${addr}/api/addresses`, {
       referrerPolicy: "unsafe-url"
     }).then(r => {
       broadcast.postMessage({
@@ -3078,7 +3063,7 @@ async function getAddress(event) {
   }));
 
   if (!returned) {
-    return getAddress(event);
+    return getAddress(request);
   }
 
   const preferred = addresses[(returned === null || returned === void 0 ? void 0 : returned.index) || 0];
@@ -3094,14 +3079,24 @@ async function getAddress(event) {
   return preferred === 'localhost' ? '127.0.0.1' : preferred; // } while (true)
 }
 
-async function maybeRedirectFetch(event) {
-  const address = await getAddress(event);
-  const request = event.request;
+function shouldHandle(request) {
+  const {
+    hostname
+  } = new URL(request.url);
+  return hostname.endsWith(self.location.hostname) && request.url !== `http://${self.location.hostname}/`;
+}
+
+self.fetch = async function maybeRedirectFetch(request, options) {
+  if (!shouldHandle(request)) {
+    return _fetch(request, options);
+  }
+
+  const address = await getAddress(request);
   const {
     hostname,
     pathname,
     searchParams
-  } = new URL(event.request.url);
+  } = new URL(request.url);
   const _headers = request.headers;
   const mode = request.mode;
   const method = request.method;
@@ -3119,7 +3114,8 @@ async function maybeRedirectFetch(event) {
   }
 
   const headers = Object.fromEntries(headerMap);
-  const args = {
+
+  const args = _objectSpread({
     headers,
     mode: mode === 'navigate' ? undefined : mode,
     method,
@@ -3128,57 +3124,11 @@ async function maybeRedirectFetch(event) {
     referrer,
     referrerPolicy,
     body
-  };
+  }, options);
+
   const url = `http://${address}${pathname}${searchParams ? `?${searchParams}` : ''}`;
-  console.log(url, args, event.request);
-  return fetch(url, args);
-}
-
-function shouldHandle(event) {
-  const {
-    hostname
-  } = new URL(event.request.url);
-  return hostname.endsWith(self.location.hostname) && event.request.url !== `http://${self.location.hostname}/`;
-}
-
-self.addEventListener('fetch', async function (event) {
-  try {
-    broadcast.postMessage({
-      type: 'TRIED_ADDRESS',
-      nonce: Date.now(),
-      addr: event.request.url
-    });
-
-    if (shouldHandle(event)) {
-      // const url = `http://${preferredAddress}/${path}`
-      // console.log('redirect to address', preferredAddress)
-      event.respondWith(maybeRedirectFetch(event));
-    }
-  } catch (e) {
-    console.error(e);
-  }
-});
-self.addEventListener('notificationclick', event => {
-  event === null || event === void 0 ? void 0 : event.notification.close();
-  event === null || event === void 0 ? void 0 : event.waitUntil(self.clients.matchAll({
-    type: 'window',
-    includeUncontrolled: true
-  }).then(function (clientList) {
-    if (clientList.length > 0) {
-      let client = clientList[0];
-
-      for (let i = 0; i < clientList.length; i++) {
-        if (clientList[i].focused) {
-          client = clientList[i];
-        }
-      }
-
-      return client.focus();
-    }
-
-    return self.clients.openWindow('/');
-  }));
-});
+  return _fetch(url, args);
+};
 })();
 
 /******/ })()
