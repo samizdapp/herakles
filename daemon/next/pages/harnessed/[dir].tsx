@@ -5,9 +5,11 @@ export default function HarnessedPage() {
     query: { dir },
   } = useRouter();
 
+  console.log("router dir?", dir);
+
   return (
     <iframe
-      src={`/harness/${dir}`}
+      src={`/harness/${dir}/`}
       style={{
         position: "fixed",
         top: 0,
