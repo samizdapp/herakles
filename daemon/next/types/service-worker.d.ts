@@ -127,6 +127,6 @@ interface ServiceWorkerGlobalScope {
     addEventListener(event: 'notificationclick', fn: (event?: NotificationEvent) => any): void;
     addEventListener(event: 'sync', fn: (event?: SyncEvent) => any): void;
 
-    fetch(request: Request | string): Promise<Response>;
+    fetch(request: Request | string, init?: object): Promise<Response>;
     skipWaiting(): Promise<void>;
 }

@@ -77,7 +77,7 @@ function shouldHandle(request: any) {
     return hostname.endsWith(self.location.hostname) && request.url !== `http://${self.location.hostname}/`
 }
 
-self.fetch = async function maybeRedirectFetch(request: any, options: object) {
+async function maybeRedirectFetch(request: any, options: object) {
     if (!shouldHandle(request)) {
         return _fetch(request, options)
     }
@@ -120,3 +120,4 @@ self.fetch = async function maybeRedirectFetch(request: any, options: object) {
     return _fetch(url, args)
 }
 
+self.fetch = maybeRedirectFetch
