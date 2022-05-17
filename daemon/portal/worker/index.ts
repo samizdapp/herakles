@@ -69,7 +69,7 @@ async function getAddress(event: any): Promise<string> {
                 addr,
                 error: e.toString()
             });
-            return new Promise(r => setTimeout(r, 100000))
+            return new Promise(r => setTimeout(r, 1000))
         })
     }))
     if (!returned) {
@@ -138,7 +138,7 @@ async function maybeRedirectFetch(event: any) {
 function shouldHandle(event: any) {
     const { hostname } = new URL(event.request.url)
 
-    return hostname.endsWith(self.location.hostname)
+    return hostname.endsWith(self.location.hostname) && event.request.url !== `http://${self.location.hostname}/`
 }
 
 self.addEventListener('fetch', async function (event: any) {

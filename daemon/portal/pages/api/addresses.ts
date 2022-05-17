@@ -7,7 +7,6 @@ const time = (_req: NextApiRequest, res: NextApiResponse) => {
         const addresses = JSON.parse(fs.readFileSync('./service/roamer/addresses').toString('utf-8').trim())
         res.status(200).json({ addresses })
     } catch (e) {
-        console.error(e)
         res.status(200).json({ addresses: [] })
     }
 }

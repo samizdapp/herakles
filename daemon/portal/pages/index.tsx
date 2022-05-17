@@ -1,9 +1,10 @@
-import styles from "../styles/Home.module.css";
 import useSwr from "swr";
 import { useEffect, useState } from "react";
 import BottomNavigation from "@mui/material/BottomNavigation";
 import BottomNavigationAction from "@mui/material/BottomNavigationAction";
 import FavoriteIcon from "@mui/icons-material/Favorite";
+import Paper from "@mui/material/Paper";
+import Link from "next/link";
 
 const fetcher = (...args: [any]) => fetch(...args).then((res) => res.json());
 
@@ -49,28 +50,37 @@ export default function Home() {
 
   return (
     <>
-      <div className={styles.container}>
-        <main className={styles.main}>
-          <h1 className={styles.title}>Herakles</h1>
+      <div>
+        <main>
+          <h1>Herakles</h1>
 
-          <p className={styles.description}>
-            {timeError ? timeError.toString() : clock}
-          </p>
+          <p>{timeError ? timeError.toString() : clock}</p>
           <p>
             Connected via {connection}: {preferred}
           </p>
-          <pre className={styles.description}>
+          <pre>
             {addressError
               ? addressError.toString()
               : JSON.stringify(addresses?.addresses, null, 2)}
           </pre>
-          <pre className={styles.description}>{preferred}</pre>
-          <pre className={styles.description}>{tried}</pre>
-          <pre className={styles.description}>{log.join("\n")}</pre>
+          <pre>{preferred}</pre>
+          <pre>{tried}</pre>
+          <pre>{log.join("\n")}</pre>
         </main>
-        <BottomNavigation showLabels>
-          <BottomNavigationAction label="Favorites" icon={<FavoriteIcon />} />
-        </BottomNavigation>
+
+        <Paper
+          sx={{ position: "fixed", bottom: 0, left: 0, right: 0 }}
+          elevation={3}
+        >
+          <BottomNavigation showLabels>
+            <Link href="/harness/cinny">
+              <BottomNavigationAction
+                label="Favorites"
+                icon={<FavoriteIcon />}
+              />
+            </Link>
+          </BottomNavigation>
+        </Paper>
       </div>
     </>
   );
