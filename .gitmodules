@@ -6,4 +6,4 @@
 	url = https://github.com/ajbura/cinny
 [submodule "service/hostname"]
 	path = service/hostname
-	url = https://github.com/balenablocks/hostname
+	url = https://github.com/samizdapp/hostname
