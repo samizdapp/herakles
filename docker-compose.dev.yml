@@ -1,4 +1,4 @@
-version: '3'
+version: '2'
 services:
   daemon_next:
     command: "npm run dev"
