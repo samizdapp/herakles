@@ -44,6 +44,6 @@ http:// {
 
     handle {
         import corsify
-        reverse_proxy daemon_portal
+        reverse_proxy daemon_next
     }
 }

@@ -13,8 +13,8 @@ services:
       - "8443:8443"
     volumes:
       - harness_cinny:/harness/cinny
-  daemon_portal:
-    build: ./daemon/portal
+  daemon_next:
+    build: ./daemon/next
     restart: always
     expose:
       - "80"
