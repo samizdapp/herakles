@@ -48,7 +48,7 @@ const Puller = styled(Box)(({ theme }) => ({
   left: "calc(50% - 15px)",
 }));
 
-export default function SwipeableEdgeDrawer({ harnessed: _harnessed }: Props) {
+export default function SwipeableEdgeDrawer({ harnessed }: Props) {
   const [open, setOpen] = useState(false);
 
   const toggleDrawer = (newOpen: boolean) => () => {
@@ -102,16 +102,18 @@ export default function SwipeableEdgeDrawer({ harnessed: _harnessed }: Props) {
           <Divider />
           <nav aria-label="harnessed frontends">
             <List>
-              <ListItem disablePadding>
-                <Link href="/harnessed/cinny">
-                  <ListItemButton>
-                    <ListItemIcon>
-                      <ExitToApp />
-                    </ListItemIcon>
-                    <ListItemText primary="Cinny" />
-                  </ListItemButton>
-                </Link>
-              </ListItem>
+              {harnessed.map((dir: string) => (
+                <ListItem key={dir} disablePadding>
+                  <Link href={`/harnessed/${dir}`}>
+                    <ListItemButton>
+                      <ListItemIcon>
+                        <ExitToApp />
+                      </ListItemIcon>
+                      <ListItemText primary={dir} />
+                    </ListItemButton>
+                  </Link>
+                </ListItem>
+              ))}
             </List>
           </nav>
         </StyledBox>
