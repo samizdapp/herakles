@@ -73,7 +73,7 @@ export default function Home() {
           elevation={3}
         >
           <BottomNavigation showLabels>
-            <Link href="/harness/cinny">
+            <Link href="/harnessed/cinny">
               <BottomNavigationAction
                 label="Favorites"
                 icon={<FavoriteIcon />}

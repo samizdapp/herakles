@@ -14,9 +14,7 @@
 }
 
 (harnessify) {
-    file_server {
-        root /harness/{args.0}
-    }
+
 }
 
 http:// {
@@ -37,9 +35,11 @@ http:// {
         reverse_proxy daemon_synapse:8008
     }
 
-    handle_path /harness/cinny/* {
+    handle_path /harness/* {
         import corsify
-        import harnessify cinny
+        file_server {
+            root /harness/
+        }
     }
 
     handle {
