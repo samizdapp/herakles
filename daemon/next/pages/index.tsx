@@ -1,6 +1,7 @@
 import useSwr from "swr";
 import { useEffect, useState } from "react";
 import HomeLayout from "../layouts/home";
+import TextField from "@mui/material/TextField";
 
 const fetcher = (...args: [any]) => fetch(...args).then((res) => res.json());
 
@@ -16,6 +17,16 @@ export default function Home() {
   const [tried, setTried] = useState("");
   const [preferred, setPreferred] = useState("");
   const [log, setLog] = useState([""]);
+  const [hostname, setHostname] = useState("");
+
+  useEffect(() => {
+    if (hostname) {
+      fetch("/api/hostname", {
+        method: "POST",
+        body: JSON.stringify({ hostname }),
+      });
+    }
+  }, [hostname]);
 
   useEffect(() => {
     const broadcast = new BroadcastChannel("address-channel");
@@ -49,6 +60,12 @@ export default function Home() {
       <div>
         <main>
           <h1>Herakles still after build?</h1>
+          <TextField
+            id="filled-basic"
+            label="Filled"
+            variant="filled"
+            onChange={(e) => setHostname(e.target.value)}
+          />
           <p>{timeError ? timeError.toString() : clock}</p>
           <p>
             Connected via {connection}: {preferred}
