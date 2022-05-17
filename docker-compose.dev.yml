@@ -1,7 +1,10 @@
 version: '3'
 services:
   daemon_next:
-    command: "./dev.sh"
+    command: "npm run dev"
+    build:
+      context: ./daemon/next
+      dockerfile: Dockerfile.dev
     volumes:
       - ./daemon/next/:/usr/src/app
       - ./daemon/next/.next:/usr/src/app/.next

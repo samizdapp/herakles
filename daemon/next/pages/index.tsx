@@ -48,7 +48,7 @@ export default function Home() {
     <HomeLayout>
       <div>
         <main>
-          <h1>Herakles</h1>
+          <h1>Herakles still after build?</h1>
           <p>{timeError ? timeError.toString() : clock}</p>
           <p>
             Connected via {connection}: {preferred}
