@@ -37,9 +37,6 @@ services:
       - "8008"
     volumes:
       - daemon_synapse:/data
-  
-
-  # Comment out when developing on localhost   
   service_wifi-connect:
     build: ./service/wifi-connect
     network_mode: "host"
@@ -49,3 +46,11 @@ services:
       - NET_ADMIN
     environment:
       DBUS_SYSTEM_BUS_ADDRESS: "unix:path=/host/run/dbus/system_bus_socket"
+
+  hostname:
+    image: bh.cr/g_tomas_migone1/hostname
+    restart: no                               # Required to avoid container restarting indefinitely
+    labels:
+      io.balena.features.supervisor-api: 1    # Required to interact with the supervisor
+    environment:
+      SET_HOSTNAME: home
