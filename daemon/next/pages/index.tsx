@@ -21,10 +21,14 @@ export default function Home() {
 
   useEffect(() => {
     if (hostname) {
-      fetch("/api/hostname", {
-        method: "POST",
-        body: JSON.stringify({ hostname }),
-      });
+      console.log("hostname change", hostname);
+      const updateHostname = async (hostname: string) => {
+        await fetch("/api/hostname", {
+          method: "POST",
+          body: JSON.stringify({ hostname }),
+        });
+      };
+      updateHostname(hostname).catch(console.error);
     }
   }, [hostname]);
 
