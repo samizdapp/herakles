@@ -1,0 +1,10 @@
+version: '3'
+services:
+  daemon_next:
+    command: "./dev.sh"
+    volumes:
+      - ./daemon/next/:/usr/src/app
+      - ./daemon/next/.next:/usr/src/app/.next
+      - next_modules:/usr/src/app/node_modules
+volumes:
+  next_modules:
