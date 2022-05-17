@@ -37,7 +37,7 @@ http:// {
         reverse_proxy daemon_synapse:8008
     }
 
-    handle_path /harness/cinny* {
+    handle_path /harness/cinny/* {
         import corsify
         import harnessify cinny
     }
