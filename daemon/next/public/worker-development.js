@@ -3086,7 +3086,7 @@ function shouldHandle(request) {
   return hostname.endsWith(self.location.hostname) && request.url !== `http://${self.location.hostname}/`;
 }
 
-self.fetch = async function maybeRedirectFetch(request, options) {
+async function maybeRedirectFetch(request, options) {
   if (!shouldHandle(request)) {
     return _fetch(request, options);
   }
@@ -3128,7 +3128,9 @@ self.fetch = async function maybeRedirectFetch(request, options) {
 
   const url = `http://${address}${pathname}${searchParams ? `?${searchParams}` : ''}`;
   return _fetch(url, args);
-};
+}
+
+self.fetch = maybeRedirectFetch;
 })();
 
 /******/ })()

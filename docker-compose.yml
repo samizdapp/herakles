@@ -3,6 +3,7 @@ volumes:
   service_roamer:
   harness_cinny:
   daemon_synapse:
+  service_hostname:
 services:
   daemon_caddy:
     build: ./daemon/caddy
@@ -50,7 +51,7 @@ services:
 
   service_hostname:
     build: ./service/hostname
-    restart: no # Required to avoid container restarting indefinitely
+    restart: "no" # Required to avoid container restarting indefinitely
     labels:
       io.balena.features.supervisor-api: 1 # Required to interact with the supervisor
     environment:
