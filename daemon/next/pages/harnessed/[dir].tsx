@@ -1,11 +1,10 @@
+// @ts-ignore
 import { useRouter } from "next/router";
 
 export default function HarnessedPage() {
   const {
     query: { dir },
   } = useRouter();
-
-  console.log("router dir?", dir);
 
   return (
     <iframe
