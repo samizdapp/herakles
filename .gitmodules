@@ -7,3 +7,6 @@
 [submodule "service/hostname"]
 	path = service/hostname
 	url = https://github.com/samizdapp/hostname
+[submodule "service/yggdrasil"]
+	path = service/yggdrasil
+	url = https://github.com/samizdapp/yggdrasil-go
