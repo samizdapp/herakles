@@ -1,12 +1,12 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-import { exec } from 'node:child_process'
+// import { exec } from 'node:child_process'
 import fs from 'node:fs/promises'
 import { NextApiRequest, NextApiResponse } from 'next'
 
-const asyncExec = async (cmd: string) => new Promise((resolve, reject) => exec(cmd, (err, res) => {
-  if (err) return reject(err)
-  resolve(res)
-}))
+// const _asyncExec = async (cmd: string) => new Promise((resolve, reject) => exec(cmd, (err, res) => {
+//   if (err) return reject(err)
+//   resolve(res)
+// }))
 
 const getCurrent = async () => {
   const buf = await fs.readFile('./service/hostname/current')

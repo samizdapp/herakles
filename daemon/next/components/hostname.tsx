@@ -42,7 +42,7 @@ function getStatusText(status: string) {
 
 const wait = async (ms = 2000) => new Promise((r) => setTimeout(r, ms));
 
-const canPingHost = async (host: string, timeout = 10000) => {
+const canPingHost = async (host: string, timeout = 600000) => {
   const start = Date.now();
 
   do {
@@ -52,18 +52,19 @@ const canPingHost = async (host: string, timeout = 10000) => {
     });
 
     if (res?.status === 200) return true;
+    await wait();
   } while (Date.now() < start + timeout);
 
   throw new Error(`unable to ping new host: ${host}.local`);
 };
 
-export default function HostnameUpdater({ next = () => {} }) {
+export default function HostnameUpdater({ next = (_host: string) => {} }) {
   const { data: hostData, error: _swrError } = useSWR("/api/hostname", fetcher);
   const hostname = hostData?.hostname;
   const [currentHost, setCurrentHost] = useState(hostname);
   const [newhost, setNewhost] = useState("");
   const [status, setStatus] = useState(statuses[0]);
-  const [error, setError] = useState(null);
+  const [_error, setError] = useState(null);
 
   const step = statuses.indexOf(status);
   const percent = Math.round((step / (statuses.length - 2)) * 100);
@@ -167,7 +168,7 @@ export default function HostnameUpdater({ next = () => {} }) {
       </Grid>
       <Grid item xs={12}>
         <Collapse in={percent === 100}>
-          <Button variant={"contained"} onClick={next}>
+          <Button variant={"contained"} onClick={() => next(newhost)}>
             Next
           </Button>
         </Collapse>
