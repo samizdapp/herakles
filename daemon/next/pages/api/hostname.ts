@@ -19,7 +19,6 @@ const checkUpdate = async (newHost: string, timeout = 5000) => {
   do {
     const buf = await getCurrent()
     const hostname = buf.toString().trim()
-    console.log('compare', hostname, newHost)
     if (hostname === newHost) return true;
   } while (Date.now() < start + timeout)
 
@@ -38,9 +37,7 @@ const hostname = async (req: NextApiRequest, res: NextApiResponse) => {
         const hostname = await getCurrent()
         return res.status(200).json({ hostname })
       case 'PUT':
-        console.log('got hostname update', body?.hostname)
         await fs.writeFile('./service/hostname/update', body.hostname)
-        console.log('wrote to update file')
         const success = await checkUpdate(body.hostname)
         return res.status(success ? 200 : 500).end()
       default:
