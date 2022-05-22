@@ -1,6 +1,7 @@
 #!/bin/bash
 
 git submodule update
+cp .env.sample .env
 
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
 
