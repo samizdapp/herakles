@@ -23,9 +23,9 @@ export default function UnsupportedGuide({ activeStep = "0" }) {
       </Stepper>
       {activeNum === 0 ? (
         <Hostname
-          next={(host: string) => {
-            location.href = `http://${host}.local/setup/chrome?active=1`;
-          }}
+        // next={(host: string) => {
+        //   location.href = `http://${host}.local/setup/chrome?active=1`;
+        // }}
         />
       ) : (
         <Trust />

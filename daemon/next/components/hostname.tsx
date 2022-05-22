@@ -58,7 +58,7 @@ const canPingHost = async (host: string, timeout = 600000) => {
   throw new Error(`unable to ping new host: ${host}.local`);
 };
 
-export default function HostnameUpdater({ next = (_host: string) => {} }) {
+export default function HostnameUpdater() {
   const { data: hostData, error: _swrError } = useSWR("/api/hostname", fetcher);
   const hostname = hostData?.hostname;
   const [currentHost, setCurrentHost] = useState(hostname);
@@ -168,7 +168,10 @@ export default function HostnameUpdater({ next = (_host: string) => {} }) {
       </Grid>
       <Grid item xs={12}>
         <Collapse in={percent === 100}>
-          <Button variant={"contained"} onClick={() => next(newhost)}>
+          <Button
+            variant={"contained"}
+            onClick={() => navigator.share({ url: "chrome://flags" })}
+          >
             Next
           </Button>
         </Collapse>
