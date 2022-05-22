@@ -7,12 +7,6 @@
 [submodule "service/hostname"]
 	path = service/hostname
 	url = https://github.com/samizdapp/hostname
-[submodule "service/yggdrasil"]
-	path = service/yggdrasil
-	url = https://github.com/samizdapp/yggdrasil-go
-[submodule "service/yggdrasil-crawler"]
-	path = service/yggdrasil-crawler
-	url = https://github.com/wafflecomposite/yggdrasil-crawler-python
 [submodule "app"]
 	path = app
 	url = git@github.com:samizdapp/herakles-expo
