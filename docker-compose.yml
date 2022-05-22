@@ -1,8 +1,6 @@
 version: '2'
 volumes:
   service_upnp:
-  harness_cinny:
-  daemon_synapse:
   service_hostname:
 services:
   daemon_caddy:
@@ -12,8 +10,8 @@ services:
       - "80:80"
       - "443:443"
       - "8443:8443"
-    volumes:
-      - harness_cinny:/harness/cinny
+    # volumes:
+    #   - harness_cinny:/harness/cinny
   daemon_next:
     build: ./daemon/next
     restart: always
@@ -22,7 +20,7 @@ services:
     volumes:
       - service_upnp:/usr/src/app/service/upnp
       - service_hostname:/usr/src/app/service/hostname
-      - harness_cinny:/usr/src/app/harness/cinny
+      # - harness_cinny:/usr/src/app/harness/cinny
   service_upnp:
     build: ./service/upnp
     network_mode: host
