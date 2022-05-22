@@ -28,17 +28,6 @@ services:
     network_mode: host
     volumes:
       - service_upnp:/upnp
-  # harness_cinny:
-  #   build: ./harness/cinny
-  #   volumes:
-  #     - harness_cinny:/src/dist
-  # daemon_synapse:
-  #   build: ./daemon/synapse
-  #   restart: "on-failure"
-  #   expose:
-  #     - "8008"
-  #   volumes:
-  #     - daemon_synapse:/data
   service_wifi-connect:
     build: ./service/wifi-connect
     network_mode: "host"
@@ -58,6 +47,7 @@ services:
       SET_HOSTNAME: setup
     volumes:
       - service_hostname:/service/hostname
+  # These will eventually live in an inherited project, but until they have a home they are saved here
   # service_yggdrasil:
   #   # https://stackoverflow.com/a/37090165
   #   build:
@@ -74,3 +64,14 @@ services:
   #   volumes:
   #     - service_yggdrasil_sock:/var/run/yg
   #   # restart: "always"
+  # harness_cinny:
+  #   build: ./harness/cinny
+  #   volumes:
+  #     - harness_cinny:/src/dist
+  # daemon_synapse:
+  #   build: ./daemon/synapse
+  #   restart: "on-failure"
+  #   expose:
+  #     - "8008"
+  #   volumes:
+  #     - daemon_synapse:/data
