@@ -16,3 +16,6 @@
 [submodule "app"]
 	path = app
 	url = git@github.com:samizdapp/herakles-expo
+[submodule "lib"]
+	path = lib
+	url = git@github.com:samizdapp/herakles-lib
