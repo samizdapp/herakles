@@ -13,6 +13,3 @@
 [submodule "daemon/next"]
 	path = daemon/next
 	url = git@github.com:samizdapp/herakles-next
-[submodule "daemon/synapse"]
-	path = daemon/synapse
-	url = git@github.com:samizdapp/synapse
