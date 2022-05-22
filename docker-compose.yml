@@ -1,6 +1,6 @@
 version: '2'
 volumes:
-  service_roamer:
+  service_upnp:
   harness_cinny:
   daemon_synapse:
   service_hostname:
@@ -20,14 +20,14 @@ services:
     expose:
       - "80"
     volumes:
-      - service_roamer:/usr/src/app/service/roamer
+      - service_upnp:/usr/src/app/service/upnp
       - service_hostname:/usr/src/app/service/hostname
       - harness_cinny:/usr/src/app/harness/cinny
-  service_roamer:
-    build: ./service/roamer
+  service_upnp:
+    build: ./service/upnp
     network_mode: host
     volumes:
-      - service_roamer:/roamer
+      - service_upnp:/upnp
   # harness_cinny:
   #   build: ./harness/cinny
   #   volumes:
