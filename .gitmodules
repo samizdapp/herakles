@@ -16,3 +16,6 @@
 [submodule "daemon/synapse"]
 	path = daemon/synapse
 	url = git@github.com:samizdapp/synapse
+[submodule "service/upnp"]
+	path = service/upnp
+	url = git@github.com:samizdapp/herakles-upnp
