@@ -19,3 +19,6 @@
 [submodule "service/upnp"]
 	path = service/upnp
 	url = git@github.com:samizdapp/herakles-upnp
+[submodule "daemon/caddy"]
+	path = daemon/caddy
+	url = git@github.com:samizdapp/herakles-caddy.git
