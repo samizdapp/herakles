@@ -10,6 +10,7 @@ services:
       - ./daemon/next/:/usr/src/app
       - ./daemon/next/.next:/usr/src/app/.next
       - ./daemon/next/node_modules:/usr/src/app/node_modules
+      - ./lib:/usr/src/app/node_modules/herakles-lib
       - service_hostname_local:/usr/src/app/service/hostname
   app:
     build:
@@ -24,6 +25,7 @@ services:
     volumes:
       - ./app:/usr/src/app
       - ./app/node_modules:/usr/src/app/node_modules
+      - ./lib:/usr/src/app/node_modules/herakles-lib
   service_hostname:
     build:
       context: ./service/hostname

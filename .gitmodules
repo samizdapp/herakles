@@ -22,3 +22,6 @@
 [submodule "daemon/caddy"]
 	path = daemon/caddy
 	url = git@github.com:samizdapp/herakles-caddy.git
+[submodule "harness/cinny"]
+	path = harness/cinny
+	url = https://github.com/samizdapp/cinny
