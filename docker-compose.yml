@@ -2,6 +2,9 @@ version: '2'
 volumes:
   service_upnp:
   service_hostname:
+  harness__cinny:
+  daemon_synapse:
+  proxy_nm: 
 services:
   daemon_caddy:
     build: ./daemon/caddy
@@ -10,8 +13,10 @@ services:
       - "80:80"
       - "443:443"
       - "8443:8443"
-    # volumes:
-    #   - harness_cinny:/harness/cinny
+      - "4000:4000"
+      - "4001:4001"
+    volumes:
+      - harness__cinny:/harness/cinny
   daemon_next:
     build: ./daemon/next
     restart: always
@@ -20,7 +25,7 @@ services:
     volumes:
       - service_upnp:/usr/src/app/service/upnp
       - service_hostname:/usr/src/app/service/hostname
-      # - harness_cinny:/usr/src/app/harness/cinny
+      - harness__cinny:/usr/src/app/harness/cinny
   service_upnp:
     build: ./service/upnp
     network_mode: host
@@ -45,6 +50,17 @@ services:
       SET_HOSTNAME: setup
     volumes:
       - service_hostname:/service/hostname
+  
+  daemon_proxy:
+    build: ./lib
+    labels:
+      io.balena.features.dbus: '1'
+    privileged: true
+    restart: always
+    volumes:
+      - service_upnp:/proxy/upnp
+    expose:
+      - "4000"
   # These will eventually live in an inherited project, but until they have a home they are saved here
   # service_yggdrasil:
   #   # https://stackoverflow.com/a/37090165
@@ -62,14 +78,16 @@ services:
   #   volumes:
   #     - service_yggdrasil_sock:/var/run/yg
   #   # restart: "always"
-  # harness_cinny:
-  #   build: ./harness/cinny
-  #   volumes:
-  #     - harness_cinny:/src/dist
-  # daemon_synapse:
-  #   build: ./daemon/synapse
-  #   restart: "on-failure"
-  #   expose:
-  #     - "8008"
-  #   volumes:
-  #     - daemon_synapse:/data
+  harness__cinny:
+    build: ./harness/cinny
+    volumes:
+      - harness__cinny:/src/dist
+  daemon_synapse:
+    build: ./daemon/synapse
+    restart: "on-failure"
+    expose:
+      - "8008"
+    ports: 
+      - "8008:8008"
+    volumes:
+      - daemon_synapse:/data
