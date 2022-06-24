@@ -5,10 +5,14 @@ volumes:
   harness__cinny:
   daemon_synapse:
   proxy_nm: 
+  service_yggdrasil:
+  service_yggdrasil_sock:
+  shared_etc: 
 services:
   daemon_caddy:
     build: ./daemon/caddy
     restart: always
+    network_mode: host
     ports:
       - "80:80"
       - "443:443"
@@ -20,6 +24,7 @@ services:
   daemon_next:
     build: ./daemon/next
     restart: always
+    network_mode: host
     expose:
       - "80"
     volumes:
@@ -44,6 +49,7 @@ services:
   service_hostname:
     build: ./service/hostname
     restart: "no" # Required to avoid container restarting indefinitely
+    network_mode: host
     labels:
       io.balena.features.supervisor-api: 1 # Required to interact with the supervisor
     environment:
@@ -56,28 +62,33 @@ services:
     labels:
       io.balena.features.dbus: '1'
     privileged: true
+    network_mode: host
     restart: always
     volumes:
       - service_upnp:/proxy/upnp
     expose:
-      - "4000"
+      - "8000"
   # These will eventually live in an inherited project, but until they have a home they are saved here
-  # service_yggdrasil:
-  #   # https://stackoverflow.com/a/37090165
-  #   build:
-  #     context: ./service/yggdrasil
-  #   privileged: true
-  #   network_mode: host
-  #   volumes:
-  #     - service_yggdrasil3:/etc/yggdrasil-network
-  #     - service_yggdrasil_sock:/var/run/yg
-  # service_yggdrasil-crawler:
-  #   build: ./service/yggdrasil-crawler
-  #   privileged: true
-  #   network_mode: host
-  #   volumes:
-  #     - service_yggdrasil_sock:/var/run/yg
-  #   # restart: "always"
+  service_yggdrasil:
+    # https://stackoverflow.com/a/37090165
+    build:
+      context: ./service/yggdrasil/
+      dockerfile: ./contrib/docker/Dockerfile
+    privileged: true
+    network_mode: host
+    expose:
+      - "9001"
+    volumes:
+      - service_yggdrasil:/etc/yggdrasil-network
+      - service_yggdrasil_sock:/var/run/
+  service_yggdrasil-peers:
+    build: ./service/yggdrasil-peers
+    privileged: true
+    network_mode: host
+    volumes:
+      - service_yggdrasil_sock:/var/run/
+      - shared_etc:/peers/
+    # restart: "always"
   harness__cinny:
     build: ./harness/cinny
     volumes:
@@ -85,9 +96,11 @@ services:
   daemon_synapse:
     build: ./daemon/synapse
     restart: "on-failure"
+    network_mode: host
     expose:
       - "8008"
     ports: 
       - "8008:8008"
     volumes:
       - daemon_synapse:/data
+      - shared_etc:/etc

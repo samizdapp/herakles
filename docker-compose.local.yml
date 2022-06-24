@@ -38,5 +38,10 @@ services:
     volumes:
       - ./lib:/proxy
       - ./lib/node_modules:/proxy/node_modules
+  service_yggdrasil:
+    # https://stackoverflow.com/a/37090165
+    volumes:
+      - /etc/yggdrasil-network:/etc/yggdrasil-network
+      - /var/run/:/var/run/
 volumes:
   service_hostname_local:
