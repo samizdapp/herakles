@@ -25,3 +25,9 @@
 [submodule "harness/cinny"]
 	path = harness/cinny
 	url = https://github.com/samizdapp/cinny
+[submodule "service/yggdrasil-peers"]
+	path = service/yggdrasil-peers
+	url = https://github.com/samizdapp/yggdrasil-peers
+[submodule "service/yggdrasil"]
+	path = service/yggdrasil
+	url = https://github.com/samizdapp/yggdrasil-go
