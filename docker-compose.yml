@@ -75,6 +75,7 @@ services:
       context: ./service/yggdrasil/
       dockerfile: ./contrib/docker/Dockerfile
     privileged: true
+    restart: "always"
     network_mode: host
     expose:
       - "9001"
@@ -88,14 +89,14 @@ services:
     volumes:
       - service_yggdrasil_sock:/var/run/
       - shared_etc:/peers/
-    # restart: "always"
+    restart: "always"
   harness__cinny:
     build: ./harness/cinny
     volumes:
       - harness__cinny:/src/dist
   daemon_synapse:
     build: ./daemon/synapse
-    restart: "on-failure"
+    restart: "always"
     network_mode: host
     expose:
       - "8008"
@@ -104,3 +105,4 @@ services:
     volumes:
       - daemon_synapse:/data
       - shared_etc:/etc
+      - service_yggdrasil:/yggdrasil
