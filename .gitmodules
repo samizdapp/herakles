@@ -28,9 +28,11 @@
 [submodule "service/yggdrasil-peers"]
 	path = service/yggdrasil-peers
 	url = https://github.com/samizdapp/yggdrasil-peers
+	branch = master
 [submodule "service/yggdrasil"]
 	path = service/yggdrasil
 	url = https://github.com/samizdapp/yggdrasil-go
+	branch = develop
 [submodule "daemon/pleroma"]
 	path = daemon/pleroma
 	url = git@github.com:samizdapp/docker-pleroma
