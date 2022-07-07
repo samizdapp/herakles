@@ -33,10 +33,7 @@
 	path = service/yggdrasil
 	url = https://github.com/samizdapp/yggdrasil-go
 	branch = develop
-[submodule "daemon/pleroma"]
-	path = daemon/pleroma
-	url = git@github.com:samizdapp/pleroma
-	branch = stable
 [submodule "newpleroma"]
 	path = daemon/pleroma
 	url = git@github.com:samizdapp/pleroma
+	branch = stable
