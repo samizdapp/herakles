@@ -35,4 +35,5 @@
 	branch = develop
 [submodule "daemon/pleroma"]
 	path = daemon/pleroma
-	url = git@github.com:samizdapp/docker-pleroma
+	url = git@github.com:samizdapp/pleroma
+	branch = stable
