@@ -37,3 +37,6 @@
 	path = daemon/pleroma
 	url = git@github.com:samizdapp/pleroma
 	branch = stable
+[submodule "newpleroma"]
+	path = daemon/pleroma
+	url = git@github.com:samizdapp/pleroma
