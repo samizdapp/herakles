@@ -8,7 +8,7 @@ volumes:
   service_yggdrasil:
   service_yggdrasil_sock:
   shared_etc: 
-  postgres_5:
+  postgres_9:
   pleroma_5:
 services:
   daemon_caddy:
@@ -33,15 +33,15 @@ services:
       - service_upnp:/usr/src/app/service/upnp
       - service_hostname:/usr/src/app/service/hostname
       - harness___cinny:/usr/src/app/harness/cinny
-  pleroma:
+  daemon_pleroma:
     restart: always
-    ports:
-      - '8009:4000'
+    network_mode: host
     build:
       context: ./daemon/pleroma
     volumes:
       - pleroma_5:/var/lib/pleroma/
       - shared_etc:/shared_etc
+      - service_yggdrasil:/yggdrasil
     environment:
       DOMAIN: exmaple.com
       INSTANCE_NAME: Pleroma
@@ -50,18 +50,19 @@ services:
       DB_USER: pleroma
       DB_PASS: ChangeMe!
       DB_NAME: pleroma
-      DB_HOST: postgres
+      DB_HOST: localhost
     depends_on:
       - postgres
   postgres:
     image: postgres:12.1-alpine
     restart: always
+    network_mode: host
     environment:
       POSTGRES_USER: pleroma
       POSTGRES_PASSWORD: ChangeMe!
       POSTGRES_DB: pleroma
     volumes:
-      - postgres_5:/var/lib/postgresql/data
+      - postgres_9:/var/lib/postgresql/data
   service_upnp:
     build: ./service/upnp
     network_mode: host

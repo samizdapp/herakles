@@ -46,5 +46,8 @@ services:
   daemon_synapse:
     volumes:
       - /etc/yggdrasil-network:/yggdrasil
+  daemon_pleroma:
+    volumes:
+      - /etc/yggdrasil-network:/yggdrasil
 volumes:
   service_hostname_local:
