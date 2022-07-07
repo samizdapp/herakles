@@ -1,6 +1,6 @@
 [submodule "service/wifi-connect"]
 	path = service/wifi-connect
-	url = https://github.com/balena-os/wifi-connect
+	url = git@github.com:samizdapp/wifi-connect
 [submodule "service/hostname"]
 	path = service/hostname
 	url = https://github.com/samizdapp/hostname
