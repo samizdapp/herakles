@@ -38,7 +38,7 @@ services:
     ports:
       - '8009:4000'
     build:
-      context: ./daemon/pler
+      context: ./daemon/pleroma
     volumes:
       - pleroma_5:/var/lib/pleroma/
       - shared_etc:/shared_etc
