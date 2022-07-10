@@ -118,6 +118,7 @@ services:
     build: ./service/yggdrasil-peers
     privileged: true
     network_mode: host
+    cpu_shares: 256
     volumes:
       - service_yggdrasil_sock:/var/run/
       - shared_etc:/peers/
