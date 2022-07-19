@@ -1,0 +1,11 @@
+pleroma/.*
+pleroma/*.md
+pleroma/AGPL-3
+pleroma/CC-BY-SA-4.0
+pleroma/COPYING
+pleroma/*file
+pleroma/elixir_buildpack.config
+pleroma/test/
+
+# Required to get version
+pleroma/!.git
