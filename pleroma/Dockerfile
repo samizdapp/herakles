@@ -14,9 +14,6 @@ RUN apk add git gcc g++ musl-dev make cmake file-dev &&\
 
 FROM alpine:3.16
 
-ARG BUILD_DATE
-ARG VCS_REF
-
 LABEL maintainer="ops@pleroma.social" \
 	org.opencontainers.image.title="pleroma" \
 	org.opencontainers.image.description="Pleroma for Docker" \
@@ -24,9 +21,7 @@ LABEL maintainer="ops@pleroma.social" \
 	org.opencontainers.image.vendor="pleroma.social" \
 	org.opencontainers.image.documentation="https://git.pleroma.social/pleroma/pleroma" \
 	org.opencontainers.image.licenses="AGPL-3.0" \
-	org.opencontainers.image.url="https://pleroma.social" \
-	org.opencontainers.image.revision=$VCS_REF \
-	org.opencontainers.image.created=$BUILD_DATE
+	org.opencontainers.image.url="https://pleroma.social" 
 
 ARG HOME=/opt/pleroma
 ARG DATA=/var/lib/pleroma

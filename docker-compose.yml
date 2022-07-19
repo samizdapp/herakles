@@ -125,19 +125,19 @@ services:
       - service_yggdrasil_sock:/var/run/
       - shared_etc:/peers/
     restart: "always"
-  harness__cinny:
-    build: ./harness/cinny
-    volumes:
-      - harness___cinny:/src/dist
-  daemon_synapse:
-    build: ./daemon/synapse
-    restart: "always"
-    network_mode: host
-    expose:
-      - "8008"
-    ports: 
-      - "8008:8008"
-    volumes:
-      - daemon_synapse:/data
-      - shared_etc:/etc
-      - service_yggdrasil:/yggdrasil
+  # harness__cinny:
+  #   build: ./harness/cinny
+  #   volumes:
+  #     - harness___cinny:/src/dist
+  # daemon_synapse:
+  #   build: ./daemon/synapse
+  #   restart: "always"
+  #   network_mode: host
+  #   expose:
+  #     - "8008"
+  #   ports: 
+  #     - "8008:8008"
+  #   volumes:
+  #     - daemon_synapse:/data
+  #     - shared_etc:/etc
+  #     - service_yggdrasil:/yggdrasil
