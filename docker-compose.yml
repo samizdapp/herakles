@@ -8,8 +8,8 @@ volumes:
   service_yggdrasil:
   service_yggdrasil_sock:
   shared_etc: 
-  postgres_9:
-  pleroma_5:
+  postgres:
+  pleroma:
 services:
   daemon_caddy:
     build: ./daemon/caddy
@@ -23,6 +23,7 @@ services:
       - "4001:4001"
     volumes:
       - harness___cinny:/harness/cinny
+      - service_yggdrasil:/yggdrasil
   daemon_next:
     build: ./daemon/next
     restart: always
@@ -37,9 +38,9 @@ services:
     restart: always
     network_mode: host
     build:
-      context: ./daemon/pleroma
+      context: ./pleroma
     volumes:
-      - pleroma_5:/var/lib/pleroma/
+      - pleroma:/var/lib/pleroma/
       - shared_etc:/shared_etc
       - service_yggdrasil:/yggdrasil
     environment:
@@ -62,7 +63,7 @@ services:
       POSTGRES_PASSWORD: ChangeMe!
       POSTGRES_DB: pleroma
     volumes:
-      - postgres_9:/var/lib/postgresql/data
+      - postgres:/var/lib/postgresql/data
   service_upnp:
     build: ./service/upnp
     network_mode: host
@@ -98,6 +99,7 @@ services:
     restart: always
     volumes:
       - service_upnp:/proxy/upnp
+      - shared_etc:/etc
     expose:
       - "8000"
   # These will eventually live in an inherited project, but until they have a home they are saved here
@@ -118,7 +120,7 @@ services:
     build: ./service/yggdrasil-peers
     privileged: true
     network_mode: host
-    cpu_shares: 256
+    cpu_shares: 128
     volumes:
       - service_yggdrasil_sock:/var/run/
       - shared_etc:/peers/
