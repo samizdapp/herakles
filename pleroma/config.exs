@@ -12,6 +12,8 @@ config :pleroma, :frontends,
     "ref" => "develop"
   }
 
+config :pleroma, :tlsopts, verify: false
+
 config :pleroma, Pleroma.Web.Endpoint,
   url: [host: System.get_env("DOMAIN", "localhost"), scheme: "https", port: 443],
   http: [ip: {0, 0, 0, 0}, port: 8009]
