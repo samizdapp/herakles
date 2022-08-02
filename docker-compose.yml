@@ -10,6 +10,7 @@ volumes:
   shared_etc: 
   postgres:
   pleroma:
+  next: 
 services:
   daemon_caddy:
     build: ./daemon/caddy
@@ -24,16 +25,18 @@ services:
     volumes:
       - harness___cinny:/harness/cinny
       - service_yggdrasil:/yggdrasil
+      - next:/next
   daemon_next:
     build: ./daemon/next
-    restart: always
     network_mode: host
+    restart: always
     expose:
       - "80"
     volumes:
       - service_upnp:/usr/src/app/service/upnp
       - service_hostname:/usr/src/app/service/hostname
       - harness___cinny:/usr/src/app/harness/cinny
+      - next:/usr/src/app/tmp
   daemon_pleroma:
     restart: always
     network_mode: host
@@ -69,15 +72,15 @@ services:
     network_mode: host
     volumes:
       - service_upnp:/upnp
-  # service_wifi-connect:
-  #   build: ./service/wifi-connect
-  #   network_mode: "host"
-  #   labels:
-  #     io.balena.features.dbus: '1'
-  #   cap_add:
-  #     - NET_ADMIN
-  #   environment:
-  #     DBUS_SYSTEM_BUS_ADDRESS: "unix:path=/host/run/dbus/system_bus_socket"
+  service_wifi-connect:
+    build: ./service/wifi-connect
+    network_mode: "host"
+    labels:
+      io.balena.features.dbus: '1'
+    cap_add:
+      - NET_ADMIN
+    environment:
+      DBUS_SYSTEM_BUS_ADDRESS: "unix:path=/host/run/dbus/system_bus_socket"
 
   service_hostname:
     build: ./service/hostname

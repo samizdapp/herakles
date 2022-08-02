@@ -1,58 +1,40 @@
 version: '2'
-# services:
-  # daemon_next:
-  #   restart: always
-  #   network_mode: host
-  #   privileged: true
-  #   user: root
-  #   build:
-  #     context: ./daemon/next
-  #     dockerfile: Dockerfile.local
-  #   volumes:
-  #     - ./daemon/next/:/usr/src/app
-  #     - ./daemon/next/.next:/usr/src/app/.next
-  #     - ./daemon/next/node_modules:/usr/src/app/node_modules
-  #     - ./lib:/usr/src/app/node_modules/herakles-lib
-  #     - service_hostname_local:/usr/src/app/service/hostname
-  # app:
-  #   build:
-  #     context: ./app
-  #     dockerfile: Dockerfile.local
-  #   environment:
-  #     - EXPO_DEVTOOLS_LISTEN_ADDRESS=0.0.0.0
-  #     - CHOKIDAR_USEPOLLING=true
-  #     - DEV_IP=192.168.50.148
-  #   network_mode: host
-  #   privileged: true
-  #   volumes:
-  #     - ./app:/usr/src/app
-  #     - ./app/node_modules:/usr/src/app/node_modules
-  #     - ./lib:/usr/src/app/node_modules/herakles-lib
-  # service_hostname:
-  #   build:
-  #     context: ./service/hostname
-  #     dockerfile: Dockerfile.local
-  #   environment:
-  #     SET_HOSTNAME: setup
-  #   volumes:
-  #     - service_hostname_local:/service/hostname
-  # daemon_proxy:
-  #   volumes:
-  #     - ./lib:/proxy
-  #     - ./lib/node_modules:/proxy/node_modules
-  # service_yggdrasil:
-  #   # https://stackoverflow.com/a/37090165
-  #   volumes:
-  #     - /etc/yggdrasil-network:/etc/yggdrasil-network
-  #     - /var/run/:/var/run/
-  # # daemon_synapse:
-  # #   volumes:
-  # #     - /etc/yggdrasil-network:/yggdrasil
-  # daemon_pleroma:
+services:
+  app:
+    build:
+      context: ./app
+      dockerfile: Dockerfile.local
+    environment:
+      - EXPO_DEVTOOLS_LISTEN_ADDRESS=0.0.0.0
+      - CHOKIDAR_USEPOLLING=true
+      - DEV_IP=192.168.50.148
+    network_mode: host
+    privileged: true
+  service_hostname:
+    build:
+      context: ./service/hostname
+      dockerfile: Dockerfile.local
+    environment:
+      SET_HOSTNAME: setup
+    volumes:
+      - service_hostname_local:/service/hostname
+  daemon_proxy:
+    volumes:
+      - ./lib:/proxy
+      - ./lib/node_modules:/proxy/node_modules
+  service_yggdrasil:
+    # https://stackoverflow.com/a/37090165
+    volumes:
+      - /etc/yggdrasil-network:/etc/yggdrasil-network
+      - /var/run/:/var/run/
+  # daemon_synapse:
   #   volumes:
   #     - /etc/yggdrasil-network:/yggdrasil
-  # daemon_caddy:
-  #   volumes:
-  #     - /etc/yggdrasil-network:/yggdrasil
+  daemon_pleroma:
+    volumes:
+      - /etc/yggdrasil-network:/yggdrasil
+  daemon_caddy:
+    volumes:
+      - /etc/yggdrasil-network:/yggdrasil
 volumes:
   service_hostname_local:
