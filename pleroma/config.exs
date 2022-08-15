@@ -2,6 +2,9 @@ import Config
 
 config :pleroma, configurable_from_database: true
 
+config :pleroma, Pleroma.Captcha,
+  enabled: false
+
 config :pleroma, :frontends,
   primary: %{
     "name" => "soapbox-fe",
