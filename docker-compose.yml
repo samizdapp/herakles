@@ -16,12 +16,12 @@ services:
     build: ./daemon/caddy
     restart: always
     network_mode: host
-    ports:
-      - "80:80"
-      - "443:443"
-      - "8443:8443"
-      - "4000:4000"
-      - "4001:4001"
+    # ports:
+    #   - "80:80"
+    #   - "443:443"
+    #   - "8443:8443"
+    #   - "4000:4000"
+    #   - "4001:4001"
     volumes:
       - harness___cinny:/harness/cinny
       - service_yggdrasil:/yggdrasil
@@ -30,8 +30,8 @@ services:
     build: ./daemon/next
     network_mode: host
     restart: always
-    expose:
-      - "80"
+    # expose:
+    #   - "80"
     volumes:
       - service_upnp:/usr/src/app/service/upnp
       - service_hostname:/usr/src/app/service/hostname
@@ -102,9 +102,9 @@ services:
     restart: always
     volumes:
       - service_upnp:/proxy/upnp
-      - shared_etc:/etc
-    expose:
-      - "8000"
+      - shared_etc:/shared_etc
+    # expose:
+    #   - "8000"
   # These will eventually live in an inherited project, but until they have a home they are saved here
   service_yggdrasil:
     # https://stackoverflow.com/a/37090165
@@ -114,8 +114,8 @@ services:
     privileged: true
     restart: "always"
     network_mode: host
-    expose:
-      - "9001"
+    # expose:
+    #   - "9001"
     volumes:
       - service_yggdrasil:/etc/yggdrasil-network
       - service_yggdrasil_sock:/var/run/
