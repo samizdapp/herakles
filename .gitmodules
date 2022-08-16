@@ -26,11 +26,11 @@
 	path = harness/cinny
 	url = https://github.com/samizdapp/cinny
 [submodule "service/yggdrasil-peers"]
-	path = service/yggdrasil-peers
+	path = yggdrasil/crawler
 	url = https://github.com/samizdapp/yggdrasil-peers
 	branch = master
 [submodule "service/yggdrasil"]
-	path = service/yggdrasil
+	path = yggdrasil/router
 	url = https://github.com/samizdapp/yggdrasil-go
 	branch = develop
 [submodule "newpleroma"]

@@ -1,0 +1,10 @@
+127.0.0.1 localhost
+::1     localhost ip6-localhost ip6-loopback
+fe00::0 ip6-localnet
+ff00::0 ip6-mcastprefix
+ff02::1 ip6-allnodes
+ff02::2 ip6-allrouters
+202:23e4:8170:5d8:f81a:dc4b:beed:f508 caddy.3b836fd1ff44e0fca4768822415ef6614d0c0d4f07b96008b1367734161e628.f.yg
+200:b6e2:2419:d4ba:c293:d6b0:6be5:5a27 caddy.a48eedf315a29eb614a7ca0d52ec684866c605305f817e61db9a90216cb2f6b.d.yg
+202:23e4:8170:5d8:f81a:dc4b:beed:f508 yggdrasil.3b836fd1ff44e0fca4768822415ef6614d0c0d4f07b96008b1367734161e628.f.yg
+200:b6e2:2419:d4ba:c293:d6b0:6be5:5a27 yggdrasil.a48eedf315a29eb614a7ca0d52ec684866c605305f817e61db9a90216cb2f6b.d.yg
