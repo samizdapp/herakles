@@ -11,14 +11,14 @@ done
 
 
 
-while [ ! -f /yggdrasil/config.conf ]
+while [ ! -f /etc/yggdrasil-network/config.conf ]
 do
 echo "waiting for yggdrasil config"
 sleep 5
 done
 
 echo "get public key"
-PUB=$(jq '.PublicKey' /yggdrasil/config.conf | tr -d '"')
+PUB=$(jq '.PublicKey' /etc/yggdrasil-network/config.conf | tr -d '"')
 echo $PUB
 P1=${PUB:0:63}
 P2=${PUB:63:1}
