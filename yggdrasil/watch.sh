@@ -1,4 +1,7 @@
 #!/bin/bash
+CONF_DIR="/etc/yggdrasil-network"
+CONF="$CONF_DIR/config.conf"
+tmp=$(mktemp)
 
 echo "watch hosts"
 if [ -f "/shared_etc/yg_hosts" ]
@@ -10,12 +13,12 @@ fi
 mkdir -p /yggdrasil
 touch /yggdrasil/peers
 
-# while inotifywait -e close_write /shared_etc/yg_hosts; 
-# do 
+while inotifywait -e close_write /shared_etc/yg_hosts; 
+do 
   echo "updated, copy yg_hosts"
   cat /shared_etc/yg_hosts > /etc/hosts
   echo "" >> /etc/hosts # need final line end
-  PEER_ENDPOINTS="[\""
+  PEER_ENDPOINTS="[\"tls://51.38.64.12:28395\",\""
   ALLOWED_KEYS="[\""
   while read p; do
     echo "check $p" 
@@ -54,4 +57,7 @@ touch /yggdrasil/peers
   echo "peer endpoints: $PEER_ENDPOINTS"
   echo "allowed keys: $ALLOWED_KEYS"
 
-# done
+  jq ".Peers = $PEER_ENDPOINTS" "$CONF" > "$tmp" && mv "$tmp" "$CONF"
+  jq ".AllowedPublicKeys = $ALLOWED_KEYS" "$CONF" > "$tmp" && mv "$tmp" "$CONF"
+
+done
