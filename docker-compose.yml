@@ -6,6 +6,7 @@ volumes:
   daemon_synapse:
   proxy_nm: 
   service_yggdrasil:
+  shared_yggdrasil:
   service_yggdrasil_sock:
   shared_etc: 
   postgres:
@@ -24,7 +25,8 @@ services:
     #   - "4001:4001"
     volumes:
       - harness___cinny:/harness/cinny
-      - service_yggdrasil:/yggdrasil
+      - shared_yggdrasil:/yggdrasil
+      - service_yggdrasil:/etc/yggdrasil-network
       - next:/next
   daemon_next:
     build: ./daemon/next
@@ -45,7 +47,7 @@ services:
     volumes:
       - pleroma:/var/lib/pleroma/
       - shared_etc:/shared_etc
-      - service_yggdrasil:/yggdrasil
+      - service_yggdrasil:/etc/yggdrasil-network
     environment:
       DOMAIN: exmaple.com
       INSTANCE_NAME: Pleroma
@@ -106,11 +108,10 @@ services:
     # expose:
     #   - "8000"
   # These will eventually live in an inherited project, but until they have a home they are saved here
-  service_yggdrasil:
+  yggdrasil:
     # https://stackoverflow.com/a/37090165
     build:
-      context: ./service/yggdrasil/
-      dockerfile: ./contrib/docker/Dockerfile
+      context: ./yggdrasil/
     privileged: true
     restart: "always"
     network_mode: host
@@ -119,15 +120,9 @@ services:
     volumes:
       - service_yggdrasil:/etc/yggdrasil-network
       - service_yggdrasil_sock:/var/run/
-  service_yggdrasil-peers:
-    build: ./service/yggdrasil-peers
-    privileged: true
-    network_mode: host
-    cpu_shares: 128
-    volumes:
-      - service_yggdrasil_sock:/var/run/
-      - shared_etc:/peers/
-    restart: "always"
+      - shared_etc:/shared_etc
+      - shared_yggdrasil:/yggdrasil
+
   # harness__cinny:
   #   build: ./harness/cinny
   #   volumes:
