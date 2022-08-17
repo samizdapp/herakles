@@ -33,7 +33,8 @@ do
       echo "got key? $KEY"
       if ! grep -q $KEY "/yggdrasil/peers"; then
         echo "not found in peers index"
-        ADDR="tcp://192.168.50.1:5000" #$(curl "$PEER")
+        echo "$PEER"
+        ADDR=$(curl "$PEER")
         echo "$ADDR $KEY" >> /yggdrasil/peers
       fi
     fi

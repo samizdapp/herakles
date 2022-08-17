@@ -27,7 +27,7 @@ COPY testhost /shared_etc/yg_hosts
 # USER yggdrasil-network
 # TODO: Make running unprivileged work
 
-RUN apk add nano jq procps miniupnpc bash inotify-tools
+RUN apk add nano jq procps miniupnpc bash inotify-tools curl
 ENV PYTHONUNBUFFERED=1
 RUN apk add --update --no-cache python3 && ln -sf python3 /usr/bin/python
 RUN python3 -m ensurepip
