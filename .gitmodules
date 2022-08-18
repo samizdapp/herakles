@@ -1,39 +1,39 @@
 [submodule "service/wifi-connect"]
 	path = service/wifi-connect
-	url = ../samizdapp/wifi-connect
+	url = ../../samizdapp/wifi-connect
 [submodule "service/hostname"]
 	path = service/hostname
-	url = ../samizdapp/hostname
+	url = ../../samizdapp/hostname
 [submodule "app"]
 	path = app
-	url = ../samizdapp/herakles-expo
+	url = ../../samizdapp/herakles-expo
 [submodule "lib"]
 	path = lib
-	url = ../samizdapp/herakles-lib
+	url = ../../samizdapp/herakles-lib
 [submodule "daemon/next"]
 	path = daemon/next
-	url = ../samizdapp/herakles-next
+	url = ../../samizdapp/herakles-next
 [submodule "daemon/synapse"]
 	path = daemon/synapse
-	url = ../samizdapp/synapse
+	url = ../../samizdapp/synapse
 [submodule "service/upnp"]
 	path = service/upnp
-	url = ../samizdapp/herakles-upnp
+	url = ../../samizdapp/herakles-upnp
 [submodule "daemon/caddy"]
 	path = daemon/caddy
-	url = ../samizdapp/herakles-caddy.git
+	url = ../../samizdapp/herakles-caddy.git
 [submodule "harness/cinny"]
 	path = harness/cinny
-	url = ../samizdapp/cinny
+	url = ../../samizdapp/cinny
 [submodule "service/yggdrasil-peers"]
 	path = yggdrasil/crawler
-	url = ../samizdapp/yggdrasil-peers
+	url = ../../samizdapp/yggdrasil-peers
 	branch = master
 [submodule "service/yggdrasil"]
 	path = yggdrasil/router
-	url = ../samizdapp/yggdrasil-go
+	url = ../../samizdapp/yggdrasil-go
 	branch = develop
 [submodule "newpleroma"]
 	path = pleroma/pleroma
-	url = ../samizdapp/pleroma
+	url = ../../samizdapp/pleroma
 	branch = stable
