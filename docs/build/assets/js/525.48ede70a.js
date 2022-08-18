@@ -1,0 +1,1 @@
+(self.webpackChunksamizdapp_herakles=self.webpackChunksamizdapp_herakles||[]).push([[525],{5525:()=>{}}]);

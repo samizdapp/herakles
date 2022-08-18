@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunksamizdapp_herakles=self.webpackChunksamizdapp_herakles||[]).push([[596],{3769:e=>{e.exports=JSON.parse('{"name":"docusaurus-plugin-content-docs","id":"default"}')}}]);
