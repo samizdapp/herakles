@@ -3,6 +3,11 @@
   align-items: center;
   padding: 2rem 0;
   width: 100%;
+  cursor: pointer;
+}
+
+.features .row {
+  justify-content: center;
 }
 
 .featureSvg {
