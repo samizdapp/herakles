@@ -1,39 +1,39 @@
 [submodule "service/wifi-connect"]
 	path = service/wifi-connect
-	url = git@github.com:samizdapp/wifi-connect
+	url = ../samizdapp/wifi-connect
 [submodule "service/hostname"]
 	path = service/hostname
-	url = https://github.com/samizdapp/hostname
+	url = ../samizdapp/hostname
 [submodule "app"]
 	path = app
-	url = git@github.com:samizdapp/herakles-expo
+	url = ../samizdapp/herakles-expo
 [submodule "lib"]
 	path = lib
-	url = git@github.com:samizdapp/herakles-lib
+	url = ../samizdapp/herakles-lib
 [submodule "daemon/next"]
 	path = daemon/next
-	url = git@github.com:samizdapp/herakles-next
+	url = ../samizdapp/herakles-next
 [submodule "daemon/synapse"]
 	path = daemon/synapse
-	url = git@github.com:samizdapp/synapse
+	url = ../samizdapp/synapse
 [submodule "service/upnp"]
 	path = service/upnp
-	url = git@github.com:samizdapp/herakles-upnp
+	url = ../samizdapp/herakles-upnp
 [submodule "daemon/caddy"]
 	path = daemon/caddy
-	url = git@github.com:samizdapp/herakles-caddy.git
+	url = ../samizdapp/herakles-caddy.git
 [submodule "harness/cinny"]
 	path = harness/cinny
-	url = https://github.com/samizdapp/cinny
+	url = ../samizdapp/cinny
 [submodule "service/yggdrasil-peers"]
 	path = yggdrasil/crawler
-	url = https://github.com/samizdapp/yggdrasil-peers
+	url = ../samizdapp/yggdrasil-peers
 	branch = master
 [submodule "service/yggdrasil"]
 	path = yggdrasil/router
-	url = https://github.com/samizdapp/yggdrasil-go
+	url = ../samizdapp/yggdrasil-go
 	branch = develop
 [submodule "newpleroma"]
 	path = pleroma/pleroma
-	url = git@github.com:samizdapp/pleroma
+	url = ../samizdapp/pleroma
 	branch = stable
