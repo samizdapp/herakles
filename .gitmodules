@@ -4,18 +4,12 @@
 [submodule "service/hostname"]
 	path = service/hostname
 	url = https://github.com/samizdapp/hostname
-[submodule "app"]
-	path = app
-	url = git@github.com:samizdapp/herakles-expo
 [submodule "lib"]
 	path = lib
 	url = git@github.com:samizdapp/herakles-lib
 [submodule "daemon/next"]
 	path = daemon/next
 	url = git@github.com:samizdapp/herakles-next
-[submodule "daemon/synapse"]
-	path = daemon/synapse
-	url = git@github.com:samizdapp/synapse
 [submodule "service/upnp"]
 	path = service/upnp
 	url = git@github.com:samizdapp/herakles-upnp
