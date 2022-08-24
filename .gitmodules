@@ -4,18 +4,12 @@
 [submodule "service/hostname"]
 	path = service/hostname
 	url = ../../samizdapp/hostname
-[submodule "app"]
-	path = app
-	url = ../../samizdapp/herakles-expo
 [submodule "lib"]
 	path = lib
 	url = ../../samizdapp/herakles-lib
 [submodule "daemon/next"]
 	path = daemon/next
 	url = ../../samizdapp/herakles-next
-[submodule "daemon/synapse"]
-	path = daemon/synapse
-	url = ../../samizdapp/synapse
 [submodule "service/upnp"]
 	path = service/upnp
 	url = ../../samizdapp/herakles-upnp
