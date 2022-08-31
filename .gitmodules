@@ -31,3 +31,6 @@
 	path = pleroma/pleroma
 	url = ../../samizdapp/pleroma
 	branch = stable
+[submodule "mdns-advertise"]
+	path = mdns-advertise
+	url = ../../samizdapp/mdns-advertise
