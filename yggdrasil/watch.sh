@@ -32,9 +32,9 @@ do
       KEY="${DPARTS[1]}${DPARTS[2]}"
       echo "got key? $KEY"
       if ! grep -q $KEY "/yggdrasil/peers"; then
-        echo "not found in peers index"
+        echo "$KEY not found in peers index"
         echo "$PEER"
-        ADDR=$(curl "$PEER")
+        ADDR=$(curl --insecure "$PEER")
         echo "$ADDR $KEY" >> /yggdrasil/peers
       fi
     fi
@@ -58,7 +58,7 @@ do
   echo "peer endpoints: $PEER_ENDPOINTS"
   echo "allowed keys: $ALLOWED_KEYS"
 
-  jq ".Peers = $PEER_ENDPOINTS" "$CONF" > "$tmp" && mv "$tmp" "$CONF"
+  jq ".Peers = $PEER_ENDPOINTS" "$CONF" > "$tmp" 
   jq ".AllowedPublicKeys = $ALLOWED_KEYS" "$CONF" > "$tmp" && mv "$tmp" "$CONF"
 
 done
