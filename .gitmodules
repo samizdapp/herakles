@@ -16,9 +16,6 @@
 [submodule "daemon/caddy"]
 	path = daemon/caddy
 	url = ../../samizdapp/herakles-caddy.git
-[submodule "harness/cinny"]
-	path = harness/cinny
-	url = ../../samizdapp/cinny
 [submodule "service/yggdrasil-peers"]
 	path = yggdrasil/crawler
 	url = ../../samizdapp/yggdrasil-peers
