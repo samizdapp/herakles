@@ -122,6 +122,36 @@ services:
       - service_yggdrasil_sock:/var/run/
       - shared_etc:/shared_etc
       - shared_yggdrasil:/yggdrasil
+  yggdrasil_upnp:
+    # https://stackoverflow.com/a/37090165
+    build:
+      context: ./yggdrasil/
+      dockerfile: Dockerfile.upnp
+    privileged: true
+    restart: "always"
+    network_mode: host
+    # expose:
+    #   - "9001"
+    volumes:
+      - service_yggdrasil:/etc/yggdrasil-network
+      - service_yggdrasil_sock:/var/run/
+      - shared_etc:/shared_etc
+      - shared_yggdrasil:/yggdrasil  
+  yggdrasil_crawler:
+    # https://stackoverflow.com/a/37090165
+    build:
+      context: ./yggdrasil/
+      dockerfile: Dockerfile.crawler
+    privileged: true
+    restart: "always"
+    network_mode: host
+    # expose:
+    #   - "9001"
+    volumes:
+      - service_yggdrasil:/etc/yggdrasil-network
+      - service_yggdrasil_sock:/var/run/
+      - shared_etc:/shared_etc
+      - shared_yggdrasil:/yggdrasil
   mdns-advertise:
     build: ./mdns-advertise
     restart: "always"
