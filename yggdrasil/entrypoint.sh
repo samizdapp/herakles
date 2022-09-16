@@ -19,8 +19,8 @@ jq '.Peers = ["tls://51.38.64.12:28395"]' "$CONF" > "$tmp" && mv "$tmp" "$CONF"
 jq '.Listen = ["tcp://0.0.0.0:5000"]' "$CONF" > "$tmp" && mv "$tmp" "$CONF"
 
 
-/usr/bin/upnp.sh & jobs
-/usr/bin/watch.sh & jobs
-/crawler/watch.sh & jobs
+# /usr/bin/upnp.sh & jobs
+# /usr/bin/watch.sh & jobs
+# /crawler/watch.sh & jobs
 yggdrasil --useconf -json < "$CONF_DIR/config.conf"
 exit $?
