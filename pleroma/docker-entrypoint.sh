@@ -11,7 +11,7 @@ done
 
 
 
-while [ ! -f /etc/yggdrasil-network/config.conf ]
+while [ ! -f /etc/yggdrasil-network/backup.conf ]
 do
 echo "waiting for yggdrasil config"
 sleep 5
@@ -33,7 +33,6 @@ $HOME/bin/pleroma_ctl migrate
 # $HOME/bin/pleroma_ctl config migrate_to_db
 
 
-$HOME/soapbox.sh & jobs
 $HOME/watch_hosts.sh & jobs
 
 echo "-- Starting!"

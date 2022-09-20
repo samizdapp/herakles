@@ -1,11 +1,12 @@
 FROM elixir:1.13-alpine as build
 
+RUN apk add git gcc g++ musl-dev make cmake file-dev
+
 COPY ./pleroma/ .
 
 ENV MIX_ENV=prod
 
-RUN apk add git gcc g++ musl-dev make cmake file-dev &&\
-	echo "import Mix.Config" > config/prod.secret.exs &&\
+RUN echo "import Mix.Config" > config/prod.secret.exs &&\
 	mix local.hex --force &&\
 	mix local.rebar --force &&\
 	mix deps.get --only prod &&\
@@ -45,7 +46,12 @@ COPY --from=build /release ${HOME}
 COPY ./config.exs /etc/pleroma/config.exs
 COPY ./docker-entrypoint.sh ${HOME}
 COPY ./watch_hosts.sh ${HOME}
-COPY ./soapbox.sh ${HOME}
+COPY ./soapbox.zip ${HOME}
+
+RUN mkdir -p /var/lib/pleroma/static/frontends/soapbox-fe 
+RUN busybox unzip ${HOME}/soapbox.zip -o -d /var/lib/pleroma/static/frontends/soapbox-fe
+
+RUN syslogd
 
 EXPOSE 4000
 

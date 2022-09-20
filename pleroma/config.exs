@@ -8,7 +8,7 @@ config :pleroma, Pleroma.Captcha,
 config :pleroma, :frontends,
   primary: %{
     "name" => "soapbox-fe",
-    "ref" => "v2.0.0"
+    "ref" => "static"
   },
   admin: %{
     "name" => "admin",
@@ -16,6 +16,8 @@ config :pleroma, :frontends,
   }
 
 config :pleroma, :tlsopts, verify: false
+
+config :tesla, :adapter, {Tesla.Adapter.Hackney, insecure: true}
 
 config :pleroma, Pleroma.Web.Endpoint,
   url: [host: System.get_env("DOMAIN", "localhost"), scheme: "https", port: 443],
@@ -28,6 +30,17 @@ config :pleroma, :instance,
   limit: 5000,
   registrations_open: true,
   healthcheck: true
+
+config :pleroma, :fetch_initial_posts,
+  enabled: true,
+  pages: 5
+
+config :logger,
+  backends: [:console, {ExSyslogger, :ex_syslogger}]
+
+config :logger, :ex_syslogger,
+  level: :debug,
+  option: [:pid, :ndelay]
 
 config :pleroma, Pleroma.Repo,
   adapter: Ecto.Adapters.Postgres,

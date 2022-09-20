@@ -58,7 +58,7 @@ do
   echo "peer endpoints: $PEER_ENDPOINTS"
   echo "allowed keys: $ALLOWED_KEYS"
 
-  jq ".Peers = $PEER_ENDPOINTS" "$CONF" > "$tmp" 
-  jq ".AllowedPublicKeys = $ALLOWED_KEYS" "$CONF" > "$tmp" && mv "$tmp" "$CONF"
+  # jq ".Peers = $PEER_ENDPOINTS" "$CONF" > "$tmp" 
+  # jq ".AllowedPublicKeys = $ALLOWED_KEYS" "$CONF" > "$tmp" && mv "$tmp" "$CONF"
 
 done

@@ -9,7 +9,7 @@ volumes:
   shared_yggdrasil:
   service_yggdrasil_sock:
   shared_etc: 
-  postgres:
+  postgres2:
   pleroma:
   next: 
 services:
@@ -68,7 +68,7 @@ services:
       POSTGRES_PASSWORD: ChangeMe!
       POSTGRES_DB: pleroma
     volumes:
-      - postgres:/var/lib/postgresql/data
+      - postgres2:/var/lib/postgresql/data
   service_upnp:
     build: ./service/upnp
     network_mode: host
