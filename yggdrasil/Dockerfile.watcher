@@ -1,0 +1,9 @@
+FROM docker.io/alpine
+
+COPY watch.sh /usr/bin/watch.sh
+
+RUN apk add nano miniupnpc bash inotify-tools curl bind-tools jq
+
+VOLUME [ "/etc/yggdrasil-network" ]
+
+ENTRYPOINT [ "/usr/bin/watch.sh" ]

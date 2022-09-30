@@ -13,10 +13,8 @@ fi
 mkdir -p /yggdrasil
 touch /yggdrasil/peers
 
-while inotifywait -e close_write /shared_etc/yg_hosts; 
-do 
-  echo "updated, copy yg_hosts"
-  cat /shared_etc/yg_hosts > /etc/hosts
+update_yggrasil_conf() {
+cat /shared_etc/yg_hosts > /etc/hosts
   echo "" >> /etc/hosts # need final line end
   PEER_ENDPOINTS="[\"tls://51.38.64.12:28395\",\""
   ALLOWED_KEYS="[\""
@@ -58,7 +56,14 @@ do
   echo "peer endpoints: $PEER_ENDPOINTS"
   echo "allowed keys: $ALLOWED_KEYS"
 
-  # jq ".Peers = $PEER_ENDPOINTS" "$CONF" > "$tmp" 
-  # jq ".AllowedPublicKeys = $ALLOWED_KEYS" "$CONF" > "$tmp" && mv "$tmp" "$CONF"
+  jq ".Peers = $PEER_ENDPOINTS" "$CONF" > "$tmp" && mv "$tmp" "$CONF"
+  jq ".AllowedPublicKeys = $ALLOWED_KEYS" "$CONF" > "$tmp" && mv "$tmp" "$CONF"
+}
 
+update_yggrasil_conf
+
+while inotifywait -e close_write /shared_etc/yg_hosts; 
+do 
+  echo "updated, copy yg_hosts"
+  update_yggrasil_conf
 done

@@ -91,7 +91,7 @@ services:
     labels:
       io.balena.features.supervisor-api: 1 # Required to interact with the supervisor
     environment:
-      SET_HOSTNAME: setup
+      SET_HOSTNAME: samizdapp
     volumes:
       - service_hostname:/service/hostname
   
@@ -105,6 +105,10 @@ services:
     volumes:
       - service_upnp:/proxy/upnp
       - shared_etc:/shared_etc
+      - next:/next
+    environment:
+      PUBLIC_PATH: "/next/libp2p.bootstrap"
+      ID_PATH: "/shared_etc/libp2p.id"
     # expose:
     #   - "8000"
   # These will eventually live in an inherited project, but until they have a home they are saved here
@@ -127,6 +131,21 @@ services:
     build:
       context: ./yggdrasil/
       dockerfile: Dockerfile.upnp
+    privileged: true
+    restart: "always"
+    network_mode: host
+    # expose:
+    #   - "9001"
+    volumes:
+      - service_yggdrasil:/etc/yggdrasil-network
+      - service_yggdrasil_sock:/var/run/
+      - shared_etc:/shared_etc
+      - shared_yggdrasil:/yggdrasil  
+  yggdrasil_watcher:
+    # https://stackoverflow.com/a/37090165
+    build:
+      context: ./yggdrasil/
+      dockerfile: Dockerfile.watcher
     privileged: true
     restart: "always"
     network_mode: host
