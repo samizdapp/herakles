@@ -10,9 +10,6 @@
 [submodule "daemon/next"]
 	path = daemon/next
 	url = ../../samizdapp/herakles-next
-[submodule "service/upnp"]
-	path = service/upnp
-	url = ../../samizdapp/herakles-upnp
 [submodule "daemon/caddy"]
 	path = daemon/caddy
 	url = ../../samizdapp/herakles-caddy.git
