@@ -9,7 +9,7 @@ ENV MIX_ENV=prod
 RUN echo "import Mix.Config" > config/prod.secret.exs &&\
 	mix local.hex --force &&\
 	mix local.rebar --force &&\
-	mix deps.get --only prod &&\
+	HEX_HTTP_CONCURRENCY=1 HEX_HTTP_TIMEOUT=120 mix deps.get --only prod &&\
 	mkdir release &&\
 	mix release --path release
 
