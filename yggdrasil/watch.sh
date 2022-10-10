@@ -32,8 +32,12 @@ cat /shared_etc/yg_hosts > /etc/hosts
       if ! grep -q $KEY "/yggdrasil/peers"; then
         echo "$KEY not found in peers index"
         echo "$PEER"
-        ADDR=$(curl --insecure "$PEER")
-        echo "$ADDR $KEY" >> /yggdrasil/peers
+        ADDR=$(curl --insecure "$PEER" | xargs)
+        if [ -z "`echo "$ADDR" | tr -d '\n'`" ]; then
+          echo "no peer response, ignore"
+        else
+          echo "$ADDR $KEY" >> /yggdrasil/peers
+        fi
       fi
     fi
   done < /etc/hosts

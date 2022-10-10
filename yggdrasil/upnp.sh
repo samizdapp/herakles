@@ -19,6 +19,7 @@ do
         echo "$PORT" > /yggdrasil/port
 
         if [[ "$PORT" == "5010" ]]; then
+            rm /yggdrasil/peer
             exit
         fi
     done
