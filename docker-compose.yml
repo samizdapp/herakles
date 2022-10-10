@@ -2,15 +2,12 @@ version: '2'
 volumes:
   service_upnp:
   service_hostname:
-  harness___cinny:
-  daemon_synapse:
   proxy_nm: 
   service_yggdrasil:
   shared_yggdrasil:
   service_yggdrasil_sock:
   shared_etc: 
   postgres2:
-  pleroma:
   next: 
 services:
   daemon_caddy:
@@ -24,7 +21,6 @@ services:
     #   - "4000:4000"
     #   - "4001:4001"
     volumes:
-      - harness___cinny:/harness/cinny
       - shared_yggdrasil:/yggdrasil
       - service_yggdrasil:/etc/yggdrasil-network
       - next:/next
@@ -37,7 +33,6 @@ services:
     volumes:
       - service_upnp:/usr/src/app/service/upnp
       - service_hostname:/usr/src/app/service/hostname
-      - harness___cinny:/usr/src/app/harness/cinny
       - next:/usr/src/app/tmp
   daemon_pleroma:
     restart: always
@@ -45,7 +40,6 @@ services:
     build:
       context: ./pleroma
     volumes:
-      - pleroma:/var/lib/pleroma/
       - shared_etc:/shared_etc
       - service_yggdrasil:/etc/yggdrasil-network
     environment:
@@ -69,11 +63,6 @@ services:
       POSTGRES_DB: pleroma
     volumes:
       - postgres2:/var/lib/postgresql/data
-  service_upnp:
-    build: ./service/upnp
-    network_mode: host
-    volumes:
-      - service_upnp:/upnp
   service_wifi-connect:
     build: ./service/wifi-connect
     network_mode: "host"
@@ -105,6 +94,7 @@ services:
     volumes:
       - service_upnp:/proxy/upnp
       - shared_etc:/shared_etc
+      - shared_yggdrasil:/yggdrasil
       - next:/next
     environment:
       PUBLIC_PATH: "/next/libp2p.bootstrap"
@@ -132,7 +122,7 @@ services:
       context: ./yggdrasil/
       dockerfile: Dockerfile.upnp
     privileged: true
-    restart: "always"
+    restart: "no  "
     network_mode: host
     # expose:
     #   - "9001"
@@ -147,7 +137,6 @@ services:
       context: ./yggdrasil/
       dockerfile: Dockerfile.watcher
     privileged: true
-    restart: "always"
     network_mode: host
     # expose:
     #   - "9001"
