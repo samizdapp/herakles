@@ -16,10 +16,6 @@ FROM docker.io/alpine
 COPY --from=builder /src/yggdrasil /usr/bin/yggdrasil
 COPY --from=builder /src/yggdrasilctl /usr/bin/yggdrasilctl
 COPY --from=builder /src/genkeys /usr/bin/genkeys
-COPY entrypoint.sh /usr/bin/entrypoint.sh
-COPY watch.sh /usr/bin/watch.sh
-COPY upnp.sh /usr/bin/upnp.sh
-COPY testhost /shared_etc/yg_hosts
 
 # RUN addgroup -g 1000 -S yggdrasil-network \
 #  && adduser -u 1000 -S -g 1000 --home /etc/yggdrasil-network yggdrasil-network
@@ -37,6 +33,11 @@ COPY crawler /crawler
 WORKDIR /crawler
 
 RUN pip3 install -r requirements.txt
+
+COPY entrypoint.sh /usr/bin/entrypoint.sh
+COPY watch.sh /usr/bin/watch.sh
+COPY upnp.sh /usr/bin/upnp.sh
+COPY restart.sh /usr/bin/restart.sh
 
 VOLUME [ "/etc/yggdrasil-network" ]
 
