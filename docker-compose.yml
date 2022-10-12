@@ -1,14 +1,14 @@
-version: '2'
+version: "2"
 volumes:
   service_upnp:
   service_hostname:
-  proxy_nm: 
+  proxy_nm:
   service_yggdrasil:
   shared_yggdrasil:
   service_yggdrasil_sock:
-  shared_etc: 
+  shared_etc:
   postgres2:
-  next: 
+  gateway_client:
 services:
   daemon_caddy:
     build: ./daemon/caddy
@@ -23,17 +23,19 @@ services:
     volumes:
       - shared_yggdrasil:/yggdrasil
       - service_yggdrasil:/etc/yggdrasil-network
-      - next:/next
-  daemon_next:
-    build: ./daemon/next
+      - gateway_client:/next
+  gateway_client:
+    build:
+      context: ./athena
+      dockerfile: ./packages/gateway-client/Dockerfile
     network_mode: host
     restart: always
     # expose:
     #   - "80"
     volumes:
-      - service_upnp:/usr/src/app/service/upnp
-      - service_hostname:/usr/src/app/service/hostname
-      - next:/usr/src/app/tmp
+      - service_upnp:/usr/src/volumes/service_upnp
+      - service_hostname:/usr/src/volumes/service_hostname
+      - gateway_client:/usr/src/volumes/gateway_client
   daemon_pleroma:
     restart: always
     network_mode: host
@@ -67,7 +69,7 @@ services:
     build: ./service/wifi-connect
     network_mode: "host"
     labels:
-      io.balena.features.dbus: '1'
+      io.balena.features.dbus: "1"
     cap_add:
       - NET_ADMIN
     environment:
@@ -83,11 +85,11 @@ services:
       SET_HOSTNAME: samizdapp
     volumes:
       - service_hostname:/service/hostname
-  
+
   daemon_proxy:
     build: ./lib
     labels:
-      io.balena.features.dbus: '1'
+      io.balena.features.dbus: "1"
     privileged: true
     network_mode: host
     restart: always
@@ -95,7 +97,7 @@ services:
       - service_upnp:/proxy/upnp
       - shared_etc:/shared_etc
       - shared_yggdrasil:/yggdrasil
-      - next:/next
+      - gateway_client:/next
     environment:
       PUBLIC_PATH: "/next/libp2p.bootstrap"
       ID_PATH: "/shared_etc/libp2p.id"
@@ -130,7 +132,7 @@ services:
       - service_yggdrasil:/etc/yggdrasil-network
       - service_yggdrasil_sock:/var/run/
       - shared_etc:/shared_etc
-      - shared_yggdrasil:/yggdrasil  
+      - shared_yggdrasil:/yggdrasil
   yggdrasil_watcher:
     # https://stackoverflow.com/a/37090165
     build:
@@ -144,7 +146,7 @@ services:
       - service_yggdrasil:/etc/yggdrasil-network
       - service_yggdrasil_sock:/var/run/
       - shared_etc:/shared_etc
-      - shared_yggdrasil:/yggdrasil  
+      - shared_yggdrasil:/yggdrasil
   yggdrasil_crawler:
     # https://stackoverflow.com/a/37090165
     build:
@@ -166,10 +168,10 @@ services:
     privileged: true
     network_mode: host
     labels:
-      io.balena.features.dbus: '1'
+      io.balena.features.dbus: "1"
     environment:
-      DBUS_SYSTEM_BUS_ADDRESS: 'unix:path=/host/run/dbus/system_bus_socket'
-      MDNS_TLD: 'samizdev.local'
+      DBUS_SYSTEM_BUS_ADDRESS: "unix:path=/host/run/dbus/system_bus_socket"
+      MDNS_TLD: "samizdev.local"
 
   # harness__cinny:
   #   build: ./harness/cinny
@@ -181,7 +183,7 @@ services:
   #   network_mode: host
   #   expose:
   #     - "8008"
-  #   ports: 
+  #   ports:
   #     - "8008:8008"
   #   volumes:
   #     - daemon_synapse:/data
