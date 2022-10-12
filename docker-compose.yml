@@ -99,7 +99,7 @@ services:
       - shared_yggdrasil:/yggdrasil
       - gateway_client:/next
     environment:
-      PUBLIC_PATH: "/next/libp2p.bootstrap"
+      PUBLIC_PATH: "/next/assets/libp2p.bootstrap"
       ID_PATH: "/shared_etc/libp2p.id"
     # expose:
     #   - "8000"

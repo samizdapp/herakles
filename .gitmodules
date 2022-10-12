@@ -7,9 +7,6 @@
 [submodule "lib"]
 	path = lib
 	url = ../../samizdapp/herakles-lib
-[submodule "daemon/next"]
-	path = daemon/next
-	url = ../../samizdapp/herakles-next
 [submodule "daemon/caddy"]
 	path = daemon/caddy
 	url = ../../samizdapp/herakles-caddy.git
