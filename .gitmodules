@@ -31,4 +31,3 @@
 [submodule "athena"]
 	path = athena
 	url = ../../samizdapp/athena
-	branch = jc/refactor/new-changes
