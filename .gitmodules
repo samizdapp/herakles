@@ -28,3 +28,7 @@
 [submodule "mdns-advertise"]
 	path = mdns-advertise
 	url = ../../samizdapp/mdns-advertise
+[submodule "athena"]
+	path = athena
+	url = ../../samizdapp/athena
+	branch = jc/refactor/new-changes
