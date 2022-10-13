@@ -9,6 +9,7 @@ volumes:
   shared_etc:
   postgres2:
   gateway_client:
+  pleroma_uploads:
 services:
   daemon_caddy:
     build: ./daemon/caddy
@@ -44,6 +45,7 @@ services:
     volumes:
       - shared_etc:/shared_etc
       - service_yggdrasil:/etc/yggdrasil-network
+      - pleroma_uploads:/var/lib/pleroma/uploads
     environment:
       DOMAIN: exmaple.com
       INSTANCE_NAME: Pleroma
