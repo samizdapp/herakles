@@ -21,11 +21,11 @@ do
       echo "found pleroma entry"
       parts=($p)
       RELAY="https://${parts[1]}/relay"
-      if ! grep -q $RELAY "/opt/pleroma/relays"; then
-        echo "not found in relay index"
-        /opt/pleroma/bin/pleroma_ctl relay follow $RELAY
-        echo $RELAY >> /opt/pleroma/relays
-      fi
+      # if ! grep -q $RELAY "/opt/pleroma/relays"; then
+      #   echo "not found in relay index"
+      /opt/pleroma/bin/pleroma_ctl relay follow $RELAY
+      #   echo $RELAY >> /opt/pleroma/relays
+      # fi
     fi
   done < /etc/hosts
 done
