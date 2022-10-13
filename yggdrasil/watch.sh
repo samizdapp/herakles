@@ -14,7 +14,8 @@ mkdir -p /yggdrasil
 touch /yggdrasil/peers
 
 update_yggrasil_conf() {
-cat /shared_etc/yg_hosts > /etc/hosts
+  tmp=$(mktemp)
+  cat /shared_etc/yg_hosts > /etc/hosts
   echo "" >> /etc/hosts # need final line end
   PEER_ENDPOINTS="[\"tls://51.38.64.12:28395\",\""
   ALLOWED_KEYS="[\""
@@ -62,7 +63,18 @@ cat /shared_etc/yg_hosts > /etc/hosts
 
   jq ".Peers = $PEER_ENDPOINTS" "$CONF" > "$tmp"
   sleep 1
-  jq ".AllowedPublicKeys = $ALLOWED_KEYS" "$tmp" > "$CONF"
+  tmp2=$(mktemp)
+  jq ".AllowedPublicKeys = $ALLOWED_KEYS" "$tmp" > "$tmp2"
+
+  if diff $tmp2 $CONF > /dev/null
+  then
+      echo "No difference in config, skip update"
+  else
+      cat $tmp2 > $CONF
+      echo "Difference, update config"
+  fi
+
+  rm $tmp $tmp2
 }
 
 update_yggrasil_conf
