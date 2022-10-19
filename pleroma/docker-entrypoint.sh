@@ -10,12 +10,19 @@ while ! pg_isready -U ${DB_USER:-pleroma} -d postgres://${DB_HOST:-db}:5432/${DB
 done
 
 
-
 while [ ! -f /etc/yggdrasil-network/backup.conf ]
 do
 echo "waiting for yggdrasil config"
 sleep 5
 done
+
+SIZERES=$(wc -c /etc/yggdrasil/config.conf)
+SIZE=${SIZERES:0:1}
+if [ $SIZE == '0' ]; then
+  echo "configuration file is empty, restore from backup"
+  rm /etc/yggdrasil/config.conf
+  cp /etc/yggdrasil-network/backup.conf /etc/yggdrasil/config.conf
+fi
 
 echo "get public key"
 PUB=$(jq '.PublicKey' /etc/yggdrasil-network/config.conf | tr -d '"')
