@@ -10,6 +10,7 @@ volumes:
   postgres2:
   gateway_client:
   pleroma_uploads:
+  ipfs:
 services:
   daemon_caddy:
     build: ./daemon/caddy
@@ -69,6 +70,7 @@ services:
       - postgres2:/var/lib/postgresql/data
   service_wifi-connect:
     build: ./service/wifi-connect
+    privileged: true
     network_mode: "host"
     labels:
       io.balena.features.dbus: "1"
@@ -76,7 +78,14 @@ services:
       - NET_ADMIN
     environment:
       DBUS_SYSTEM_BUS_ADDRESS: "unix:path=/host/run/dbus/system_bus_socket"
-
+  # iotwifi:
+  #   build: ./iotwifi
+  #   privileged: true
+  #   network_mode: host 
+  #   cap_add:
+  #     - NET_ADMIN
+  #   labels:
+  #     io.balena.features.dbus: '1'
   service_hostname:
     build: ./service/hostname
     restart: "no" # Required to avoid container restarting indefinitely
@@ -101,7 +110,7 @@ services:
       - shared_yggdrasil:/yggdrasil
       - gateway_client:/next
     environment:
-      PUBLIC_PATH: "/next/assets/libp2p.bootstrap"
+      PUBLIC_PATH: "/next/assets"
       ID_PATH: "/shared_etc/libp2p.id"
     # expose:
     #   - "8000"
@@ -174,6 +183,13 @@ services:
     environment:
       DBUS_SYSTEM_BUS_ADDRESS: "unix:path=/host/run/dbus/system_bus_socket"
       MDNS_TLD: "samizdev.local"
+
+  # ipfs:
+  #   image: ipfs/kubo
+  #   network_mode: host
+  #   volumes:
+  #     - ipfs:/data/ipfs
+  #     - gateway_client:/gateway_client
 
   # harness__cinny:
   #   build: ./harness/cinny
