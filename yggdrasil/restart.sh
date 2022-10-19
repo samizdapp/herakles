@@ -4,5 +4,5 @@ CONF="$CONF_DIR/config.conf"
 while inotifywait -e close_write $CONF; 
 do
     echo "detected yggdrasil config change, TODO restart container"
-    kill $(pidof yggdrasil)
+    # kill $(pidof yggdrasil)
 done

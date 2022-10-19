@@ -53,10 +53,14 @@ update_yggrasil_conf() {
   done < /yggdrasil/peers
   
   TRIMMED_PEER_ENDPOINTS=${PEER_ENDPOINTS::-2}
-  TRIMMED_ALLOWED_KEYS=${ALLOWED_KEYS::-2}
   PEER_ENDPOINTS="$TRIMMED_PEER_ENDPOINTS]"
-  ALLOWED_KEYS="$TRIMMED_ALLOWED_KEYS]"
 
+  if [ $ALLOWED_KEYS != "[\"" ]; then 
+    ALLOWED_KEYS=${ALLOWED_KEYS::-2}
+  fi
+
+
+  ALLOWED_KEYS="$ALLOWED_KEYS]"
 
   echo "peer endpoints: $PEER_ENDPOINTS"
   echo "allowed keys: $ALLOWED_KEYS"
@@ -66,10 +70,12 @@ update_yggrasil_conf() {
   tmp2=$(mktemp)
   jq ".AllowedPublicKeys = $ALLOWED_KEYS" "$tmp" > "$tmp2"
 
+  SIZERES=$(wc -c $CONF)
+  SIZE=${SIZERES:0:1}
   if diff $tmp2 $CONF > /dev/null
   then
       echo "No difference in config, skip update"
-  else
+  elif [ $SIZE != '0' ]; then
       cat $tmp2 > $CONF
       echo "Difference, update config"
   fi

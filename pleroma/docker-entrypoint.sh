@@ -16,12 +16,12 @@ echo "waiting for yggdrasil config"
 sleep 5
 done
 
-SIZERES=$(wc -c /etc/yggdrasil/config.conf)
+SIZERES=$(wc -c /etc/yggdrasil-network/config.conf)
 SIZE=${SIZERES:0:1}
 if [ $SIZE == '0' ]; then
   echo "configuration file is empty, restore from backup"
-  rm /etc/yggdrasil/config.conf
-  cp /etc/yggdrasil-network/backup.conf /etc/yggdrasil/config.conf
+  rm /etc/yggdrasil-network/config.conf
+  cp /etc/yggdrasil-network/backup.conf /etc/yggdrasil-network/config.conf
 fi
 
 echo "get public key"
