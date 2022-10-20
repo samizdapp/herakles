@@ -12,6 +12,11 @@ volumes:
   pleroma_uploads:
   ipfs:
 services:
+  athena:
+    image: herakles_athena
+    build: ./athena
+    deploy:
+      replicas: 0
   daemon_caddy:
     build: ./daemon/caddy
     restart: always
@@ -27,6 +32,8 @@ services:
       - service_yggdrasil:/etc/yggdrasil-network
       - gateway_client:/next
   gateway_client:
+    depends_on:
+      - athena
     build:
       context: ./athena
       dockerfile: ./packages/gateway-client/Dockerfile
