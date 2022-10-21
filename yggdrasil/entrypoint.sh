@@ -6,7 +6,13 @@ CONF_DIR="/etc/yggdrasil-network"
 CONF="$CONF_DIR/config.conf"
 CONF_BACKUP="$CONF_DIR/backup.conf"
 tmp=$(mktemp)
-mkdir -p /shared_etc
+mkdir -p /shared_etc/yggdrasil-network
+
+if ! test -f "$CONF"; then
+    echo "generate init $CONF"
+    yggdrasil --genconf -json > "$CONF"
+    cp $CONF $CONF_BACKUP
+fi
 
 SIZERES=$(wc -c $CONF)
 SIZE=${SIZERES:0:1}
@@ -17,7 +23,7 @@ fi
 
 if [ ! -f $CONF ]; then
   if [ ! -f $CONF_BACKUP ]; then
-    echo "generate $CONF"
+    echo "generate recover $CONF"
     yggdrasil --genconf -json > "$CONF"
     cp $CONF $CONF_BACKUP
   else 
@@ -36,5 +42,5 @@ jq '.Listen = ["tcp://0.0.0.0:5000"]' "$CONF" > "$tmp" && mv "$tmp" "$CONF"
 # /usr/bin/watch.sh & jobs
 # /crawler/watch.sh & jobs
 /usr/bin/restart.sh & jobs
-yggdrasil --useconf -json < "$CONF_DIR/config.conf"
+yggdrasil --useconf -json < $CONF
 exit $?

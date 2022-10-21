@@ -6,4 +6,4 @@ RUN apk add nano miniupnpc bash inotify-tools curl bind-tools
 
 VOLUME [ "/etc/yggdrasil-network" ]
 
-ENTRYPOINT [ "/usr/bin/upnp.sh" ]
+ENTRYPOINT [ "/bin/bash","/usr/bin/upnp.sh" ]

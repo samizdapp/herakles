@@ -13,4 +13,4 @@ RUN pip3 install -r requirements.txt
 
 VOLUME [ "/etc/yggdrasil-network" ]
 
-ENTRYPOINT [ "/crawler/watch.sh" ]
+ENTRYPOINT ["/bin/bash", "/crawler/watch.sh" ]
