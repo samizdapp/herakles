@@ -16,12 +16,6 @@ services:
     build: ./daemon/caddy
     restart: always
     network_mode: host
-    # ports:
-    #   - "80:80"
-    #   - "443:443"
-    #   - "8443:8443"
-    #   - "4000:4000"
-    #   - "4001:4001"
     volumes:
       - shared_yggdrasil:/yggdrasil
       - service_yggdrasil:/etc/yggdrasil-network
@@ -32,8 +26,6 @@ services:
       dockerfile: ./packages/gateway-client/Dockerfile
     network_mode: host
     restart: always
-    # expose:
-    #   - "80"
     volumes:
       - service_upnp:/usr/src/volumes/service_upnp
       - service_hostname:/usr/src/volumes/service_hostname
@@ -78,24 +70,17 @@ services:
       - NET_ADMIN
     environment:
       DBUS_SYSTEM_BUS_ADDRESS: "unix:path=/host/run/dbus/system_bus_socket"
-  # iotwifi:
-  #   build: ./iotwifi
-  #   privileged: true
-  #   network_mode: host 
-  #   cap_add:
-  #     - NET_ADMIN
-  #   labels:
-  #     io.balena.features.dbus: '1'
-  service_hostname:
-    build: ./service/hostname
-    restart: "no" # Required to avoid container restarting indefinitely
-    network_mode: host
-    labels:
-      io.balena.features.supervisor-api: 1 # Required to interact with the supervisor
-    environment:
-      SET_HOSTNAME: samizdapp
-    volumes:
-      - service_hostname:/service/hostname
+    depends_on:
+      - gateway-client
+      - postgres
+      - daemon_pleroma
+      - daemon_proxy
+      - daemon_caddy
+      - mdns-advertise
+      - yggdrasil
+      - yggdrasil_crawler
+      - yggdrasil_upnp
+      - yggdrasil_watcher
 
   daemon_proxy:
     build: ./lib
@@ -109,11 +94,11 @@ services:
       - shared_etc:/shared_etc
       - shared_yggdrasil:/yggdrasil
       - gateway_client:/next
+    depends_on:
+      - gateway_client
     environment:
       PUBLIC_PATH: "/next/assets"
       ID_PATH: "/shared_etc/libp2p.id"
-    # expose:
-    #   - "8000"
   # These will eventually live in an inherited project, but until they have a home they are saved here
   yggdrasil:
     # https://stackoverflow.com/a/37090165
@@ -183,27 +168,3 @@ services:
     environment:
       DBUS_SYSTEM_BUS_ADDRESS: "unix:path=/host/run/dbus/system_bus_socket"
       MDNS_TLD: "samizdev.local"
-
-  # ipfs:
-  #   image: ipfs/kubo
-  #   network_mode: host
-  #   volumes:
-  #     - ipfs:/data/ipfs
-  #     - gateway_client:/gateway_client
-
-  # harness__cinny:
-  #   build: ./harness/cinny
-  #   volumes:
-  #     - harness___cinny:/src/dist
-  # daemon_synapse:
-  #   build: ./daemon/synapse
-  #   restart: "always"
-  #   network_mode: host
-  #   expose:
-  #     - "8008"
-  #   ports:
-  #     - "8008:8008"
-  #   volumes:
-  #     - daemon_synapse:/data
-  #     - shared_etc:/etc
-  #     - service_yggdrasil:/yggdrasil
