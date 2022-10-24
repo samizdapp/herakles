@@ -15,6 +15,7 @@ clear_upnp_table(){
     do
       echo "line: " $i
       PARTS=($i)
+      CLEAR="0"
       if [ ${PARTS[1]} == "TCP" ] || [ ${PARTS[1]} == "UDP" ]; then
         echo "is entry"
         IN=${PARTS[2]}
@@ -24,7 +25,9 @@ clear_upnp_table(){
         echo "ip: " ${IPP[0]}
         if [ ${IPP[0]} != $LAN_ADDR ]; then
             echo "try to delete upnp entry"
-            upnpc -d ${INFO[0]} ${PARTS[1]} 
+            if upnpc -d ${INFO[0]} ${PARTS[1]}; then
+                return [0]
+            fi
         fi
       fi
     done
