@@ -30,6 +30,12 @@ services:
       - service_upnp:/usr/src/volumes/service_upnp
       - service_hostname:/usr/src/volumes/service_hostname
       - gateway_client:/usr/src/volumes/gateway_client
+  status_service:
+    build:
+      context: ./athena
+      dockerfile: ./packages/status-service/Dockerfile
+    network_mode: host
+    restart: always
   daemon_pleroma:
     restart: always
     network_mode: host
