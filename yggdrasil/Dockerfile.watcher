@@ -1,5 +1,6 @@
 FROM docker.io/alpine
 
+COPY status.sh /usr/bin/status.sh
 COPY watch.sh /usr/bin/watch.sh
 
 RUN apk add nano miniupnpc bash inotify-tools curl bind-tools jq
