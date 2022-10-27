@@ -34,6 +34,7 @@ WORKDIR /crawler
 
 RUN pip3 install -r requirements.txt
 
+COPY status.sh /usr/bin/status.sh
 COPY entrypoint.sh /usr/bin/entrypoint.sh
 COPY watch.sh /usr/bin/watch.sh
 COPY upnp.sh /usr/bin/upnp.sh

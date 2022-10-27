@@ -1,7 +1,12 @@
 #!/bin/bash
+
+source /usr/bin/status.sh
+
 CONF_DIR="/etc/yggdrasil-network"
 CONF="$CONF_DIR/config.conf"
 tmp=$(mktemp)
+
+send_status "yggdrasil_watcher" "WAITING" "Starting."
 
 echo "watch hosts"
 if [ -f "/shared_etc/yg_hosts" ]
@@ -74,9 +79,11 @@ update_yggrasil_conf() {
   SIZE=${SIZERES:0:1}
   if diff $tmp2 $CONF > /dev/null
   then
+      send_status "yggdrasil_watcher" "ONLINE" "No differences in config."
       echo "No difference in config, skip update"
   elif [ $SIZE != '0' ]; then
       cat $tmp2 > $CONF
+      send_status "yggdrasil_watcher" "ONLINE" "Updated config."
       echo "Difference, update config"
   fi
 
