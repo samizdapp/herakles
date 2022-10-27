@@ -1,7 +1,12 @@
 #!/bin/bash
+
+source /usr/bin/status.sh
+
 CONF_DIR="/etc/yggdrasil-network"
 CONF="$CONF_DIR/config.conf"
 tmp=$(mktemp)
+
+send_status "yggdrasil_watcher" "WAITING" "Starting."
 
 echo "watch hosts"
 if [ -f "/shared_etc/yg_hosts" ]
@@ -74,19 +79,45 @@ update_yggrasil_conf() {
   SIZE=${SIZERES:0:1}
   if diff $tmp2 $CONF > /dev/null
   then
+      send_status "yggdrasil_watcher" "ONLINE" "No differences in config."
       echo "No difference in config, skip update"
   elif [ $SIZE != '0' ]; then
       cat $tmp2 > $CONF
+      send_status "yggdrasil_watcher" "ONLINE" "Updated config."
       echo "Difference, update config"
   fi
 
   rm $tmp $tmp2
 }
 
+loop_status () {
+  while true; do
+      send_status "yggdrasil_watcher" "ONLINE" "Waiting for changes to yg_hosts."
+      sleep 120
+  done
+}
+
+start_loop_status () {
+  loop_status &
+  LOOP_PID=$!
+}
+
+stop_loop_status () {
+  kill $LOOP_PID >/dev/null 2>&1
+}
+
 update_yggrasil_conf
+start_loop_status
 
 while inotifywait -e close_write /shared_etc/yg_hosts; 
-do 
+do
+  stop_loop_status
   echo "updated, copy yg_hosts"
   update_yggrasil_conf
+  start_loop_status
 done
+
+echo "Unexpected exit!"
+send_status "yggdrasil_watcher" "OFFLINE" "Exiting unexpectedly!"
+
+exit 1
