@@ -7,6 +7,6 @@ send_status () {
   curl \
     -w "\n" \
     -d "{\"service\": \"$SERVICE\", \"status\": \"$STATUS\", \"message\": \"$MESSAGE\"}" -H "Content-Type: application/json" \
-    -X POST http://localhost/api/status/logs \
+    -X POST http://localhost/smz/api/status/logs \
     || true
 }
