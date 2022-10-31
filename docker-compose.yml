@@ -20,6 +20,8 @@ services:
       - shared_yggdrasil:/yggdrasil
       - service_yggdrasil:/etc/yggdrasil-network
       - gateway_client:/next
+    depends_on:
+      - yggdrasil
   gateway_client:
     build:
       context: ./athena
@@ -30,6 +32,8 @@ services:
       - service_upnp:/usr/src/volumes/service_upnp
       - service_hostname:/usr/src/volumes/service_hostname
       - gateway_client:/usr/src/volumes/gateway_client
+    depends_on:
+      - daemon_caddy
   status_service:
     build:
       context: ./athena
@@ -56,6 +60,7 @@ services:
       DB_HOST: localhost
     depends_on:
       - postgres
+      - yggdrasil
   postgres:
     image: postgres:12.1-alpine
     restart: always
@@ -76,6 +81,8 @@ services:
       - NET_ADMIN
     environment:
       DBUS_SYSTEM_BUS_ADDRESS: "unix:path=/host/run/dbus/system_bus_socket"
+      PORTAL_SSID: "SamizdApp"
+      PORTAL_PASSPHRASE: "samizdapp"
     depends_on:
       - gateway_client
       - postgres
@@ -102,6 +109,7 @@ services:
       - gateway_client:/next
     depends_on:
       - gateway_client
+      - yggdrasil
     environment:
       PUBLIC_PATH: "/next/assets"
       ID_PATH: "/shared_etc/libp2p.id"
@@ -120,6 +128,8 @@ services:
       - service_yggdrasil_sock:/var/run/
       - shared_etc:/shared_etc
       - shared_yggdrasil:/yggdrasil
+    depends_on:
+      - status_service
   yggdrasil_upnp:
     # https://stackoverflow.com/a/37090165
     build:
@@ -149,6 +159,8 @@ services:
       - service_yggdrasil_sock:/var/run/
       - shared_etc:/shared_etc
       - shared_yggdrasil:/yggdrasil
+    depends_on:
+      - yggdrasil
   yggdrasil_crawler:
     # https://stackoverflow.com/a/37090165
     build:
@@ -164,6 +176,8 @@ services:
       - service_yggdrasil_sock:/var/run/
       - shared_etc:/shared_etc
       - shared_yggdrasil:/yggdrasil
+    depends_on:
+      - yggdrasil
   mdns-advertise:
     build: ./mdns-advertise
     restart: "always"
