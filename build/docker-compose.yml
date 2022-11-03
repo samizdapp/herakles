@@ -1,0 +1,6 @@
+version: "2"
+services:
+  athena:
+    image: ghcr.io/samizdapp/athena:${VERSION}
+    build:
+      context: ../athena
