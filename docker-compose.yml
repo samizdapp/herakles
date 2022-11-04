@@ -140,7 +140,7 @@ services:
       context: ./yggdrasil/
       dockerfile: Dockerfile.upnp
     privileged: true
-    restart: "no  "
+    restart: "no"
     network_mode: host
     # expose:
     #   - "9001"
