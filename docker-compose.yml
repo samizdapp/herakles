@@ -26,6 +26,8 @@ services:
     build:
       context: ./athena
       dockerfile: ./packages/gateway-client/Dockerfile
+      args:
+        - VERSION=${VERSION}
     network_mode: host
     restart: always
     volumes:
@@ -38,6 +40,8 @@ services:
     build:
       context: ./athena
       dockerfile: ./packages/status-service/Dockerfile
+      args:
+        - VERSION=${VERSION}
     network_mode: host
     restart: always
   daemon_pleroma:
@@ -136,7 +140,7 @@ services:
       context: ./yggdrasil/
       dockerfile: Dockerfile.upnp
     privileged: true
-    restart: "no  "
+    restart: "no"
     network_mode: host
     # expose:
     #   - "9001"
