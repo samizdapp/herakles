@@ -26,6 +26,8 @@ services:
     build:
       context: ./athena
       dockerfile: ./packages/gateway-client/Dockerfile
+      args:
+        - VERSION=${VERSION}
     network_mode: host
     restart: always
     volumes:
@@ -38,6 +40,8 @@ services:
     build:
       context: ./athena
       dockerfile: ./packages/status-service/Dockerfile
+      args:
+        - VERSION=${VERSION}
     network_mode: host
     restart: always
   daemon_pleroma:
