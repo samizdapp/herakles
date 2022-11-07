@@ -46,7 +46,7 @@ jobs:
           tags: |
             ghcr.io/samizdapp/athena:${{ github.sha }}
             ghcr.io/samizdapp/athena:${{ github.ref_name }}
-          cache-from: type=registry,ref=ghcr.io/samizdapp/athena:${{ github.sha }}
+          cache-from: type=registry,ref=ghcr.io/samizdapp/athena:${{ github.ref_name }}
           cache-to: type=inline
 
       - name: balenify docker-compose.yml
