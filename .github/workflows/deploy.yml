@@ -1,0 +1,17 @@
+name: deploy
+on:
+  workflow_run:
+    workflows: ["build"]
+    types:
+      - completed
+    branches:
+      - develop
+
+  workflow_dispatch:
+
+jobs:
+  empty:
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Empty"
+        run: echo "Empty"
