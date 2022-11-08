@@ -9,7 +9,7 @@ on:
     types:
       - completed
     branches:
-      - SAM-43-ci-cd-workflow
+      - develop
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
