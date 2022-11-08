@@ -74,18 +74,6 @@ jobs:
             | sed 's/^.*Release: \([0-9a-f]*\) (id: \([0-9]*\))/\1,\2/g' \
             > release-commit-id.txt;
 
-      # - name: balena push draft
-      #   uses: balena-labs-research/community-cli-action@1.0.0
-      #   with:
-      #     balena_token: ${{secrets.BALENA_TOKEN}}
-      #     balena_cli_commands: >
-      #       push ${{ github.ref_name == 'master' && 'gh_rynomad/alpha' || 'gh_rynomad/develop' }} -m --draft \
-      #         | tee /dev/tty | grep -e "Release: .* (id: .*)" \
-      #         | sed -r "s/\x1B\[(([0-9]{1,2})?(;)?([0-9]{1,2})?)?[m,K,H,f,J]//g" \
-      #         | sed 's/^.*Release: \([0-9a-f]*\) (id: \([0-9]*\))/\1,\2/g' \
-      #         > release-commit-id.txt;
-      #     balena_cli_version: 14.3.1
-
       - name: Output release info
         run: |
           mkdir -p ./release-info
