@@ -30,8 +30,10 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       - name: Download artifact
-        uses: actions/download-artifact@v3
+        uses: dawidd6/action-download-artifact@v2
         with:
+          commit: ${{ github.sha }}
+          workflow: build.yml
           name: release-info-${{ github.sha }}
           path: ./release-info
 
