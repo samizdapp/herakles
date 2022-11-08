@@ -1,0 +1,87 @@
+# This is a basic workflow to help you get started with Actions
+
+name: build
+
+# Controls when the workflow will run
+on:
+  push:
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          submodules: recursive
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Login to GHCR
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push athena image
+        uses: docker/build-push-action@v3
+        with:
+          context: ./athena
+          platforms: linux/amd64,linux/arm64/v8
+          push: true
+          tags: |
+            ghcr.io/samizdapp/athena:${{ github.sha }}
+            ghcr.io/samizdapp/athena:${{ github.ref_name }}
+          cache-from: type=registry,ref=ghcr.io/samizdapp/athena:${{ github.ref_name }}
+          cache-to: type=inline
+
+      - name: balenify docker-compose.yml
+        run: sed -i -e 's/${VERSION}/${{ github.sha }}/g' docker-compose.yml
+
+      - name: Install balena
+        env:
+          BALENA_CLI_VERSION: 14.3.1
+        run: |
+          sudo apt-get update && \
+            sudo apt-get install -y unzip wget && \
+          wget -q -O balena-cli.zip "https://github.com/balena-io/balena-cli/releases/download/v${BALENA_CLI_VERSION}/balena-cli-v${BALENA_CLI_VERSION}-linux-x64-standalone.zip" && \
+            unzip balena-cli.zip && \
+            rm balena-cli.zip
+
+      - name: balena login
+        run: balena-cli/balena login --token ${{ secrets.BALENA_TOKEN }}
+
+      - name: balena push draft
+        run: |
+          balena-cli/balena push ${{ github.ref_name == 'master' && 'gh_rynomad/alpha' || 'gh_rynomad/develop' }} -m --draft \
+            | tee balena-push.out && \
+          grep -e "Release: .* (id: .*)" balena-push.out \
+            | sed -r "s/\x1B\[(([0-9]{1,2})?(;)?([0-9]{1,2})?)?[m,K,H,f,J]//g" \
+            | sed 's/^.*Release: \([0-9a-f]*\) (id: \([0-9]*\))/\1,\2/g' \
+            > release-commit-id.txt;
+
+      - name: Output release info
+        run: |
+          mkdir -p ./release-info
+          cut -d, -f1 release-commit-id.txt | xargs echo -n > ./release-info/commit
+          cut -d, -f2 release-commit-id.txt | xargs echo -n > ./release-info/id
+
+      - name: Upload release info
+        uses: actions/upload-artifact@v3
+        with:
+          name: release-info-${{ github.sha }}
+          path: release-info/
