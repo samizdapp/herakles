@@ -24,6 +24,11 @@ jobs:
         with:
           submodules: recursive
 
+      - name: Get cache tag
+        id: get-cache-tag
+        run: |
+          echo "::set-output name=cache_tag::$(git rev-parse HEAD~1)"
+
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
 
@@ -46,7 +51,7 @@ jobs:
           tags: |
             ghcr.io/samizdapp/athena:${{ github.sha }}
             ghcr.io/samizdapp/athena:${{ github.ref_name }}
-          cache-from: type=registry,ref=ghcr.io/samizdapp/athena:${{ github.ref_name }}
+          cache-from: type=registry,ref=ghcr.io/samizdapp/athena:${{ steps.get-cache-tag.outputs.cache_tag }}
           cache-to: type=inline
 
       - name: balenify docker-compose.yml
