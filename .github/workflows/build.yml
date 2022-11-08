@@ -63,7 +63,7 @@ jobs:
             rm balena-cli.zip
 
       - name: balena login
-        run: ./balena login --token ${{ secrets.BALENA_TOKEN }}
+        run: balena login --token ${{ secrets.BALENA_TOKEN }}
 
       - name: balena push draft
         run: |
