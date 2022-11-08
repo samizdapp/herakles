@@ -5,7 +5,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  empty:
+  build:
     runs-on: ubuntu-latest
     steps:
       - name: "Empty"
