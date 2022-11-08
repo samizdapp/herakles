@@ -23,6 +23,12 @@ jobs:
         uses: actions/checkout@v3
         with:
           submodules: recursive
+          fetch-depth: 2
+
+      - name: Get cache tag
+        id: get-cache-tag
+        run: |
+          echo "cache_tag=$(git rev-parse HEAD~1)" >> $GITHUB_ENV
 
       - name: Construct branch tag
         id: construct-branch-tag
@@ -51,7 +57,7 @@ jobs:
           tags: |
             ghcr.io/samizdapp/athena:${{ github.sha }}
             ghcr.io/samizdapp/athena:${{ env.branch_tag }}
-          cache-from: type=registry,ref=ghcr.io/samizdapp/athena:${{ env.branch_tag }}
+          cache-from: type=registry,ref=ghcr.io/samizdapp/athena:${{ env.cache_tag }}
           cache-to: type=inline
 
       - name: balenify docker-compose.yml
