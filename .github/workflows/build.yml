@@ -27,7 +27,7 @@ jobs:
       - name: Construct branch tag
         id: construct-branch-tag
         run: |
-          echo "::set-output name=branch_tag::$(echo ${{ github.ref_name }} | sed 's/\//-/g')"
+          echo "branch_tag=$(echo ${{ github.ref_name }} | sed 's/\//-/g')" >> $GITHUB_ENV
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
@@ -50,8 +50,8 @@ jobs:
           push: true
           tags: |
             ghcr.io/samizdapp/athena:${{ github.sha }}
-            ghcr.io/samizdapp/athena:${{ steps.construct-branch-tag.outputs.branch_tag }}
-          cache-from: type=registry,ref=ghcr.io/samizdapp/athena:${{ steps.construct-branch-tag.outputs.branch_tag }}
+            ghcr.io/samizdapp/athena:${{ env.branch_tag }}
+          cache-from: type=registry,ref=ghcr.io/samizdapp/athena:${{ env.branch_tag }}
           cache-to: type=inline
 
       - name: balenify docker-compose.yml
