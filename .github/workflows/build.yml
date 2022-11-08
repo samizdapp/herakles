@@ -63,11 +63,11 @@ jobs:
             rm balena-cli.zip
 
       - name: balena login
-        run: balena login --token ${{ secrets.BALENA_TOKEN }}
+        run: balena-cli/balena login --token ${{ secrets.BALENA_TOKEN }}
 
       - name: balena push draft
         run: |
-          balena push ${{ github.ref_name == 'master' && 'gh_rynomad/alpha' || 'gh_rynomad/develop' }} -m --draft \
+          balena-cli/balena push ${{ github.ref_name == 'master' && 'gh_rynomad/alpha' || 'gh_rynomad/develop' }} -m --draft \
             | tee /dev/tty | grep -e "Release: .* (id: .*)" \
             | sed -r "s/\x1B\[(([0-9]{1,2})?(;)?([0-9]{1,2})?)?[m,K,H,f,J]//g" \
             | sed 's/^.*Release: \([0-9a-f]*\) (id: \([0-9]*\))/\1,\2/g' \
