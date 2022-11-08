@@ -52,17 +52,38 @@ jobs:
       - name: balenify docker-compose.yml
         run: sed -i -e 's/${VERSION}/${{ github.sha }}/g' docker-compose.yml
 
+      - name: Install balena
+        env:
+          BALENA_CLI_VERSION: 14.3.1
+        run: |
+          apt-get update && \
+            apt-get install -y unzip wget && \
+          wget -q -O balena-cli.zip "https://github.com/balena-io/balena-cli/releases/download/v${BALENA_CLI_VERSION}/balena-cli-v${BALENA_CLI_VERSION}-linux-x64-standalone.zip" && \
+            unzip balena-cli.zip && \
+            rm balena-cli.zip
+
+      - name: balena login
+        run: ./balena login --token ${{ secrets.BALENA_TOKEN }}
+
       - name: balena push draft
-        uses: balena-labs-research/community-cli-action@1.0.0
-        with:
-          balena_token: ${{secrets.BALENA_TOKEN}}
-          balena_cli_commands: >
-            push ${{ github.ref_name == 'master' && 'gh_rynomad/alpha' || 'gh_rynomad/develop' }} -m --draft \
-              | tee /dev/tty | grep -e "Release: .* (id: .*)" \
-              | sed -r "s/\x1B\[(([0-9]{1,2})?(;)?([0-9]{1,2})?)?[m,K,H,f,J]//g" \
-              | sed 's/^.*Release: \([0-9a-f]*\) (id: \([0-9]*\))/\1,\2/g' \
-              > release-commit-id.txt;
-          balena_cli_version: 14.3.1
+        run: |
+          balena push ${{ github.ref_name == 'master' && 'gh_rynomad/alpha' || 'gh_rynomad/develop' }} -m --draft \
+            | tee /dev/tty | grep -e "Release: .* (id: .*)" \
+            | sed -r "s/\x1B\[(([0-9]{1,2})?(;)?([0-9]{1,2})?)?[m,K,H,f,J]//g" \
+            | sed 's/^.*Release: \([0-9a-f]*\) (id: \([0-9]*\))/\1,\2/g' \
+            > release-commit-id.txt;
+
+      # - name: balena push draft
+      #   uses: balena-labs-research/community-cli-action@1.0.0
+      #   with:
+      #     balena_token: ${{secrets.BALENA_TOKEN}}
+      #     balena_cli_commands: >
+      #       push ${{ github.ref_name == 'master' && 'gh_rynomad/alpha' || 'gh_rynomad/develop' }} -m --draft \
+      #         | tee /dev/tty | grep -e "Release: .* (id: .*)" \
+      #         | sed -r "s/\x1B\[(([0-9]{1,2})?(;)?([0-9]{1,2})?)?[m,K,H,f,J]//g" \
+      #         | sed 's/^.*Release: \([0-9a-f]*\) (id: \([0-9]*\))/\1,\2/g' \
+      #         > release-commit-id.txt;
+      #     balena_cli_version: 14.3.1
 
       - name: Output release info
         run: |
