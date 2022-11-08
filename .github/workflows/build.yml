@@ -61,7 +61,7 @@ jobs:
           cache-to: type=inline
 
       - name: balenify docker-compose.yml
-        run: sed -i -e 's/${VERSION}/${{ github.sha }}/g' docker-compose.yml
+        run: sed -i -e 's/VERSION=latest/VERSION=${{ github.sha }}/g' docker-compose.yml
 
       - name: Install balena
         env:
