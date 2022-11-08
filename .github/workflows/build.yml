@@ -89,8 +89,8 @@ jobs:
       - name: Output release info
         run: |
           mkdir -p ./release-info
-          cut -d, -f1 release-commit-id.txt > ./release-info/commit
-          cut -d, -f2 release-commit-id.txt > ./release-info/id
+          cut -d, -f1 release-commit-id.txt | xargs echo -n > ./release-info/commit
+          cut -d, -f2 release-commit-id.txt | xargs echo -n > ./release-info/id
 
       - name: Upload release info
         uses: actions/upload-artifact@v3
