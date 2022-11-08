@@ -40,13 +40,13 @@ jobs:
       - name: Set release info
         id: set-release-info
         run: |
-          echo "::set-output name=commit::$(cat ./release-info/commit)"
-          echo "::set-output name=id::$(cat ./release-info/id)"
+          echo "release_commit=$(cat ./release-info/commit)" >> $GITHUB_ENV
+          echo "release_id=$(cat ./release-info/id)" >> $GITHUB_ENV
 
       - name: balena finalize draft
         uses: balena-labs-research/community-cli-action@1.0.0
         with:
           balena_token: ${{secrets.BALENA_TOKEN}}
           balena_cli_commands: >
-            release finalize ${{ steps.set-release-info.outputs.id }}
+            release finalize ${{ env.release_id }}
           balena_cli_version: 14.3.1
