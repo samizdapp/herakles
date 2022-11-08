@@ -9,7 +9,7 @@ on:
     types:
       - completed
     branches:
-      - develop
+      - features/build-deploy-ci-cd
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
