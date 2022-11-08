@@ -49,16 +49,18 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build and push athena image
-        uses: docker/build-push-action@v3
-        with:
-          context: ./athena
-          platforms: linux/amd64,linux/arm64/v8
-          push: true
-          tags: |
-            ghcr.io/samizdapp/athena:${{ github.sha }}
-            ghcr.io/samizdapp/athena:${{ env.branch_tag }}
-          cache-from: type=registry,ref=ghcr.io/samizdapp/athena:${{ env.cache_tag }}
-          cache-to: type=inline
+        run: |
+          /usr/bin/docker buildx build \
+            --cache-from type=registry,ref=ghcr.io/samizdapp/athena:${{ github.event.before }} \
+            --cache-from type=registry,ref=ghcr.io/samizdapp/athena:${{ env.cache_tag }} \
+            --cache-from type=registry,ref=ghcr.io/samizdapp/athena:${{ env.branch_tag }} \
+            --cache-from type=registry,ref=ghcr.io/samizdapp/athena:develop \
+            --cache-to type=inline \
+            --platform linux/amd64,linux/arm64/v8 \
+            --tag ghcr.io/samizdapp/athena:${{ github.sha }} \
+            --tag ghcr.io/samizdapp/athena:${{ env.branch_tag }} \
+            --push \
+            ./athena
 
       - name: balenify docker-compose.yml
         run: sed -i -e 's/VERSION=latest/VERSION=${{ github.sha }}/g' docker-compose.yml
