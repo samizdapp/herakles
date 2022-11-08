@@ -56,8 +56,8 @@ jobs:
         env:
           BALENA_CLI_VERSION: 14.3.1
         run: |
-          sudo apt update && \
-            sudo apt install -y unzip wget && \
+          sudo apt-get update && \
+            sudo apt-get install -y unzip wget && \
           wget -q -O balena-cli.zip "https://github.com/balena-io/balena-cli/releases/download/v${BALENA_CLI_VERSION}/balena-cli-v${BALENA_CLI_VERSION}-linux-x64-standalone.zip" && \
             unzip balena-cli.zip && \
             rm balena-cli.zip
