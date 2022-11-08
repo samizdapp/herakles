@@ -1,0 +1,10 @@
+name: deploy
+on:
+  workflow_dispatch:
+
+jobs:
+  empty:
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Empty"
+        run: echo "Empty"
