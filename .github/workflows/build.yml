@@ -57,5 +57,21 @@ jobs:
         with:
           balena_token: ${{secrets.BALENA_TOKEN}}
           balena_cli_commands: >
-            push ${{ github.ref_name == 'master' && 'gh_rynomad/alpha' || 'gh_rynomad/develop' }} -m --draft;
+            push ${{ github.ref_name == 'master' && 'gh_rynomad/alpha' || 'gh_rynomad/develop' }} -m --draft \
+              | tee /dev/tty | grep -e "Release: .* (id: .*)" \
+              | sed -r "s/\x1B\[(([0-9]{1,2})?(;)?([0-9]{1,2})?)?[m,K,H,f,J]//g" \
+              | sed 's/^.*Release: \([0-9a-f]*\) (id: \([0-9]*\))/\1,\2/g' \
+              > release-commit-id.txt;
           balena_cli_version: 14.3.1
+
+      - name: Output release info
+        run: |
+          mkdir -p ./release-info
+          cut -d, -f1 release-commit-id.txt > ./release-info/commit
+          cut -d, -f2 release-commit-id.txt > ./release-info/id
+
+      - name: Upload release info
+        uses: actions/upload-artifact@v3
+        with:
+          name: release-info-${{ github.sha }}
+          path: release-info/
