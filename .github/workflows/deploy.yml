@@ -13,6 +13,12 @@ on:
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
+    inputs:
+      dispatched:
+        description: "Mark this invocation as a manual dispatch"
+        required: false
+        type: boolean
+        default: true
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -20,7 +26,7 @@ jobs:
   deploy:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    if: ${{ github.event.inputs.dispatched || github.event.workflow_run.conclusion == 'success' }}
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       - name: Download artifact
