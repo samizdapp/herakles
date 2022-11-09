@@ -1,4 +1,8 @@
+# This is a basic workflow to help you get started with Actions
+
 name: deploy
+
+# Controls when the workflow will run
 on:
   workflow_run:
     workflows: ["build"]
@@ -7,11 +11,42 @@ on:
     branches:
       - develop
 
+  # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
+    inputs:
+      dispatched:
+        description: "Mark this invocation as a manual dispatch"
+        required: false
+        type: boolean
+        default: true
 
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  empty:
+  # This workflow contains a single job called "build"
+  deploy:
+    # The type of runner that the job will run on
     runs-on: ubuntu-latest
+    if: ${{ github.event.inputs.dispatched || github.event.workflow_run.conclusion == 'success' }}
+    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      - name: "Empty"
-        run: echo "Empty"
+      - name: Download artifact
+        uses: dawidd6/action-download-artifact@v2
+        with:
+          commit: ${{ github.sha }}
+          workflow: build.yml
+          name: release-info-${{ github.sha }}
+          path: ./release-info
+
+      - name: Set release info
+        id: set-release-info
+        run: |
+          echo "release_commit=$(cat ./release-info/commit)" >> $GITHUB_ENV
+          echo "release_id=$(cat ./release-info/id)" >> $GITHUB_ENV
+
+      - name: balena finalize draft
+        uses: balena-labs-research/community-cli-action@1.0.0
+        with:
+          balena_token: ${{secrets.BALENA_TOKEN}}
+          balena_cli_commands: >
+            release finalize ${{ env.release_id }}
+          balena_cli_version: 14.3.1

@@ -1,0 +1,14 @@
+# Copied over from ./router
+
+# Don't copy over .git when it's a submodule (.git is a file)
+# If you're using this as a submodule you'll need to set $PKGVER yourself
+router/.git
+!router/.git/*
+
+router/contrib/
+!router/contrib/docker
+!router/contrib/semver
+
+router/.github/
+router/misc/
+router/*.md
