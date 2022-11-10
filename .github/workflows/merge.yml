@@ -31,8 +31,11 @@ jobs:
           fetch-depth: 2
           ref: "develop"
       - name: Get athena commit
+        outputs:
+          ATHENA_SHA: ${{ steps.step1.outputs.test }}
+          output2: ${{ steps.step2.outputs.test }}
         run: |
-          pushd athena &&  echo "ATHENA_SHA=$(git log --pretty=format:'%h' | tr -d '\r')" >> $GITHUB_OUTPUT && popd
+          pushd athena && echo "ATHENA_SHA=$(git log --pretty=format:'%h' | tr -d '\r')" >> $GITHUB_ENV
       - name: check athena commit
         run: |
           echo "${{ steps.version.outputs.ATHENA_SHA }}"
