@@ -29,5 +29,8 @@ jobs:
         with:
           submodules: recursive
           fetch-depth: 2
+      - uses: actions/checkout@v2
+        with:
+          ref: my-branch
       - name: athena
-        run: pushd athena && git checkout master && git merge develop -m "update master" && git push origin master && popd
+        run: pushd athena && git show-ref && git checkout master && git merge develop -m "update master" && git push origin master && popd
