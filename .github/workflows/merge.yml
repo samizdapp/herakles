@@ -36,6 +36,7 @@ jobs:
           pushd athena && echo "ATHENA_SHA=$(git rev-parse --short HEAD)" >> $GITHUB_ENV && popd && \
           pushd lib && echo "LIB_SHA=$(git rev-parse --short HEAD)" >> $GITHUB_ENV && popd
       - name: Checkout master
+        uses: actions/checkout@v3
         with:
           submodules: recursive
           fetch-depth: 2
