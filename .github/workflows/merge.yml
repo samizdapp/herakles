@@ -42,6 +42,14 @@ jobs:
           submodules: recursive
           fetch-depth: 0
           ref: "master"
-      - name: Merge submodules
+      - name: Merge athena
         run: |
-          git merge ${{env.ATHENA_SHA}} && git push origin master
+          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git merge ${{env.ATHENA_SHA}} -m "develop->master"
+            - name: Push changes
+      - name: Push athena
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: "master"
