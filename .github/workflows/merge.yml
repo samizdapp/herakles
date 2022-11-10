@@ -32,7 +32,7 @@ jobs:
           ref: "develop"
       - name: Get athena commit
         run: |
-          pushd athena && echo "ATHENA_SHA=$(git log --pretty=format:'%h' | tr -d '\r')" >> $GITHUB_ENV
+          pushd athena && echo "ATHENA_SHA=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
       - name: check athena commit
         run: |
           echo "${{ steps.version.outputs.ATHENA_SHA }}"
