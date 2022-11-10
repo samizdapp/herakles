@@ -29,5 +29,10 @@ jobs:
         with:
           submodules: recursive
           fetch-depth: 2
-      - name: athena
-        run: pushd athena && git fetch && git show-ref && git checkout master && git merge develop -m "update master" && git push origin master && popd
+          ref: "develop"
+      - name: Get athena commit
+        run: |
+          pushd athena && echo "ATHENA_SHA=$(git log --pretty=format:"%h")" >> $GITHUB_OUTPUT && popd
+      - name: check athena commit
+        run: |
+          echo "${{ steps.version.outputs.ATHENA_SHA }}"
