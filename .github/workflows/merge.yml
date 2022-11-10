@@ -30,9 +30,10 @@ jobs:
           submodules: recursive
           fetch-depth: 2
           ref: "develop"
-      - name: Get athena commit
+      - name: Get commits
+        id: commits
         run: |
           pushd athena && echo "ATHENA_SHA=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
       - name: check athena commit
         run: |
-          echo "${{ steps.version.outputs.ATHENA_SHA }}"
+          echo "${{ steps.commits.outputs.ATHENA_SHA }}"
