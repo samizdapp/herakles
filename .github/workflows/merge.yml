@@ -33,8 +33,8 @@ jobs:
       - name: Get commits
         id: commits
         run: |
-          pushd athena && echo "ATHENA_SHA=$(git rev-parse --short HEAD)" >> $GITHUB_ENV && \
-          pushd lib && echo "LIB_SHA=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
+          pushd athena && echo "ATHENA_SHA=$(git rev-parse --short HEAD)" >> $GITHUB_ENV && popd && \
+          pushd lib && echo "LIB_SHA=$(git rev-parse --short HEAD)" >> $GITHUB_ENV && popd
       - name: check athena commit
         run: |
           echo "${{ env.ATHENA_SHA }} ${{env.LIB_SHA}}"
