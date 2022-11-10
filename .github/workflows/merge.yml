@@ -40,5 +40,6 @@ jobs:
           submodules: recursive
           fetch-depth: 2
           ref: "master"
+      - name: Merge submodules
         run: |
           pushd athena && git merge ${{env.ATHENA_SHA}} && git push origin master && popd
