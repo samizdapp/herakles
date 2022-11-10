@@ -1,0 +1,31 @@
+# This is a basic workflow to help you get started with Actions
+
+name: merge
+
+# Controls when the workflow will run
+on:
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+    inputs:
+      dispatched:
+        description: "Mark this invocation as a manual dispatch"
+        required: false
+        type: boolean
+        default: true
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  submodules:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+    if: ${{ github.event.inputs.dispatched }}
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          submodules: recursive
+          fetch-depth: 2
+      - name: athena
+        run: pushd athena && git checkout master && git merge develop -m "update master" && git push origin master && popd
