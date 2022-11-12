@@ -1,7 +1,7 @@
 ARG BALENA_ARCH=%%BALENA_ARCH%%
 
 # base
-FROM balenalib/${BALENA_ARCH}-alpine-node:16.13-run
+FROM balenalib/${BALENA_ARCH}
 
 RUN install_packages curl
 
