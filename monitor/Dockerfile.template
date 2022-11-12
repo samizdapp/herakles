@@ -1,7 +1,7 @@
 ARG BALENA_ARCH=%%BALENA_ARCH%%
 
 # base
-FROM balenalib/${BALENA_ARCH}-debian:16.13-bullseye-run
+FROM balenalib/${BALENA_ARCH}
 
 RUN install_packages curl
 
