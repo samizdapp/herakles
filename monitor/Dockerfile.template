@@ -1,0 +1,10 @@
+ARG BALENA_ARCH=%%BALENA_ARCH%%
+
+# base
+FROM balenalib/${BALENA_ARCH}-alpine-node:16.13-run
+
+RUN install_packages curl
+
+COPY start.sh .
+
+CMD ["sh", "start.sh"]
