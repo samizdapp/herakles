@@ -3,7 +3,7 @@ ARG BALENA_ARCH=%%BALENA_ARCH%%
 # base
 FROM balenalib/${BALENA_ARCH}
 
-RUN install_packages curl
+RUN install_packages curl systemd
 
 COPY start.sh .
 
