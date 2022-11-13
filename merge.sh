@@ -2,6 +2,8 @@
 
 update_submodule() {
     pushd $1 
+    git checkout develop
+    git pull origin develop
     SHA=$(git rev-parse --short HEAD)
     git fetch
     git checkout master
@@ -18,7 +20,7 @@ checkout_submodule() {
 }
 
 update_all_submodules() {
-    update_submodule lib de
+    update_submodule lib
     update_submodule daemon/caddy
     update_submodule athena
     update_submodule mdns-advertise
