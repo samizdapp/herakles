@@ -16,3 +16,5 @@ monitor_journal(){
 
 monitor_supervisor &
 monitor_journal &
+
+sleep infinity
