@@ -11,7 +11,14 @@ monitor_supervisor(){
 }
 
 monitor_journal(){
-    journalctl -f >> /monitor/journal.log
+    journalctl -f | \
+    while read line ; do
+        echo "$line" | grep "EAI_AGAIN"
+        if [ $? = 0 ]
+        then
+            curl -X POST --header "Content-Type:application/json" "$BALENA_SUPERVISOR_ADDRESS/v1/reboot?apikey=$BALENA_SUPERVISOR_API_KEY"
+        fi
+    done 
 }
 
 monitor_supervisor &
