@@ -202,7 +202,7 @@ services:
     volumes:
       - monitor:/monitor
   hostname:
-    build: .
+    build: ./service/hostname
     restart: no
     labels:
       io.balena.features.supervisor-api: 1
