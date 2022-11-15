@@ -201,3 +201,10 @@ services:
       io.balena.features.journal-logs: "1"
     volumes:
       - monitor:/monitor
+  hostname:
+    build: ./service/hostname
+    restart: no
+    labels:
+      io.balena.features.supervisor-api: 1
+    environment:
+      SET_HOSTNAME: samizdapp
