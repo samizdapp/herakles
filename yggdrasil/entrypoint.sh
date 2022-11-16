@@ -83,6 +83,7 @@ if [ ! -f $CONF ]; then
   fi
 fi
 
+jq '.MulticastInterfaces = [  ]' "$CONF" > "$tmp" && mv "$tmp" "$CONF"
 
 send_status "yggdrasil" "WAITING" "Starting up."
 
