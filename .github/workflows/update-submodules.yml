@@ -58,6 +58,11 @@ jobs:
       AUTO_UPDATE_BRANCH: ${{ steps.create-pr.outputs.AUTO_UPDATE_BRANCH }}
 
     steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ env.BASE_BRANCH }}
+
       - name: Create pull request
         id: create-pr
         if: ${{ !needs.find-open-pr.outputs.AUTO_UPDATE_BRANCH }}
@@ -65,7 +70,9 @@ jobs:
           export BASE_BRANCH="${{ env.BASE_BRANCH }}"
           export NEW_BRANCH="auto-update-submodules-$BASE_BRANCH-$(($(date +%s%N)/1000000))"
           export AUTO_UPDATE_LABEL="${{ env.AUTO_UPDATE_LABEL }}"
+
           gh pr create -B "$BASE_BRANCH" -H "$NEW_BRANCH" --title 'Auto-update: submodules to develop' --body '' --label "$AUTO_UPDATE_LABEL"
+
           echo "AUTO_UPDATE_BRANCH=$NEW_BRANCH" >> $GITHUB_OUTPUT
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
