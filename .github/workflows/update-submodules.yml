@@ -8,6 +8,11 @@ on:
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
+    inputs:
+      repository:
+        description: "Repository of the submodule to update"
+        required: true
+        type: string
 
 env:
   AUTO_UPDATE_LABEL: "auto-update-submodules"
@@ -71,6 +76,16 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
+      - name: Get repository_dispatch repository name
+        if: ${{ github.event.client_payload.repository }}
+        run: |
+          echo "REPOSITORY_NAME=${{ github.event.client_payload.repository }}" >> $GITHUB_ENV
+
+      - name: Get workflow_dispatch repository name
+        if: ${{ github.event.inputs.repository }}
+        run: |
+          echo "REPOSITORY_NAME=${{ github.event.inputs.repository }}" >> $GITHUB_ENV
+
       - name: Get find-open-pr output branch
         if: ${{ jobs.find-open-pr.outputs.AUTO_UPDATE_BRANCH }}
         run: |
@@ -83,9 +98,10 @@ jobs:
 
       - name: Parse submodule path
         run: |
+          export REPOSITORY_NAME="${{ env.REPOSITORY_NAME }}"
           export SUBMODULE_NAME=$(\
             git config --file .gitmodules --get-regexp url | \
-              grep "${{ github.event.client_payload.repository }}" | \
+              grep "$REPOSITORY_NAME" | \
               awk 'BEGIN{FS=OFS="."}{print $2}'\
           )
 
