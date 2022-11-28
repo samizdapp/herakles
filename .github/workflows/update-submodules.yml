@@ -46,7 +46,7 @@ jobs:
                 `More than one open PR with label ${AUTO_UPDATE_LABEL} found: ${branches.join(', ')}`
               )
             }
-            return branches[0] ?? null
+            return branches[0] ?? undefined
 
   create-pr:
     # The type of runner that the job will run on
