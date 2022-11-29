@@ -60,7 +60,7 @@ jobs:
     needs: find-open-pr
 
     env:
-      RUN: ${{ !needs.find-open-pr.outputs.AUTO_UPDATE_BRANCH }}
+      RUN: ${{ needs.find-open-pr.outputs.AUTO_UPDATE_BRANCH == '' }}
 
     outputs:
       AUTO_UPDATE_BRANCH: ${{ steps.create-branch.outputs.AUTO_UPDATE_BRANCH }}
