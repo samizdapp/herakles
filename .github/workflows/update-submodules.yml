@@ -129,6 +129,13 @@ jobs:
         run: |
           echo "AUTO_UPDATE_BRANCH=${{ needs.create-pr.outputs.AUTO_UPDATE_BRANCH }}" >> $GITHUB_ENV
 
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          submodules: recursive
+          fetch-depth: 0
+          ref: ${{ env.AUTO_UPDATE_BRANCH }}
+
       - name: Parse submodule path
         run: |
           export REPOSITORY_NAME="${{ env.REPOSITORY_NAME }}"
@@ -139,13 +146,6 @@ jobs:
           )
 
           echo "SUBMODULE_PATH=$(git config --file .gitmodules --get "submodule.$SUBMODULE_NAME.path")" >> $GITHUB_ENV
-
-      - name: Checkout
-        uses: actions/checkout@v3
-        with:
-          submodules: recursive
-          fetch-depth: 0
-          ref: ${{ env.AUTO_UPDATE_BRANCH }}
 
       - name: Update submodules
         run: |
@@ -159,8 +159,8 @@ jobs:
           cd "$SUBMODULE_PATH"
           git switch "$BASE_BRANCH"
           git pull
-          cd "$PWD"
 
+          cd "$PWD"
           git add .
           git commit --allow-empty -m "Auto-update: submodule $SUBMODULE_PATH to $BASE_BRANCH"
           git push
