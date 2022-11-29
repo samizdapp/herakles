@@ -157,8 +157,8 @@ jobs:
 
           export SUBMODULE_PATH="${{ env.SUBMODULE_PATH }}"
           export BASE_BRANCH="${{ env.BASE_BRANCH }}"
-          export PWD=$(pwd)
-          echo "SUBMODULE_PATH: $SUBMODULE_PATH, PWD: $PWD"
+          export ROOT_DIR=$(pwd)
+          echo "SUBMODULE_PATH: $SUBMODULE_PATH, ROOT_DIR: $ROOT_DIR"
 
           cd "$SUBMODULE_PATH"
           echo "Changed directory: $(pwd)"
@@ -166,7 +166,7 @@ jobs:
           git switch "$BASE_BRANCH"
           git pull
 
-          cd "$PWD"
+          cd "$ROOT_DIR"
           echo "Changed directory: $(pwd)"
           git status
           git add .
