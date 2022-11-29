@@ -33,6 +33,7 @@ jobs:
         id: find-open-pr
         uses: actions/github-script@v6
         with:
+          result-encoding: string
           script: |
             const AUTO_UPDATE_LABEL = "${{ env.AUTO_UPDATE_LABEL }}"
             const { data: prs } = await github.rest.pulls.list({
