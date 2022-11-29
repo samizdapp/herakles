@@ -57,7 +57,7 @@ jobs:
                 `More than one open PR with label ${AUTO_UPDATE_LABEL} found: ${branches.join(', ')}`
               )
             }
-            return branches[0] ?? undefined
+            return branches[0] ?? ''
 
   create-pr:
     # The type of runner that the job will run on
@@ -72,6 +72,12 @@ jobs:
       AUTO_UPDATE_BRANCH: ${{ steps.create-branch.outputs.AUTO_UPDATE_BRANCH }}
 
     steps:
+      - name: debug
+        run: |
+          echo "RUN: $RUN"
+          echo "AUTO_UPDATE_BRANCH: ${{ needs.find-open-pr.outputs.AUTO_UPDATE_BRANCH }}"
+          echo "Condition: ${{ needs.find-open-pr.outputs.AUTO_UPDATE_BRANCH == '' }}"
+
       - name: Checkout
         uses: actions/checkout@v3
         if: ${{ env.RUN != 'false' }}
