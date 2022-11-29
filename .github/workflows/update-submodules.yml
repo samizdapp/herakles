@@ -152,16 +152,17 @@ jobs:
           git config --global user.email "${{ env.GIT_CONFIG_EMAIL }}"
           git config --global user.name "${{ env.GIT_CONFIG_USER }}"
 
+          export SUBMODULE_PATH="${{ env.SUBMODULE_PATH }}"
           export BASE_BRANCH="${{ env.BASE_BRANCH }}"
           export PWD=$(pwd)
 
-          cd "${{ env.SUBMODULE_PATH }}"
+          cd "$SUBMODULE_PATH"
           git switch "$BASE_BRANCH"
           git pull
           cd "$PWD"
 
           git add .
-          git commit -m "Auto-update: submodules to $BASE_BRANCH"
+          git commit --allow-empty -m "Auto-update: submodule $SUBMODULE_PATH to $BASE_BRANCH"
           git push
         env:
           GITHUB_TOKEN: ${{ secrets.HERAKLES_TOKEN }}
