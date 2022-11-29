@@ -77,6 +77,7 @@ jobs:
         if: ${{ env.RUN != 'false' }}
         with:
           ref: ${{ env.BASE_BRANCH }}
+          token: ${{ secrets.HERAKLES_TOKEN }}
 
       - name: Create branch
         id: create-branch
@@ -93,8 +94,6 @@ jobs:
           git push origin $NEW_BRANCH
 
           echo "AUTO_UPDATE_BRANCH=$NEW_BRANCH" >> $GITHUB_OUTPUT
-        env:
-          GITHUB_TOKEN: ${{ secrets.HERAKLES_TOKEN }}
 
       - name: Create pull request
         id: create-pr
@@ -107,8 +106,6 @@ jobs:
           NEW_PR="$(gh pr create -B "$BASE_BRANCH" -H "$AUTO_UPDATE_BRANCH" \
             --title "Auto-update: submodules to $BASE_BRANCH" --body '')"
           gh pr edit "$NEW_PR" --add-label "$AUTO_UPDATE_LABEL"
-        env:
-          GITHUB_TOKEN: ${{ secrets.HERAKLES_TOKEN }}
 
   update-submodules:
     # The type of runner that the job will run on
@@ -144,6 +141,7 @@ jobs:
           submodules: recursive
           fetch-depth: 0
           ref: ${{ env.AUTO_UPDATE_BRANCH }}
+          token: ${{ secrets.HERAKLES_TOKEN }}
 
       - name: Parse submodule path
         run: |
@@ -178,5 +176,3 @@ jobs:
           git add .
           git commit --allow-empty -m "Auto-update: submodule $SUBMODULE_PATH to $BASE_BRANCH"
           git push
-        env:
-          GITHUB_TOKEN: ${{ secrets.HERAKLES_TOKEN }}
