@@ -74,7 +74,7 @@ jobs:
 
       - name: Checkout
         uses: actions/checkout@v3
-        if: ${{ env.RUN }}
+        if: ${{ env.RUN != false }}
         with:
           ref: ${{ env.BASE_BRANCH }}
 
