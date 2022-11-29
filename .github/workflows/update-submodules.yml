@@ -54,26 +54,44 @@ jobs:
 
     needs: find-open-pr
 
+    env:
+      RUN: ${{ !needs.find-open-pr.outputs.AUTO_UPDATE_BRANCH }}
+
     outputs:
-      AUTO_UPDATE_BRANCH: ${{ steps.create-pr.outputs.AUTO_UPDATE_BRANCH }}
+      AUTO_UPDATE_BRANCH: ${{ steps.create-branch.outputs.AUTO_UPDATE_BRANCH }}
 
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+        if: ${{ env.RUN }}
         with:
           ref: ${{ env.BASE_BRANCH }}
 
-      - name: Create pull request
-        id: create-pr
-        if: ${{ !needs.find-open-pr.outputs.AUTO_UPDATE_BRANCH }}
+      - name: Create branch
+        id: create-branch
+        if: ${{ env.RUN }}
         run: |
           export BASE_BRANCH="${{ env.BASE_BRANCH }}"
           export NEW_BRANCH="auto-update-submodules-$BASE_BRANCH-$(($(date +%s%N)/1000000))"
-          export AUTO_UPDATE_LABEL="${{ env.AUTO_UPDATE_LABEL }}"
 
-          gh pr create -B "$BASE_BRANCH" -H "$NEW_BRANCH" --title 'Auto-update: submodules to develop' --body '' --label "$AUTO_UPDATE_LABEL"
+          git checkout -b $NEW_BRANCH
+          git commit --allow-empty -m "New Auto-update PR"
+          git push origin $NEW_BRANCH
 
           echo "AUTO_UPDATE_BRANCH=$NEW_BRANCH" >> $GITHUB_OUTPUT
+        env:
+          GITHUB_TOKEN: ${{ secrets.HERAKLES_TOKEN }}
+
+      - name: Create pull request
+        id: create-pr
+        if: ${{ env.RUN }}
+        run: |
+          export AUTO_UPDATE_BRANCH="${{ steps.create-branch.outputs.AUTO_UPDATE_BRANCH }}"
+          export AUTO_UPDATE_LABEL="${{ env.AUTO_UPDATE_LABEL }}"
+
+          gh pr create -B "$BASE_BRANCH" -H "$AUTO_UPDATE_BRANCH" \
+            --title 'Auto-update: submodules to develop' --body '' \
+            --label "$AUTO_UPDATE_LABEL"
         env:
           GITHUB_TOKEN: ${{ secrets.HERAKLES_TOKEN }}
 
