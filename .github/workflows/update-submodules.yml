@@ -72,12 +72,6 @@ jobs:
       AUTO_UPDATE_BRANCH: ${{ steps.create-branch.outputs.AUTO_UPDATE_BRANCH }}
 
     steps:
-      - name: debug
-        run: |
-          echo "RUN: $RUN"
-          echo "AUTO_UPDATE_BRANCH: ${{ needs.find-open-pr.outputs.AUTO_UPDATE_BRANCH }}"
-          echo "Condition: ${{ needs.find-open-pr.outputs.AUTO_UPDATE_BRANCH == '' }}"
-
       - name: Checkout
         uses: actions/checkout@v3
         if: ${{ env.RUN != 'false' }}
