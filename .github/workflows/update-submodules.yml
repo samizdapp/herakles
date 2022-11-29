@@ -91,12 +91,13 @@ jobs:
         id: create-pr
         if: ${{ env.RUN }}
         run: |
+          export BASE_BRANCH="${{ env.BASE_BRANCH }}"
           export AUTO_UPDATE_BRANCH="${{ steps.create-branch.outputs.AUTO_UPDATE_BRANCH }}"
           export AUTO_UPDATE_LABEL="${{ env.AUTO_UPDATE_LABEL }}"
 
-          gh pr create -B "$BASE_BRANCH" -H "$AUTO_UPDATE_BRANCH" \
-            --title 'Auto-update: submodules to develop' --body '' \
-            --label "$AUTO_UPDATE_LABEL"
+          NEW_PR="$(gh pr create -B "$BASE_BRANCH" -H "$AUTO_UPDATE_BRANCH" \
+            --title "Auto-update: submodules to $BASE_BRANCH" --body '')"
+          gh pr edit "$NEW_PR" --add-label "$AUTO_UPDATE_LABEL"
         env:
           GITHUB_TOKEN: ${{ secrets.HERAKLES_TOKEN }}
 
