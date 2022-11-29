@@ -80,7 +80,7 @@ jobs:
 
       - name: Create branch
         id: create-branch
-        if: ${{ env.RUN }}
+        if: ${{ env.RUN != 'false' }}
         run: |
           git config --global user.email "${{ env.GIT_CONFIG_EMAIL }}"
           git config --global user.name "${{ env.GIT_CONFIG_USER }}"
@@ -98,7 +98,7 @@ jobs:
 
       - name: Create pull request
         id: create-pr
-        if: ${{ env.RUN != 'false' }}
+        if: ${{ false }}
         run: |
           export BASE_BRANCH="${{ env.BASE_BRANCH }}"
           export AUTO_UPDATE_BRANCH="${{ steps.create-branch.outputs.AUTO_UPDATE_BRANCH }}"
