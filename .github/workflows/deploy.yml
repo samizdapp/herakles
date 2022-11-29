@@ -29,12 +29,17 @@ jobs:
     if: ${{ github.event.inputs.dispatched || github.event.workflow_run.conclusion == 'success' }}
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
+      - name: Construct branch tag
+        id: construct-branch-tag
+        run: |
+          echo "branch_tag=$(echo ${{ github.ref_name }} | sed 's/\//-/g')" >> $GITHUB_ENV
+
       - name: Download artifact
         uses: dawidd6/action-download-artifact@v2
         with:
           commit: ${{ github.sha }}
           workflow: build.yml
-          name: release-info-${{ github.ref_name }}-${{ github.sha }}
+          name: release-info-${{ env.branch_tag }}-${{ github.sha }}
           path: ./release-info
 
       - name: Set release info

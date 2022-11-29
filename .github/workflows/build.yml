@@ -97,5 +97,5 @@ jobs:
       - name: Upload release info
         uses: actions/upload-artifact@v3
         with:
-          name: release-info-${{ github.ref_name }}-${{ github.sha }}
+          name: release-info-${{ env.branch_tag }}-${{ github.sha }}
           path: release-info/
