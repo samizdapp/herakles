@@ -161,10 +161,14 @@ jobs:
           echo "SUBMODULE_PATH: $SUBMODULE_PATH, PWD: $PWD"
 
           cd "$SUBMODULE_PATH"
+          echo "Changed directory: $(pwd)"
+          git status
           git switch "$BASE_BRANCH"
           git pull
 
           cd "$PWD"
+          echo "Changed directory: $(pwd)"
+          git status
           git add .
           git commit --allow-empty -m "Auto-update: submodule $SUBMODULE_PATH to $BASE_BRANCH"
           git push
