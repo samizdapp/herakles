@@ -8,14 +8,175 @@ on:
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
+    inputs:
+      repository:
+        description: "Repository of the submodule to update"
+        required: true
+        type: string
+
+env:
+  GIT_CONFIG_USER: "SamizdBot"
+  GIT_CONFIG_EMAIL: "119370794+SamizdBot@users.noreply.github.com"
+  AUTO_UPDATE_LABEL: "auto-update-submodules"
+  BASE_BRANCH: develop
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
+  find-open-pr:
+    runs-on: ubuntu-latest
+
+    outputs:
+      AUTO_UPDATE_BRANCH: ${{ steps.find-open-pr.outputs.result }}
+
+    steps:
+      - name: Find open PR
+        id: find-open-pr
+        uses: actions/github-script@v6
+        with:
+          result-encoding: string
+          script: |
+            const AUTO_UPDATE_LABEL = "${{ env.AUTO_UPDATE_LABEL }}"
+            const { data: prs } = await github.rest.pulls.list({
+                owner: "${{ github.repository_owner }}",
+                repo: "${{ github.repository }}".split('/')[1],
+                state: "open",
+            })
+
+            console.log(`Found ${prs.length} open PRs: ${prs.map(pr => pr.url).join(', ')}`)
+
+            const branches = prs
+              .filter(it => it.labels.find(label => label.name === AUTO_UPDATE_LABEL))
+              .map(it => it.head.ref)
+
+            console.log(
+              `Found ${branches.length} open PRs with label ${AUTO_UPDATE_LABEL}: ${branches.join(', ')}`
+            )
+
+            if (branches.length > 1) {
+              throw new Error(
+                `More than one open PR with label ${AUTO_UPDATE_LABEL} found: ${branches.join(', ')}`
+              )
+            }
+            return branches[0] ?? ''
+
+  create-pr:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    needs: find-open-pr
+
+    env:
+      RUN: ${{ needs.find-open-pr.outputs.AUTO_UPDATE_BRANCH == '' }}
+
+    outputs:
+      AUTO_UPDATE_BRANCH: ${{ steps.create-branch.outputs.AUTO_UPDATE_BRANCH }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        if: ${{ env.RUN != 'false' }}
+        with:
+          ref: ${{ env.BASE_BRANCH }}
+
+      - name: Create branch
+        id: create-branch
+        if: ${{ env.RUN != 'false' }}
+        run: |
+          git config --global user.email "${{ env.GIT_CONFIG_EMAIL }}"
+          git config --global user.name "${{ env.GIT_CONFIG_USER }}"
+
+          export BASE_BRANCH="${{ env.BASE_BRANCH }}"
+          export NEW_BRANCH="auto-update-submodules-$BASE_BRANCH-$(($(date +%s%N)/1000000))"
+
+          git checkout -b $NEW_BRANCH
+          git commit --allow-empty -m "New Auto-update PR"
+          git push origin $NEW_BRANCH
+
+          echo "AUTO_UPDATE_BRANCH=$NEW_BRANCH" >> $GITHUB_OUTPUT
+        env:
+          GITHUB_TOKEN: ${{ secrets.HERAKLES_TOKEN }}
+
+      - name: Create pull request
+        id: create-pr
+        if: ${{ env.RUN != 'false' }}
+        run: |
+          export BASE_BRANCH="${{ env.BASE_BRANCH }}"
+          export AUTO_UPDATE_BRANCH="${{ steps.create-branch.outputs.AUTO_UPDATE_BRANCH }}"
+          export AUTO_UPDATE_LABEL="${{ env.AUTO_UPDATE_LABEL }}"
+
+          NEW_PR="$(gh pr create -B "$BASE_BRANCH" -H "$AUTO_UPDATE_BRANCH" \
+            --title "Auto-update: submodules to $BASE_BRANCH" --body '')"
+          gh pr edit "$NEW_PR" --add-label "$AUTO_UPDATE_LABEL"
+        env:
+          GITHUB_TOKEN: ${{ secrets.HERAKLES_TOKEN }}
+
   update-submodules:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
+    needs: [find-open-pr, create-pr]
+
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      - run: echo "Hello, world!"
+      - name: Get repository_dispatch repository name
+        if: ${{ github.event.client_payload.repository }}
+        run: |
+          echo "REPOSITORY_NAME=${{ github.event.client_payload.repository }}" >> $GITHUB_ENV
+
+      - name: Get workflow_dispatch repository name
+        if: ${{ github.event.inputs.repository }}
+        run: |
+          echo "REPOSITORY_NAME=${{ github.event.inputs.repository }}" >> $GITHUB_ENV
+
+      - name: Get find-open-pr output branch
+        if: ${{ needs.find-open-pr.outputs.AUTO_UPDATE_BRANCH }}
+        run: |
+          echo "AUTO_UPDATE_BRANCH=${{ needs.find-open-pr.outputs.AUTO_UPDATE_BRANCH }}" >> $GITHUB_ENV
+
+      - name: Get create-pr output branch
+        if: ${{ needs.create-pr.outputs.AUTO_UPDATE_BRANCH }}
+        run: |
+          echo "AUTO_UPDATE_BRANCH=${{ needs.create-pr.outputs.AUTO_UPDATE_BRANCH }}" >> $GITHUB_ENV
+
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          submodules: recursive
+          fetch-depth: 0
+          ref: ${{ env.AUTO_UPDATE_BRANCH }}
+
+      - name: Parse submodule path
+        run: |
+          export REPOSITORY_NAME="${{ env.REPOSITORY_NAME }}"
+          export SUBMODULE_NAME=$(\
+            git config --file .gitmodules --get-regexp url | \
+              grep "$REPOSITORY_NAME" | \
+              awk 'BEGIN{FS=OFS="."}{print $2}'\
+          )
+
+          echo "SUBMODULE_PATH=$(git config --file .gitmodules --get "submodule.$SUBMODULE_NAME.path")" >> $GITHUB_ENV
+
+      - name: Update submodules
+        run: |
+          git config --global user.email "${{ env.GIT_CONFIG_EMAIL }}"
+          git config --global user.name "${{ env.GIT_CONFIG_USER }}"
+
+          export SUBMODULE_PATH="${{ env.SUBMODULE_PATH }}"
+          export BASE_BRANCH="${{ env.BASE_BRANCH }}"
+          export ROOT_DIR=$(pwd)
+          echo "SUBMODULE_PATH: $SUBMODULE_PATH, ROOT_DIR: $ROOT_DIR"
+
+          cd "$SUBMODULE_PATH"
+          echo "Changed directory: $(pwd)"
+          git status
+          git switch "$BASE_BRANCH"
+          git pull
+
+          cd "$ROOT_DIR"
+          echo "Changed directory: $(pwd)"
+          git status
+          git add .
+          git commit --allow-empty -m "Auto-update: submodule $SUBMODULE_PATH to $BASE_BRANCH"
+          git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.HERAKLES_TOKEN }}
