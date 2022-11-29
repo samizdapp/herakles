@@ -34,7 +34,7 @@ jobs:
         with:
           commit: ${{ github.sha }}
           workflow: build.yml
-          name: release-info-${{ github.sha }}
+          name: release-info-${{ github.ref_name }}-${{ github.sha }}
           path: ./release-info
 
       - name: Set release info
