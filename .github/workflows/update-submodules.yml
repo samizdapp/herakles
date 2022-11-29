@@ -41,11 +41,17 @@ jobs:
                 repo: "${{ github.repository }}".split('/')[1],
                 state: "open",
             })
+
             console.log(`Found ${prs.length} open PRs: ${prs.map(pr => pr.url).join(', ')}`)
+
             const branches = prs
               .filter(it => it.labels.find(label => label.name === AUTO_UPDATE_LABEL))
               .map(it => it.head.ref)
-            console.log(`Found ${branches.length} open PRs with label ${AUTO_UPDATE_LABEL}: ${branches.join(', ')}`)
+
+            console.log(
+              `Found ${branches.length} open PRs with label ${AUTO_UPDATE_LABEL}: ${branches.join(', ')}`
+            )
+
             if (branches.length > 1) {
               throw new Error(
                 `More than one open PR with label ${AUTO_UPDATE_LABEL} found: ${branches.join(', ')}`
@@ -60,21 +66,15 @@ jobs:
     needs: find-open-pr
 
     env:
-      RUN: ${{ needs.find-open-pr.outputs.AUTO_UPDATE_BRANCH == '' }}
+      RUN: ${{ !needs.find-open-pr.outputs.AUTO_UPDATE_BRANCH }}
 
     outputs:
       AUTO_UPDATE_BRANCH: ${{ steps.create-branch.outputs.AUTO_UPDATE_BRANCH }}
 
     steps:
-      - name: debug
-        run: |
-          echo "RUN: $RUN"
-          echo "AUTO_UPDATE_BRANCH: ${{ needs.find-open-pr.outputs.AUTO_UPDATE_BRANCH }}"
-          echo "Condition: ${{ needs.find-open-pr.outputs.AUTO_UPDATE_BRANCH == '' }}"
-
       - name: Checkout
         uses: actions/checkout@v3
-        if: ${{ env.RUN != false }}
+        if: ${{ env.RUN != 'false' }}
         with:
           ref: ${{ env.BASE_BRANCH }}
 
@@ -98,7 +98,7 @@ jobs:
 
       - name: Create pull request
         id: create-pr
-        if: ${{ false }}
+        if: ${{ env.RUN != 'false' }}
         run: |
           export BASE_BRANCH="${{ env.BASE_BRANCH }}"
           export AUTO_UPDATE_BRANCH="${{ steps.create-branch.outputs.AUTO_UPDATE_BRANCH }}"
