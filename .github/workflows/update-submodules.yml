@@ -75,7 +75,7 @@ jobs:
 
           echo "AUTO_UPDATE_BRANCH=$NEW_BRANCH" >> $GITHUB_OUTPUT
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.HERAKLES_TOKEN }}
 
   update-submodules:
     # The type of runner that the job will run on
