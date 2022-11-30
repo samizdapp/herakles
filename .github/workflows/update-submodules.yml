@@ -106,6 +106,8 @@ jobs:
           NEW_PR="$(gh pr create -B "$BASE_BRANCH" -H "$AUTO_UPDATE_BRANCH" \
             --title "Auto-update: submodules to $BASE_BRANCH" --body '')"
           gh pr edit "$NEW_PR" --add-label "$AUTO_UPDATE_LABEL"
+        env:
+          GITHUB_TOKEN: ${{ secrets.HERAKLES_TOKEN }}
 
   update-submodules:
     # The type of runner that the job will run on
