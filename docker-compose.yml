@@ -196,7 +196,7 @@ services:
   monitor:
     build: ./monitor
     restart: "always"
-    labels: 
+    labels:
       io.balena.features.supervisor-api: "1"
       io.balena.features.journal-logs: "1"
     volumes:
