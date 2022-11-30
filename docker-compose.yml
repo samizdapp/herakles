@@ -45,16 +45,6 @@ services:
         - VERSION=latest
     network_mode: host
     restart: always
-  app_service:
-    build:
-      context: ./athena
-      dockerfile: ./packages/app-service/Dockerfile
-      args:
-        - VERSION=latest
-    network_mode: host
-    restart: always
-    labels:
-      io.balena.features.balena-socket: "1"
   daemon_pleroma:
     restart: always
     network_mode: host
