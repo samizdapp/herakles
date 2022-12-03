@@ -1,5 +1,6 @@
 version: "2"
 volumes:
+  app_manifests:
   service_upnp:
   service_hostname:
   proxy_nm:
@@ -51,6 +52,8 @@ services:
       dockerfile: ./packages/app-service/Dockerfile
       args:
         - VERSION=latest
+    volumes:
+      - app_manifests:/usr/src/volumes/app_manifests
     network_mode: host
     restart: always
     labels:
