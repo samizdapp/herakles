@@ -97,8 +97,8 @@ jq '.Listen = ["tcp://0.0.0.0:5000"]' "$CONF" > "$tmp" && mv "$tmp" "$CONF"
 /usr/bin/restart.sh & jobs
 
 yggdrasil --useconf -json < $CONF | while read LOG; do
-  handle_log "$LOG" &
   echo "$LOG"
+  handle_log "$LOG" 
 done
 
 RET="${PIPESTATUS[0]}"
