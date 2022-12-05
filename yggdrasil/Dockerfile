@@ -42,4 +42,4 @@ COPY restart.sh /usr/bin/restart.sh
 
 VOLUME [ "/etc/yggdrasil-network" ]
 
-ENTRYPOINT [ "/usr/bin/entrypoint.sh" ]
+ENTRYPOINT [ "/usr/bin/restart.sh" ]

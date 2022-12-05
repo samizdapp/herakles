@@ -91,14 +91,9 @@ jq '.AdminListen = "tcp://localhost:9001"' "$CONF" > "$tmp" && mv "$tmp" "$CONF"
 
 jq '.Listen = ["tcp://0.0.0.0:5000"]' "$CONF" > "$tmp" && mv "$tmp" "$CONF"
 
-# /usr/bin/upnp.sh & jobs
-# /usr/bin/watch.sh & jobs
-# /crawler/watch.sh & jobs
-/usr/bin/restart.sh & jobs
-
 yggdrasil --useconf -json < $CONF | while read LOG; do
   echo "$LOG"
-  handle_log "$LOG" 
+  handle_log "$LOG" &
 done
 
 RET="${PIPESTATUS[0]}"
