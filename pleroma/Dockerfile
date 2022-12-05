@@ -54,5 +54,6 @@ RUN busybox unzip ${HOME}/soapbox.zip -o -d /var/lib/pleroma/static/frontends/so
 RUN syslogd
 
 EXPOSE 4000
+EXPOSE 4001
 
 ENTRYPOINT ["/opt/pleroma/docker-entrypoint.sh"]
