@@ -7,9 +7,6 @@
 [submodule "lib"]
 	path = lib
 	url = ../../samizdapp/herakles-lib
-[submodule "daemon/caddy"]
-	path = daemon/caddy
-	url = ../../samizdapp/herakles-caddy.git
 [submodule "service/yggdrasil-peers"]
 	path = yggdrasil/crawler
 	url = ../../samizdapp/yggdrasil-peers
