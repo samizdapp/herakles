@@ -15,7 +15,7 @@ volumes:
   monitor:
 services:
   daemon_caddy:
-    build: ./daemon/caddy
+    build: ./caddy
     restart: always
     network_mode: host
     volumes:
