@@ -38,24 +38,18 @@ update_yggrasil_conf() {
       if ! grep -q $KEY "/yggdrasil/peers"; then
         echo "$KEY not found in peers index"
         echo "$PEER"
+        echo "$ADDR $KEY" >> /yggdrasil/peers
         ADDR=$(curl --insecure "$PEER" | xargs)
         if [ -z "`echo "$ADDR" | tr -d '\n'`" ]; then
-          echo "no peer response, ignore"
+          echo "no peer response, add to allowed keys"
+          ALLOWED_KEYS="$ALLOWED_KEYS$KEY\",\""
         else
-          echo "$ADDR $KEY" >> /yggdrasil/peers
+          echo "got peer response, add to peers"
+          PEER_ENDPOINTS="$PEER_ENDPOINTS$ADDR\",\""
         fi
       fi
     fi
   done < /etc/hosts
-
-  while read l; do
-    echo "updating yggdrasil peer config $l"
-    PARTS=($l)
-    ADDR="${PARTS[0]}"
-    KEY="${PARTS[1]}"
-    PEER_ENDPOINTS="$PEER_ENDPOINTS$ADDR\",\""
-    ALLOWED_KEYS="$ALLOWED_KEYS$KEY\",\""
-  done < /yggdrasil/peers
   
   TRIMMED_PEER_ENDPOINTS=${PEER_ENDPOINTS::-2}
   PEER_ENDPOINTS="$TRIMMED_PEER_ENDPOINTS]"
