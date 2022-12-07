@@ -38,4 +38,6 @@ echo "}" >> $CF
 echo "http://samizdapp.localhost, http://localhost, http://$MDNS_TLD {" >> $CF
 cat Caddyfile.footer >> $CF
 
-caddy run --config /etc/caddy/Caddyfile --adapter caddyfile
+caddy run --config /etc/caddy/Caddyfile --adapter caddyfile & jobs
+
+sleep 1000

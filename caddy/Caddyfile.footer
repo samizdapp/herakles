@@ -44,21 +44,30 @@
 
 
     handle_path /smz/ipfs/8080/* {
+        header {
+            ?X-Samizdapp-Base-path /smz/ipfs/8080
+        }
         reverse_proxy 0.0.0.0:8080 {
             header_up Host 0.0.0.0:8080
             header_up X-Forwarded-Proto http
             header_up x-forwarded-host 0.0.0.0:8080
+            header_down Location "(.*)$" http://samizdev.local/smz/ipfs/8080$1
+            header_down Content-Location "(.*)$" http://samizdev.local/smz/ipfs/8080$1
         }
     }
 
     handle_path /smz/ipfs* {
-
         header {
             ?X-Samizdapp-Base-path /smz/ipfs,8080
         }
 
-
-        reverse_proxy localhost:5001
+        reverse_proxy localhost:5001 {
+            header_up Host 0.0.0.0:8080
+            header_up X-Forwarded-Proto http
+            header_up x-forwarded-host 0.0.0.0:8080
+            header_down Location "(.*)$" http://samizdev.local/smz/ipfs/8080$1
+            header_down Content-Location "(.*)$" http://samizdev.local/smz/ipfs/8080$1
+        }
     }
 
     handle @daemon_pleroma {
