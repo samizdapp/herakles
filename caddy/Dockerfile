@@ -1,7 +1,12 @@
 # note: never use the :latest tag in a production site
 FROM caddy:latest
 
-COPY . .
+
+WORKDIR /app
 RUN apk add jq
 
-ENTRYPOINT ["./start.sh"]
+COPY ./Caddyfile.header ./Caddyfile.header
+COPY ./Caddyfile.footer ./Caddyfile.footer
+COPY ./start.sh ./start.sh
+
+ENTRYPOINT ["sh","./start.sh"]

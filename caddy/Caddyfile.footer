@@ -42,6 +42,25 @@
         }
     }
 
+
+    handle_path /smz/ipfs/8080/* {
+        reverse_proxy 0.0.0.0:8080 {
+            header_up Host 0.0.0.0:8080
+            header_up X-Forwarded-Proto http
+            header_up x-forwarded-host 0.0.0.0:8080
+        }
+    }
+
+    handle_path /smz/ipfs* {
+
+        header {
+            ?X-Samizdapp-Base-path /smz/ipfs,8080
+        }
+
+
+        reverse_proxy localhost:5001
+    }
+
     handle @daemon_pleroma {
         import harnessify
         reverse_proxy localhost:8009

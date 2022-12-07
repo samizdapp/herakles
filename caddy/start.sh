@@ -6,6 +6,7 @@ echo "waiting for yggdrasil config"
 sleep 1
 done
 
+
 echo "get public key"
 PUB=$(jq '.PublicKey' /etc/yggdrasil-network/backup.conf | tr -d '"')
 echo $PUB

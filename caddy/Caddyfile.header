@@ -1,7 +1,9 @@
 {
     local_certs
     auto_https disable_redirects
+    debug log
 }
+
 
 (corsify) {
     header {
@@ -19,9 +21,4 @@
         -X-Frame-Options
         -X-Content-Type-Options
     }
-}
-
-:4000 {
-    import corsify
-    reverse_proxy localhost:8004
 }
