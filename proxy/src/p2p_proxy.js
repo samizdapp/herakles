@@ -92,23 +92,25 @@ const getRelayAddrs = async (peerId) => {
   const proms = [];
 
   for (const host_str of yg_peers) {
-    const [ip_part, host] = host_str.split(" ");
+    const [ip_part, domain] = host_str.split(" ");
     if (!host) continue;
 
-    const p1 = host.slice(0, host.length - 1);
-    const p2 = host.slice(host.length - 1);
-    const domain = `${p1}.${p2}.yg`;
-    ygDomainMap.set(domain, ip_part);
-    const fetchaddr = `https://yggdrasil.${domain}/libp2p.relay`;
-    // console.log("try relay", fetchaddr);
-    proms.push(
-      fetch(fetchaddr)
-        .then((r) => r.text())
-        .catch((e) => {
-          return "";
-        })
-        .then((raw) => raw.trim())
-    );
+    try {
+      ygDomainMap.set(domain, ip_part);
+      if (!domain.startsWith("yggdrasil")) continue;
+      const fetchaddr = `https://${domain}/libp2p.relay`;
+      // console.log("try relay", fetchaddr);
+      proms.push(
+        fetch(fetchaddr)
+          .then((r) => r.text())
+          .catch((e) => {
+            return "";
+          })
+          .then((raw) => raw.trim())
+      );
+    } catch (e) {
+      // ignore bad lines in hosts file
+    }
   }
 
   const addrs = (await Promise.all(proms)).filter(
