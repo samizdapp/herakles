@@ -3,10 +3,10 @@ FROM caddy:latest
 
 
 WORKDIR /app
-RUN apk add jq
+RUN apk add jq ruby-mustache
+RUN gem install mustache
 
-COPY ./Caddyfile.header ./Caddyfile.header
-COPY ./Caddyfile.footer ./Caddyfile.footer
+COPY ./Caddyfile.mustache ./Caddyfile.mustache
 COPY ./start.sh ./start.sh
 
 ENTRYPOINT ["sh","./start.sh"]
