@@ -116,7 +116,7 @@ services:
       - yggdrasil_watcher
 
   daemon_proxy:
-    build: ./lib
+    build: ./proxy
     labels:
       io.balena.features.dbus: "1"
     privileged: true
