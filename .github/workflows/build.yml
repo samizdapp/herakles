@@ -88,8 +88,6 @@ jobs:
               - NX_BUILD_COMMIT=${{ github.sha }}
               - NX_BUILD_BRANCH=${{ github.ref_name }}
           EOF
-          echo ".balena/balena.yml: "
-          cat .balena/balena.yml
           set -o pipefail
           balena-cli/balena push ${{ github.ref_name == 'master' && 'gh_rynomad/alpha' || 'gh_rynomad/develop' }} -m --draft \
             | tee balena-push.out
