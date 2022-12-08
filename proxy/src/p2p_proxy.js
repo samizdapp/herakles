@@ -78,7 +78,7 @@ const getIP = async (nat) =>
     });
   });
 
-const YGGDRASIL_PEERS = "/yggdrasil/peers";
+const YGGDRASIL_PEERS = "/shared_etc/yg_hosts";
 
 const ygDomainMap = new Map();
 
@@ -99,7 +99,7 @@ const getRelayAddrs = async (peerId) => {
     const p2 = host.slice(host.length - 1);
     const domain = `${p1}.${p2}.yg`;
     ygDomainMap.set(domain, ip_part);
-    const fetchaddr = `${domain}/libp2p.relay`;
+    const fetchaddr = `https://yggdrasil.${domain}/libp2p.relay`;
     // console.log("try relay", fetchaddr);
     proms.push(
       fetch(fetchaddr)
@@ -247,6 +247,7 @@ async function dialRelays(node, makeRelayStream) {
   const relayStream = makeRelayStream();
   let relay;
   while ((relay = (await relayStream.next()).value)) {
+    console.log("dialing relay", relay);
     keepalive(node, relay);
   }
 }
