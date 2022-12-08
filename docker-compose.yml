@@ -11,7 +11,7 @@ volumes:
   postgres2:
   gateway_client:
   pleroma_uploads:
-  ipfs:
+  ipfs2:
   monitor:
 services:
   daemon_caddy:
@@ -24,6 +24,8 @@ services:
       - gateway_client:/next
     depends_on:
       - yggdrasil
+    environment:
+      MDNS_TLD: "samizdev.local"
   gateway_client:
     build:
       context: ./athena
@@ -227,5 +229,5 @@ services:
       - IPFS_PROFILE=server
       - IPFS_PATH=/ipfsdata
     volumes:
-      - ipfs:/ipfsdata
+      - ipfs2:/ipfsdata
     network_mode: host
