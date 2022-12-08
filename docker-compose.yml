@@ -11,7 +11,7 @@ volumes:
   postgres2:
   gateway_client:
   pleroma_uploads:
-  ipfs2:
+  ipfs3:
   monitor:
 services:
   daemon_caddy:
@@ -229,5 +229,5 @@ services:
       - IPFS_PROFILE=server
       - IPFS_PATH=/ipfsdata
     volumes:
-      - ipfs2:/ipfsdata
+      - ipfs3:/ipfsdata
     network_mode: host
