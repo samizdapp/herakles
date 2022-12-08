@@ -247,6 +247,7 @@ async function dialRelays(node, makeRelayStream) {
   const relayStream = makeRelayStream();
   let relay;
   while ((relay = (await relayStream.next()).value)) {
+    console.log("dialing relay", relay);
     keepalive(node, relay);
   }
 }
