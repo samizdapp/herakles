@@ -56,6 +56,8 @@ update_yggrasil_conf() {
 
   if [ $ALLOWED_KEYS != "[\"" ]; then 
     ALLOWED_KEYS=${ALLOWED_KEYS::-2}
+  else 
+    ALLOWED_KEYS="["
   fi
 
 
