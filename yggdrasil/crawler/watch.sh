@@ -2,7 +2,7 @@
 
 source /crawler/status.sh
 
-export VERSION=12
+export VERSION=13
 touch "/shared_etc/hosts_crawled$VERSION"
 SLEEP=10
 
