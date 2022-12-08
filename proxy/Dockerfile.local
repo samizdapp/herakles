@@ -1,0 +1,7 @@
+FROM node
+
+WORKDIR /herakles/lib
+
+COPY . .
+
+CMD ["sleep", "infinity"]

@@ -11,7 +11,7 @@ volumes:
   postgres2:
   gateway_client:
   pleroma_uploads:
-  ipfs:
+  ipfs3:
   monitor:
 services:
   daemon_caddy:
@@ -24,6 +24,8 @@ services:
       - gateway_client:/next
     depends_on:
       - yggdrasil
+    environment:
+      MDNS_TLD: "samizdev.local"
   gateway_client:
     build:
       context: ./athena
@@ -114,7 +116,7 @@ services:
       - yggdrasil_watcher
 
   daemon_proxy:
-    build: ./lib
+    build: ./proxy
     labels:
       io.balena.features.dbus: "1"
     privileged: true
@@ -221,3 +223,11 @@ services:
       io.balena.features.supervisor-api: 1
     environment:
       SET_HOSTNAME: samizdapp
+  # ipfs:
+  #   image: ipfs/go-ipfs:latest
+  #   environment:
+  #     - IPFS_PROFILE=server
+  #     - IPFS_PATH=/ipfsdata
+  #   volumes:
+  #     - ipfs3:/ipfsdata
+  #   network_mode: host

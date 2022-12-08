@@ -4,9 +4,6 @@
 [submodule "service/hostname"]
 	path = service/hostname
 	url = ../../samizdapp/hostname
-[submodule "lib"]
-	path = lib
-	url = ../../samizdapp/herakles-lib
 [submodule "service/yggdrasil-peers"]
 	path = yggdrasil/crawler
 	url = ../../samizdapp/yggdrasil-peers
