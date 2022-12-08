@@ -223,11 +223,11 @@ services:
       io.balena.features.supervisor-api: 1
     environment:
       SET_HOSTNAME: samizdapp
-  ipfs:
-    image: ipfs/go-ipfs:latest
-    environment:
-      - IPFS_PROFILE=server
-      - IPFS_PATH=/ipfsdata
-    volumes:
-      - ipfs3:/ipfsdata
-    network_mode: host
+  # ipfs:
+  #   image: ipfs/go-ipfs:latest
+  #   environment:
+  #     - IPFS_PROFILE=server
+  #     - IPFS_PATH=/ipfsdata
+  #   volumes:
+  #     - ipfs3:/ipfsdata
+  #   network_mode: host

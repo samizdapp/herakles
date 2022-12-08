@@ -43,7 +43,7 @@ PEERS=$(cat /etc/yggdrasil-network/config.conf  | jq .Peers)
 if [ "$PEERS" == "[]" ]; then
   echo "no peers, add default"
   jq '.Peers = ["tls://51.38.64.12:28395"]' "$CONF" > "$tmp" && mv "$tmp" "$CONF"
-elif
+fi
 
 # disable multicast, listen for crawler on localhost, add nodeinfo, listen on all interfaces
 jq '.MulticastInterfaces = [  ]' "$CONF" > "$tmp" && mv "$tmp" "$CONF"

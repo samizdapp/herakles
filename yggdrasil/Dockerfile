@@ -42,4 +42,4 @@ COPY run.sh /usr/bin/run.sh
 
 VOLUME [ "/etc/yggdrasil-network" ]
 
-ENTRYPOINT [ "/usr/bin/entrypoint.sh" ]
+ENTRYPOINT [ "/bin/bash","/usr/bin/entrypoint.sh" ]
