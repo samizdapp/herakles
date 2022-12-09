@@ -994,7 +994,7 @@ const staticLookup = () => async (hostname, _, cb) => {
     console.log("intercepting yg", hostname);
     const ip = ygDomainMap.get(hostname);
     if (ip) {
-      return cb(null, ip, 4);
+      return cb(null, ip, 6);
     }
   }
 
