@@ -1,5 +1,5 @@
 #!/bin/bash
-
+touch /shared_etc/hosts
 source /usr/bin/status.sh
 
 CONF_DIR="/etc/yggdrasil-network"
@@ -13,6 +13,7 @@ send_status "yggdrasil" "WAITING" "Generating config."
 if ! test -f "$CONF"; then
     echo "generate init $CONF"
     yggdrasil --genconf -json > "$CONF"
+    jq '.AdminListen = "tcp://localhost:9001"' "$CONF" > "$tmp" && mv "$tmp" "$CONF"
     cp $CONF $CONF_BACKUP
 fi
 
@@ -26,12 +27,13 @@ fi
 if [ ! -f $CONF ]; then
   if [ ! -f $CONF_BACKUP ]; then
     echo "SOMETHING FUCKED UP, WE SHOULD HAVE A REAL BACKUP $CONF"
-    yggdrasil --genconf -json > "$CONF"
     cp $CONF $CONF_BACKUP
   else 
     echo "restore $CONF_BACKUP"
     cp $CONF_BACKUP $CONF
+    jq '.AdminListen = "tcp://localhost:9001"' "$CONF" > "$tmp" && mv "$tmp" "$CONF"
   fi
+  jq '.AdminListen = "tcp://localhost:9001"' "$CONF" > "$tmp" && mv "$tmp" "$CONF"
 fi
 
 
@@ -47,7 +49,6 @@ fi
 
 # disable multicast, listen for crawler on localhost, add nodeinfo, listen on all interfaces
 jq '.MulticastInterfaces = [  ]' "$CONF" > "$tmp" && mv "$tmp" "$CONF"
-jq '.AdminListen = "tcp://localhost:9001"' "$CONF" > "$tmp" && mv "$tmp" "$CONF"
 jq '.NodeInfo = { "samizdapp": { "groups": ["caddy", "pleroma", "yggdrasil"] } }' "$CONF" > "$tmp" && mv "$tmp" "$CONF"
 jq '.Listen = ["tcp://0.0.0.0:5000"]' "$CONF" > "$tmp" && mv "$tmp" "$CONF"
 

@@ -22,8 +22,6 @@ services:
       - shared_yggdrasil:/yggdrasil
       - service_yggdrasil:/etc/yggdrasil-network
       - gateway_client:/next
-    depends_on:
-      - yggdrasil
     environment:
       MDNS_TLD: "samizdev.local"
   gateway_client:
@@ -60,6 +58,16 @@ services:
     restart: always
     labels:
       io.balena.features.balena-socket: "1"
+  networking_service:
+    build:
+      context: ./athena
+      dockerfile: ./packages/networking-service/Dockerfile
+      args:
+        - VERSION=latest
+    volumes:
+      - service_yggdrasil:/etc/yggdrasil-network
+      - shared_etc:/shared_etc
+    network_mode: host
   daemon_pleroma:
     restart: always
     network_mode: host
@@ -111,9 +119,6 @@ services:
       - daemon_caddy
       - mdns-advertise
       - yggdrasil
-      - yggdrasil_crawler
-      - yggdrasil_upnp
-      - yggdrasil_watcher
 
   daemon_proxy:
     build: ./proxy
@@ -165,39 +170,6 @@ services:
       - service_yggdrasil_sock:/var/run/
       - shared_etc:/shared_etc
       - shared_yggdrasil:/yggdrasil
-  yggdrasil_watcher:
-    # https://stackoverflow.com/a/37090165
-    build:
-      context: ./yggdrasil/
-      dockerfile: Dockerfile.watcher
-    privileged: true
-    network_mode: host
-    # expose:
-    #   - "9001"
-    volumes:
-      - service_yggdrasil:/etc/yggdrasil-network
-      - service_yggdrasil_sock:/var/run/
-      - shared_etc:/shared_etc
-      - shared_yggdrasil:/yggdrasil
-    depends_on:
-      - yggdrasil
-  yggdrasil_crawler:
-    # https://stackoverflow.com/a/37090165
-    build:
-      context: ./yggdrasil/
-      dockerfile: Dockerfile.crawler
-    privileged: true
-    restart: "always"
-    network_mode: host
-    # expose:
-    #   - "9001"
-    volumes:
-      - service_yggdrasil:/etc/yggdrasil-network
-      - service_yggdrasil_sock:/var/run/
-      - shared_etc:/shared_etc
-      - shared_yggdrasil:/yggdrasil
-    depends_on:
-      - yggdrasil
   mdns-advertise:
     build: ./mdns-advertise
     restart: "always"

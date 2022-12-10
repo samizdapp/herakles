@@ -78,7 +78,7 @@ const getIP = async (nat) =>
     });
   });
 
-const YGGDRASIL_PEERS = "/shared_etc/yg_hosts";
+const YGGDRASIL_PEERS = "/shared_etc/hosts";
 
 const ygDomainMap = new Map();
 

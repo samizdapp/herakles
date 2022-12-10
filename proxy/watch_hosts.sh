@@ -1,11 +1,11 @@
 #!/bin/sh
-if [ -f "/shared_etc/yg_hosts" ]
+if [ -f "/shared_etc/hosts" ]
 then
-cp /shared_etc/yg_hosts /etc/hosts
+cp /shared_etc/hosts /etc/hosts
 fi
 
-while inotifywait -e close_write /shared_etc/yg_hosts; 
+while inotifywait -e close_write /shared_etc/hosts; 
 do 
-echo "copy yg_hosts"
-cp /shared_etc/yg_hosts /etc/hosts
+echo "copy hosts"
+cp /shared_etc/hosts /etc/hosts
 done
