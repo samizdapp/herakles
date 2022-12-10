@@ -61,3 +61,4 @@ do
     echo "detected yggdrasil config change, restart container"
     exit
 done
+

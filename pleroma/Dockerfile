@@ -24,6 +24,8 @@ LABEL maintainer="ops@pleroma.social" \
 	org.opencontainers.image.licenses="AGPL-3.0" \
 	org.opencontainers.image.url="https://pleroma.social" 
 
+ARG HOME=/opt/pleroma
+ARG DATA=/var/lib/pleroma
 ENV HOME=/opt/pleroma
 ENV DATA=/var/lib/pleroma
 
