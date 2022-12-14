@@ -26,6 +26,8 @@ LABEL maintainer="ops@pleroma.social" \
 
 ARG HOME=/opt/pleroma
 ARG DATA=/var/lib/pleroma
+ENV HOME=/opt/pleroma
+ENV DATA=/var/lib/pleroma
 
 RUN echo "http://nl.alpinelinux.org/alpine/v3.16/community" >> /etc/apk/repositories &&\
 	apk update &&\

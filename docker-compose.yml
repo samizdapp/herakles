@@ -1,7 +1,6 @@
 version: "2"
 volumes:
   app_manifests:
-  service_upnp:
   service_hostname:
   proxy_nm:
   service_yggdrasil:
@@ -22,8 +21,6 @@ services:
       - shared_yggdrasil:/yggdrasil
       - service_yggdrasil:/etc/yggdrasil-network
       - gateway_client:/next
-    depends_on:
-      - yggdrasil
     environment:
       MDNS_TLD: "samizdev.local"
   gateway_client:
@@ -35,7 +32,6 @@ services:
     network_mode: host
     restart: always
     volumes:
-      - service_upnp:/usr/src/volumes/service_upnp
       - service_hostname:/usr/src/volumes/service_hostname
       - gateway_client:/usr/src/volumes/gateway_client
     depends_on:
@@ -60,6 +56,18 @@ services:
     restart: always
     labels:
       io.balena.features.balena-socket: "1"
+  networking_service:
+    build:
+      context: ./athena
+      dockerfile: ./packages/networking-service/Dockerfile
+      args:
+        - VERSION=latest
+    volumes:
+      - service_yggdrasil:/etc/yggdrasil-network
+      - shared_etc:/shared_etc
+      - shared_yggdrasil:/yggdrasil
+      - gateway_client:/next
+    network_mode: host
   daemon_pleroma:
     restart: always
     network_mode: host
@@ -107,32 +115,10 @@ services:
       - gateway_client
       - postgres
       - daemon_pleroma
-      - daemon_proxy
       - daemon_caddy
       - mdns-advertise
       - yggdrasil
-      - yggdrasil_crawler
-      - yggdrasil_upnp
-      - yggdrasil_watcher
 
-  daemon_proxy:
-    build: ./proxy
-    labels:
-      io.balena.features.dbus: "1"
-    privileged: true
-    network_mode: host
-    restart: always
-    volumes:
-      - service_upnp:/proxy/upnp
-      - shared_etc:/shared_etc
-      - shared_yggdrasil:/yggdrasil
-      - gateway_client:/next
-    depends_on:
-      - gateway_client
-      - yggdrasil
-    environment:
-      PUBLIC_PATH: "/next/assets"
-      ID_PATH: "/shared_etc/libp2p.id"
   # These will eventually live in an inherited project, but until they have a home they are saved here
   yggdrasil:
     # https://stackoverflow.com/a/37090165
@@ -150,54 +136,6 @@ services:
       - shared_yggdrasil:/yggdrasil
     depends_on:
       - status_service
-  yggdrasil_upnp:
-    # https://stackoverflow.com/a/37090165
-    build:
-      context: ./yggdrasil/
-      dockerfile: Dockerfile.upnp
-    privileged: true
-    restart: "no"
-    network_mode: host
-    # expose:
-    #   - "9001"
-    volumes:
-      - service_yggdrasil:/etc/yggdrasil-network
-      - service_yggdrasil_sock:/var/run/
-      - shared_etc:/shared_etc
-      - shared_yggdrasil:/yggdrasil
-  yggdrasil_watcher:
-    # https://stackoverflow.com/a/37090165
-    build:
-      context: ./yggdrasil/
-      dockerfile: Dockerfile.watcher
-    privileged: true
-    network_mode: host
-    # expose:
-    #   - "9001"
-    volumes:
-      - service_yggdrasil:/etc/yggdrasil-network
-      - service_yggdrasil_sock:/var/run/
-      - shared_etc:/shared_etc
-      - shared_yggdrasil:/yggdrasil
-    depends_on:
-      - yggdrasil
-  yggdrasil_crawler:
-    # https://stackoverflow.com/a/37090165
-    build:
-      context: ./yggdrasil/
-      dockerfile: Dockerfile.crawler
-    privileged: true
-    restart: "always"
-    network_mode: host
-    # expose:
-    #   - "9001"
-    volumes:
-      - service_yggdrasil:/etc/yggdrasil-network
-      - service_yggdrasil_sock:/var/run/
-      - shared_etc:/shared_etc
-      - shared_yggdrasil:/yggdrasil
-    depends_on:
-      - yggdrasil
   mdns-advertise:
     build: ./mdns-advertise
     restart: "always"

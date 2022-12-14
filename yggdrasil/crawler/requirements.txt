@@ -1,3 +1,0 @@
-lxml
-bloom_filter2
-requests
