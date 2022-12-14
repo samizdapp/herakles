@@ -1,0 +1,14 @@
+name: Samizdapp Alpha
+type: sw.application
+description: >-
+  Self-hosted plug-and-play fediverse server
+assets:
+  repository:
+    type: blob.asset
+    data:
+      url: "https://github.com/samizdapp/herakles"
+data:
+  defaultDeviceType: raspberry-pi4-64
+  supportedDeviceTypes:
+    - rockpi-4b-rk3399
+    - raspberrypi4-64
