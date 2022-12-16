@@ -33,15 +33,17 @@ echo $PUB
 export DOMAIN="pleroma.$P1.$P2.yg"
 echo $DOMAIN
 
-
-
 echo "-- Running migrations..."
 $HOME/bin/pleroma_ctl migrate
 # $HOME/bin/pleroma_ctl config migrate_to_db
 
 
-$HOME/watch_hosts.sh & jobs
 
 echo "-- Starting!"
 # sleep infinity
-exec $HOME/bin/pleroma start
+$HOME/bin/pleroma start & jobs;
+
+sleep 10
+
+echo "-- watch relays"
+$HOME/watch_hosts.sh

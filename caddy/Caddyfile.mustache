@@ -23,6 +23,7 @@
 }
 
 pleroma.{{YGGDRASIL_TLD}} {
+  import harnessify
   reverse_proxy localhost:8009
 }
 caddy.{{YGGDRASIL_TLD}} {
@@ -38,12 +39,12 @@ yggdrasil.{{YGGDRASIL_TLD}} {
 
 http://samizdapp.localhost, http://localhost, http://{{MDNS_TLD}} {
 
-@options {
+    @options {
         method OPTIONS
     }
 
-    @daemon_synapse {
-        header X-Intercepted-Subdomain synapse
+    @daemon_pleroma {
+        header X-Intercepted-Subdomain pleroma
     }
 
     handle /manifest.json {
@@ -56,6 +57,11 @@ http://samizdapp.localhost, http://localhost, http://{{MDNS_TLD}} {
     handle @options {
         import corsify
         respond 204
+    }
+
+    handle @daemon_pleroma {
+        import harnessify
+        reverse_proxy localhost:8009
     }
 
     handle /smz/api/app* {
@@ -121,15 +127,6 @@ http://samizdapp.localhost, http://localhost, http://{{MDNS_TLD}} {
             header_down Location "(.*)$" http://{{MDNS_TLD}}/smz/ipfs/8080$1
             header_down Content-Location "(.*)$" http://{{MDNS_TLD}}/smz/ipfs/8080$1
         }
-    }
-
-    handle @daemon_pleroma {
-        import harnessify
-        reverse_proxy localhost:8009
-    }
-
-    @daemon_pleroma {
-        header X-Intercepted-Subdomain pleroma
     }
 
     handle / {

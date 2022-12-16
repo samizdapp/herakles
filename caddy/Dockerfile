@@ -1,5 +1,5 @@
 # note: never use the :latest tag in a production site
-FROM caddy:latest
+FROM caddy:2.6.1-alpine
 
 
 WORKDIR /app

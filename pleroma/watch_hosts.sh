@@ -10,7 +10,7 @@ follow_relays() {
       RELAY="https://${parts[1]}/relay"
       # if ! grep -q $RELAY "/opt/pleroma/relays"; then
       #   echo "not found in relay index"
-      /opt/pleroma/bin/pleroma_ctl relay follow $RELAY & jobs
+      /opt/pleroma/bin/pleroma_ctl relay follow $RELAY
       #   echo $RELAY >> /opt/pleroma/relays
       # fi
     fi
@@ -26,8 +26,8 @@ cat /shared_etc/hosts > /etc/hosts
 echo "" >> /etc/hosts
 fi
 
-touch /opt/pleroma/relays
 
+touch /opt/pleroma/relays
 follow_relays
 
 while inotifywait -e close_write /shared_etc/hosts; 

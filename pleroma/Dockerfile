@@ -45,13 +45,14 @@ RUN echo "http://nl.alpinelinux.org/alpine/v3.16/community" >> /etc/apk/reposito
 
 COPY --from=build /release ${HOME}
 
-COPY ./config.exs /etc/pleroma/config.exs
-COPY ./docker-entrypoint.sh ${HOME}
-COPY ./watch_hosts.sh ${HOME}
 COPY ./soapbox.zip ${HOME}
 
 RUN mkdir -p /var/lib/pleroma/static/frontends/soapbox-fe 
 RUN busybox unzip ${HOME}/soapbox.zip -o -d /var/lib/pleroma/static/frontends/soapbox-fe
+
+COPY ./config.exs /etc/pleroma/config.exs
+COPY ./docker-entrypoint.sh ${HOME}
+COPY ./watch_hosts.sh ${HOME}
 
 RUN syslogd
 
