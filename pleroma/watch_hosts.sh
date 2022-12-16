@@ -1,4 +1,5 @@
 #!/bin/bash
+touch /shared_etc/hosts
 
 follow_relays() {
   while read p; do
@@ -16,11 +17,12 @@ follow_relays() {
   done < /etc/hosts
 }
 
+
 echo "watch hosts"
-if [ -f "/shared_etc/yg_hosts" ]
+if [ -f "/shared_etc/hosts" ]
 then
-echo "found yg_hosts, copying"
-cat /shared_etc/yg_hosts > /etc/hosts
+echo "found hosts, copying"
+cat /shared_etc/hosts > /etc/hosts
 echo "" >> /etc/hosts
 fi
 
@@ -28,10 +30,10 @@ touch /opt/pleroma/relays
 
 follow_relays
 
-while inotifywait -e close_write /shared_etc/yg_hosts; 
+while inotifywait -e close_write /shared_etc/hosts; 
 do 
-  echo "updated, copy yg_hosts"
-  cat /shared_etc/yg_hosts > /etc/hosts
+  echo "updated, copy hosts"
+  cat /shared_etc/hosts > /etc/hosts
   echo "" >> /etc/hosts # need final line end
   readarray FOLLOWED < /opt/pleroma/relays
   follow_relays

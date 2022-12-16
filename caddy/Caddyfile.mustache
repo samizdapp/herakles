@@ -1,0 +1,138 @@
+{
+    local_certs
+    auto_https disable_redirects
+}
+
+
+(corsify) {
+    header {
+        ?Access-Control-Allow-Origin *
+        ?Access-Control-Allow-Credentials true
+        ?Access-Control-Allow-Methods *
+        ?Access-Control-Allow-Headers *
+        ?Service-Worker-Allowed /
+    }
+}
+
+(harnessify) {
+    header {
+        -Content-Security-Policy
+        -X-Frame-Options
+        -X-Content-Type-Options
+    }
+}
+
+pleroma.{{YGGDRASIL_TLD}} {
+  reverse_proxy localhost:8009
+}
+caddy.{{YGGDRASIL_TLD}} {
+  file_server browse {
+    root /data/caddy/
+  }
+}
+yggdrasil.{{YGGDRASIL_TLD}} {
+  file_server {
+    root /yggdrasil/
+  }
+}
+
+http://samizdapp.localhost, http://localhost, http://{{MDNS_TLD}} {
+
+@options {
+        method OPTIONS
+    }
+
+    @daemon_synapse {
+        header X-Intercepted-Subdomain synapse
+    }
+
+    handle /manifest.json {
+        import corsify
+        file_server {
+            root /next/
+        }
+    }
+
+    handle @options {
+        import corsify
+        respond 204
+    }
+
+    handle /smz/api/app* {
+        reverse_proxy localhost:3412
+    }
+
+    handle /smz/api/status* {
+        reverse_proxy localhost:3411
+    }
+
+    handle_path /smz/wifi* {
+        reverse_proxy 192.168.42.1:8000
+    }
+
+    handle_path /smz/pwa* {
+        import corsify
+        route {
+            root * /next/
+            file_server {
+                pass_thru
+            }
+            rewrite * /
+            file_server
+        }
+    }
+
+
+    handle_path /smz/ipfs/8080/* {
+        header {
+            ?X-Samizdapp-Base-path /smz/ipfs/8080
+        }
+        reverse_proxy 0.0.0.0:8080 {
+            header_up Host {{MDNS_TLD}}
+            header_up X-Forwarded-Proto http
+            header_up x-forwarded-host {{MDNS_TLD}}
+            header_down Location "(.*)$" http://{{MDNS_TLD}}/smz/ipfs/8080$1
+            header_down Content-Location "(.*)$" http://{{MDNS_TLD}}/smz/ipfs/8080$1
+        }
+    }
+
+    handle_path /smz/ipfs/5001/* {
+        header {
+            ?X-Samizdapp-Base-path /smz/ipfs/5001
+        }
+        reverse_proxy 0.0.0.0:5001 {
+            header_up Host {{MDNS_TLD}}
+            header_up X-Forwarded-Proto http
+            header_up x-forwarded-host {{MDNS_TLD}}
+            header_down Location "(.*)$" http://{{MDNS_TLD}}/smz/ipfs/5001$1
+            header_down Content-Location "(.*)$" http://{{MDNS_TLD}}/smz/ipfs/5001$1
+        }
+    }
+
+    handle_path /smz/ipfs* {
+        header {
+            ?X-Samizdapp-Base-path /smz/ipfs,8080,5001
+        }
+
+        reverse_proxy localhost:5001 {
+            header_up Host {{MDNS_TLD}}
+            header_up X-Forwarded-Proto http
+            header_up x-forwarded-host {{MDNS_TLD}}
+            header_down Location "(.*)$" http://{{MDNS_TLD}}/smz/ipfs/8080$1
+            header_down Content-Location "(.*)$" http://{{MDNS_TLD}}/smz/ipfs/8080$1
+        }
+    }
+
+    handle @daemon_pleroma {
+        import harnessify
+        reverse_proxy localhost:8009
+    }
+
+    @daemon_pleroma {
+        header X-Intercepted-Subdomain pleroma
+    }
+
+    handle / {
+        redir / /smz/pwa
+    }
+}
