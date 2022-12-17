@@ -1,5 +1,6 @@
 #!/bin/bash
 touch /shared_etc/hosts
+sleep 20
 
 follow_relays() {
   relays=""
@@ -30,8 +31,8 @@ cat /shared_etc/hosts > /etc/hosts
 echo "" >> /etc/hosts
 fi
 
-touch /opt/pleroma/relays
 
+touch /opt/pleroma/relays
 follow_relays
 
 while inotifywait -e close_write /shared_etc/hosts; 
