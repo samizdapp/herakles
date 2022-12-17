@@ -1,5 +1,6 @@
 #!/bin/bash
 touch /shared_etc/hosts
+sleep 20
 
 follow_relays() {
   while read p; do

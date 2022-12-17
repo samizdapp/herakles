@@ -37,13 +37,8 @@ echo "-- Running migrations..."
 $HOME/bin/pleroma_ctl migrate
 # $HOME/bin/pleroma_ctl config migrate_to_db
 
-
-
-echo "-- Starting!"
-# sleep infinity
-$HOME/bin/pleroma start & jobs;
-
-sleep 10
-
 echo "-- watch relays"
 $HOME/watch_hosts.sh
+echo "-- Starting!"
+# sleep infinity
+$HOME/bin/pleroma start;
