@@ -2,19 +2,23 @@
 touch /shared_etc/hosts
 
 follow_relays() {
-  while read p; do
-    echo "check $p" 
+  relays=""
+  while read p
+  do
     if [[ $p == *"pleroma."* ]]; then
       echo "found pleroma entry"
       parts=($p)
       RELAY="https://${parts[1]}/relay"
-      # if ! grep -q $RELAY "/opt/pleroma/relays"; then
-      #   echo "not found in relay index"
-      /opt/pleroma/bin/pleroma_ctl relay follow $RELAY & jobs
-      #   echo $RELAY >> /opt/pleroma/relays
-      # fi
+      relays="$relays $RELAY"
     fi
-  done < /etc/hosts
+  done <<< "$(cat /etc/hosts)"
+  echo "found $relays"
+  # iterate over array and add to relays
+  for i in $relays
+  do
+    echo "follow $i"
+    /opt/pleroma/bin/pleroma_ctl relay follow $i || true
+  done
 }
 
 
@@ -35,6 +39,6 @@ do
   echo "updated, copy hosts"
   cat /shared_etc/hosts > /etc/hosts
   echo "" >> /etc/hosts # need final line end
-  readarray FOLLOWED < /opt/pleroma/relays
+  readarray FOLLOWED  < /opt/pleroma/relays
   follow_relays
 done
