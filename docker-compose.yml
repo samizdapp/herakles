@@ -74,6 +74,8 @@ services:
       - NET_ADMIN
     environment:
       DBUS_SYSTEM_BUS_ADDRESS: "unix:path=/host/run/dbus/system_bus_socket"
+      WIFI_SSID: 'empty',
+      WIFI_PASSWORD: 'empty'
   daemon_pleroma:
     restart: always
     network_mode: host
