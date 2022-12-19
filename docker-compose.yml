@@ -67,6 +67,7 @@ services:
       - shared_etc:/shared_etc
       - shared_yggdrasil:/yggdrasil
       - gateway_client:/next
+    privileged: true
     network_mode: host
     labels:
       io.balena.features.dbus: "1"
