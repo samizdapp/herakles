@@ -68,6 +68,12 @@ services:
       - shared_yggdrasil:/yggdrasil
       - gateway_client:/next
     network_mode: host
+    labels:
+      io.balena.features.dbus: "1"
+    cap_add:
+      - NET_ADMIN
+    environment:
+      DBUS_SYSTEM_BUS_ADDRESS: "unix:path=/host/run/dbus/system_bus_socket"
   daemon_pleroma:
     restart: always
     network_mode: host
@@ -99,26 +105,6 @@ services:
       POSTGRES_DB: pleroma
     volumes:
       - postgres2:/var/lib/postgresql/data
-  service_wifi-connect:
-    build: ./service/wifi-connect
-    privileged: true
-    network_mode: "host"
-    labels:
-      io.balena.features.dbus: "1"
-    cap_add:
-      - NET_ADMIN
-    environment:
-      DBUS_SYSTEM_BUS_ADDRESS: "unix:path=/host/run/dbus/system_bus_socket"
-      PORTAL_SSID: "SamizdApp"
-      PORTAL_PASSPHRASE: "samizdapp"
-    depends_on:
-      - gateway_client
-      - postgres
-      - daemon_pleroma
-      - daemon_caddy
-      - mdns-advertise
-      - yggdrasil
-
   # These will eventually live in an inherited project, but until they have a home they are saved here
   yggdrasil:
     # https://stackoverflow.com/a/37090165
@@ -136,16 +122,6 @@ services:
       - shared_yggdrasil:/yggdrasil
     depends_on:
       - status_service
-  mdns-advertise:
-    build: ./mdns-advertise
-    restart: "always"
-    privileged: true
-    network_mode: host
-    labels:
-      io.balena.features.dbus: "1"
-    environment:
-      DBUS_SYSTEM_BUS_ADDRESS: "unix:path=/host/run/dbus/system_bus_socket"
-      MDNS_TLD: "samizdev.local"
   monitor:
     build: ./monitor
     restart: "always"
