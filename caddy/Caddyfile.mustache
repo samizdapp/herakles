@@ -68,6 +68,10 @@ http://samizdapp.localhost, http://localhost, http://{{MDNS_TLD}} {
         reverse_proxy localhost:3412
     }
 
+    handle /smz/api/networking* {
+        reverse_proxy localhost:3413
+    }
+
     handle /smz/api/status* {
         reverse_proxy localhost:3411
     }
