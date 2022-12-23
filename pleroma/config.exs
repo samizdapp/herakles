@@ -30,6 +30,10 @@ config :pleroma, :instance,
   limit: 5000,
   registrations_open: true,
   healthcheck: true
+  config :pleroma, :instance,
+  name: "Pleroma",
+  upload_limit: 16_000_000_000
+
 
 config :pleroma, :fetch_initial_posts,
   enabled: true,
