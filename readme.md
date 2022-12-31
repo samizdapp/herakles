@@ -17,3 +17,35 @@ This repo is mostly an accumulation of various git submodules, composed via dock
 - service/hostname: a service to change device hostname
 - service/upnp: open ports and record addresses
 - service/wifi-connect: bootstrap device WiFi connection
+
+## Build and push to local box via balena
+
+```bash
+balena push $IP_ADDRESS -mds build && balena push $IP_ADDRESS -m --env MDNS_TLD=$MDNS_TLD
+```
+
+where `$IP_ADDRESS` is the IP address of your local box and `$MDNS_TLD` is the
+mDNS domain you wish to use to connect to your box.
+
+## Build via docker-compose
+
+To build with plain docker-compose, run these two commands, first:
+
+```bash
+docker-compose -f build/docker-compose.yml build
+```
+
+then:
+
+```bash
+cp mdns-advertise/Dockerfile.template mdns-advertise/Dockerfile && \
+sed -i -e 's/%%BALENA_ARCH%%/aarch64/g' mdns-advertise/Dockerfile && \
+cp monitor/Dockerfile.template monitor/Dockerfile && \
+sed -i -e 's/%%BALENA_ARCH%%/aarch64/g' monitor/Dockerfile && \
+cp service/hostname/Dockerfile.template service/hostname/Dockerfile && \
+sed -i -e 's/%%BALENA_ARCH%%/aarch64/g' service/hostname/Dockerfile && \
+docker-compose build && \
+rm mdns-advertise/Dockerfile && \
+rm monitor/Dockerfile && \
+rm service/hostname/Dockerfile
+```
