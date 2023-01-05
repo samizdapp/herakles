@@ -1,6 +1,7 @@
 {
     local_certs
     auto_https disable_redirects
+    debug log
 }
 
 
@@ -36,6 +37,10 @@ yggdrasil.{{YGGDRASIL_TLD}} {
     root /yggdrasil/
   }
 }
+wiki.{{YGGDRASIL_TLD}} {
+  import harnessify
+  reverse_proxy localhost:3000
+}
 
 http://samizdapp.localhost, http://localhost, http://{{MDNS_TLD}} {
 
@@ -61,7 +66,7 @@ http://samizdapp.localhost, http://localhost, http://{{MDNS_TLD}} {
 
     handle @daemon_pleroma {
         import harnessify
-        reverse_proxy localhost:8009
+        reverse_proxy localhost:{{ROOT_APP_PORT}}
     }
 
     handle /smz/api/app* {
@@ -132,7 +137,6 @@ http://samizdapp.localhost, http://localhost, http://{{MDNS_TLD}} {
             header_down Content-Location "(.*)$" http://{{MDNS_TLD}}/smz/ipfs/8080$1
         }
     }
-
     handle / {
         redir / /smz/pwa
     }
