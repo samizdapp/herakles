@@ -12,6 +12,7 @@ volumes:
   pleroma_uploads:
   ipfs3:
   monitor:
+  wiki:
 services:
   daemon_caddy:
     build: ./caddy
@@ -23,6 +24,7 @@ services:
       - gateway_client:/next
     environment:
       MDNS_TLD: "samizdev.local"
+      ROOT_APP_PORT: "8009"
   gateway_client:
     build:
       context: ./athena
@@ -68,6 +70,9 @@ services:
       - shared_yggdrasil:/yggdrasil
       - gateway_client:/next
     network_mode: host
+    environment:
+      RECRAWL_KNOWN_YGGDRASIL_NODES: "true"
+      DEBUG: "*:INFO"
   daemon_pleroma:
     restart: always
     network_mode: host
@@ -161,6 +166,13 @@ services:
       io.balena.features.supervisor-api: 1
     environment:
       SET_HOSTNAME: samizdapp
+  wiki:
+    build: ./wiki
+    restart: "always"
+    network_mode: host
+    volumes:
+      - wiki:/wiki
+      - shared_etc:/shared_etc
   # ipfs:
   #   image: ipfs/go-ipfs:latest
   #   environment:

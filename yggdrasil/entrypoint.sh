@@ -49,7 +49,7 @@ fi
 
 # disable multicast, listen for crawler on localhost, add nodeinfo, listen on all interfaces
 jq '.MulticastInterfaces = [  ]' "$CONF" > "$tmp" && mv "$tmp" "$CONF"
-jq '.NodeInfo = { "samizdapp": { "groups": ["caddy", "pleroma", "yggdrasil"] } }' "$CONF" > "$tmp" && mv "$tmp" "$CONF"
+jq '.NodeInfo = { "samizdapp": { "groups": ["caddy", "pleroma", "yggdrasil", "wiki"] } }' "$CONF" > "$tmp" && mv "$tmp" "$CONF"
 jq '.Listen = ["tcp://0.0.0.0:5000"]' "$CONF" > "$tmp" && mv "$tmp" "$CONF"
 
 /usr/bin/run.sh & jobs

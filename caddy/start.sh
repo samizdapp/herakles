@@ -19,7 +19,7 @@ export YGGDRASIL="yggdrasil.$P1.$P2.yg"
 
 YGGDRASIL_TLD="$P1.$P2.yg"
 
-echo "{\"YGGDRASIL_TLD\" : \"$YGGDRASIL_TLD\", \"MDNS_TLD\" : \"$MDNS_TLD\" }" > frontmatter.yaml
+echo "{\"YGGDRASIL_TLD\" : \"$YGGDRASIL_TLD\", \"MDNS_TLD\" : \"$MDNS_TLD\", \"ROOT_APP_PORT\": \"$ROOT_APP_PORT\" }" > frontmatter.yaml
 
 mustache frontmatter.yaml Caddyfile.mustache > /etc/caddy/Caddyfile
 
