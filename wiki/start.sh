@@ -5,6 +5,14 @@ run_wiki() {
     killall node;
     echo "copy hosts";
     cat /shared_etc/hosts > /etc/hosts;
+    echo "copy welcome-visitors";
+    if [ -f /wiki/init ]
+    then
+    echo "skip init";
+    else
+    touch /wiki/init;
+    cat /usr/src/athena/welcome-visitors.json > /wiki/pages/welcome-visitors;
+    fi
     while read p
     do
         if [[ $p == *"wiki."* ]]; then

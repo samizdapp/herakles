@@ -1,0 +1,404 @@
+{
+  "title": "Welcome Visitors",
+  "story": [
+    {
+      "text": "Welcome to [[Federated Wiki]], running on your [[Samizdapp Box]]",
+      "id": "7b56f22a4b9ee974",
+      "type": "paragraph"
+    },
+    {
+      "type": "paragraph",
+      "id": "821827c99b90cfd1",
+      "text": "Below, you can see recent activity on this and other wiki's in the [[Samizdapp Project]]. if you click \"wiki\" at the bottom of the screen, you'll enable editing. editing pages makes a copy that you own, and anyone can read and compare copies. checkout [[how to wiki]] for thorough overview of the app, or [[ask a question]]."
+    },
+    {
+      "type": "paragraph",
+      "id": "fb5ad2252ab026a3",
+      "text": "Enable editing by clicking \"wiki\" at the bottom of the screen (you'll see a checkmark appear). Then double click this paragraph to change it. Try typing in [[your name here]] to create a link to a page about you. follow the link to create the new page, and click '+' to make a new factory and start writing (see [[about factory plugin]] for more."
+    },
+    {
+      "type": "pagefold",
+      "id": "2a8c3be632fa4d3f",
+      "text": "Recent Changes"
+    },
+    {
+      "type": "activity",
+      "id": "c43a88598cb67997",
+      "text": " "
+    }
+  ],
+  "journal": [
+    {
+      "type": "edit",
+      "id": "821827c99b90cfd1",
+      "item": {
+        "type": "paragraph",
+        "id": "821827c99b90cfd1",
+        "text": "Below, you can see recent activity on this and other wiki's in the [[Samizdapp Project]]. if you click \"wiki\" at the bottom of the screen, you'll enable editing. editing pages makes a copy that you own, and anyone can read and compare copies. checkout [[how to wiki]] for thorough overview of the app, or [[ask a question]]."
+      },
+      "date": 1672953916537
+    },
+    {
+      "type": "edit",
+      "id": "821827c99b90cfd1",
+      "item": {
+        "type": "paragraph",
+        "id": "821827c99b90cfd1",
+        "text": "Below, you can see recent activity on this and other wiki's in the [[Samizdapp Network]]. if you click \"wiki\" at the bottom of the screen, you'll enable editing. editing pages makes a copy that you own, and anyone can read and compare copies. checkout [[how to wiki]] for thorough overview of the app, or [[ask a question]] "
+      },
+      "date": 1672952877804
+    },
+    {
+      "type": "edit",
+      "id": "7b56f22a4b9ee974",
+      "item": {
+        "text": "Welcome to [[Federated Wiki]], running on your [[Samizdapp Box]]",
+        "id": "7b56f22a4b9ee974",
+        "type": "paragraph"
+      },
+      "date": 1672952716530
+    },
+    {
+      "type": "remove",
+      "id": "3eeb8a8a9e3bd890",
+      "date": 1672952667754
+    },
+    {
+      "type": "add",
+      "id": "3eeb8a8a9e3bd890",
+      "item": {
+        "type": "paragraph",
+        "id": "3eeb8a8a9e3bd890",
+        "text": "[[Plug and Play Self Hosting]]"
+      },
+      "after": "821827c99b90cfd1",
+      "date": 1672949894625
+    },
+    {
+      "type": "edit",
+      "id": "821827c99b90cfd1",
+      "item": {
+        "type": "paragraph",
+        "id": "821827c99b90cfd1",
+        "text": "Below, you can see recent activity on this and other wiki's in the [[Samizdapp Network]]"
+      },
+      "date": 1672948648361
+    },
+    {
+      "type": "edit",
+      "id": "7b56f22a4b9ee974",
+      "item": {
+        "text": "Welcome to [[Federated Wiki]], here running on the [[local mode]] [[Samizdapp Box]] of [[Ryan Bennett]].",
+        "id": "7b56f22a4b9ee974",
+        "type": "paragraph"
+      },
+      "date": 1672948568921
+    },
+    {
+      "type": "edit",
+      "id": "7b56f22a4b9ee974",
+      "item": {
+        "text": "Welcome to [[Federated Wiki]], here running on your [[Samizdapp Box]].",
+        "id": "7b56f22a4b9ee974",
+        "type": "paragraph"
+      },
+      "date": 1672948522709
+    },
+    {
+      "type": "edit",
+      "id": "7b56f22a4b9ee974",
+      "item": {
+        "text": "Welcome to [[Federated Wiki]], here running on your ",
+        "id": "7b56f22a4b9ee974",
+        "type": "paragraph"
+      },
+      "date": 1672948510157
+    },
+    {
+      "id": "c43a88598cb67997",
+      "type": "add",
+      "item": {
+        "type": "activity",
+        "id": "c43a88598cb67997",
+        "text": " "
+      },
+      "after": "821827c99b90cfd1",
+      "attribution": {
+        "page": "About Activity Plugin"
+      },
+      "date": 1672948375983
+    },
+    {
+      "item": {
+        "type": "factory",
+        "id": "78236e4bb07b4e88"
+      },
+      "id": "78236e4bb07b4e88",
+      "type": "add",
+      "after": "ee416d431ebf4fb4",
+      "date": 1672948135020
+    },
+    {
+      "type": "edit",
+      "id": "821827c99b90cfd1",
+      "item": {
+        "type": "paragraph",
+        "id": "821827c99b90cfd1",
+        "text": "Pages about us"
+      },
+      "date": 1672948129077
+    },
+    {
+      "type": "remove",
+      "id": "2b438eb997ec79ce",
+      "date": 1672948122502
+    },
+    {
+      "type": "remove",
+      "id": "86933e0177fd245c",
+      "date": 1672948116870
+    },
+    {
+      "type": "remove",
+      "id": "e1c390038d15b743",
+      "date": 1672948116147
+    },
+    {
+      "type": "remove",
+      "id": "a3e45e980e885c7a",
+      "date": 1672948113147
+    },
+    {
+      "type": "edit",
+      "id": "7b56f22a4b9ee974",
+      "item": {
+        "text": "Welcome to [[Samizdapp]]",
+        "id": "7b56f22a4b9ee974",
+        "type": "paragraph"
+      },
+      "date": 1672948111822
+    },
+    {
+      "type": "add",
+      "id": "86933e0177fd245c",
+      "item": {
+        "type": "paragraph",
+        "id": "86933e0177fd245c",
+        "text": "else"
+      },
+      "after": "2b438eb997ec79ce",
+      "date": 1672947960620
+    },
+    {
+      "type": "add",
+      "id": "2b438eb997ec79ce",
+      "item": {
+        "type": "paragraph",
+        "id": "2b438eb997ec79ce",
+        "text": "something"
+      },
+      "after": "7b56f22a4b9ee974",
+      "date": 1672947950237
+    },
+    {
+      "type": "add",
+      "id": "a3e45e980e885c7a",
+      "item": {
+        "type": "paragraph",
+        "id": "a3e45e980e885c7a",
+        "text": "asd"
+      },
+      "after": "e1c390038d15b743",
+      "date": 1672947212654
+    },
+    {
+      "type": "edit",
+      "id": "e1c390038d15b743",
+      "item": {
+        "type": "paragraph",
+        "id": "e1c390038d15b743",
+        "text": "hey hey hey [[new page]]"
+      },
+      "date": 1672909031542
+    },
+    {
+      "type": "add",
+      "id": "e1c390038d15b743",
+      "item": {
+        "type": "paragraph",
+        "id": "e1c390038d15b743",
+        "text": "hey hey hey"
+      },
+      "after": "7b56f22a4b9ee974",
+      "date": 1672908968593
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "ee416d431ebf4fb4",
+        "text": "You can edit your copy of these pages. Press [+] to add more writing spaces. Read [[How to Wiki]] for more ideas. Follow [[Recent Changes]] here and nearby."
+      },
+      "after": "05e2fa92643677ca",
+      "id": "ee416d431ebf4fb4",
+      "date": 1420938220851
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "factory",
+        "id": "05e2fa92643677ca",
+        "prompt": "Create pages about things you do on this wiki. Type a descriptive name of something you will be writing about. Enclose it in square brackets. Then press Command/ALT-S to save."
+      },
+      "after": "2bbd646ff3f44b51",
+      "id": "05e2fa92643677ca",
+      "date": 1420938216782
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "2bbd646ff3f44b51",
+        "text": "Pages where we do and share."
+      },
+      "after": "63ad2e58eecdd9e5",
+      "id": "2bbd646ff3f44b51",
+      "date": 1420938212624
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "factory",
+        "id": "63ad2e58eecdd9e5",
+        "prompt": "Link to a page about yourself here. Type your name enclosed in double square brackets. Then press Command/ALT-S to save.\n\nMake all pages here yours alone with the login below."
+      },
+      "after": "821827c99b90cfd1",
+      "id": "63ad2e58eecdd9e5",
+      "date": 1420938208737
+    },
+    {
+      "type": "add",
+      "item": {
+        "type": "paragraph",
+        "id": "821827c99b90cfd1",
+        "text": "Pages about us."
+      },
+      "after": "7b56f22a4b9ee974",
+      "id": "821827c99b90cfd1",
+      "date": 1420938202921
+    },
+    {
+      "type": "add",
+      "item": {
+        "text": "Welcome to this [[Federated Wiki]] site. From this page you can find who we are and what we do. New sites provide this information and then claim the site as their own. You will need your own site to participate.",
+        "id": "7b56f22a4b9ee974",
+        "type": "paragraph"
+      },
+      "id": "7b56f22a4b9ee974",
+      "date": 1420938199166
+    },
+    {
+      "type": "create",
+      "item": {
+        "title": "Welcome Visitors",
+        "story": []
+      },
+      "date": 1420938191608
+    },
+    {
+      "type": "remove",
+      "id": "78236e4bb07b4e88",
+      "date": 1672954174593
+    },
+    {
+      "type": "remove",
+      "id": "ee416d431ebf4fb4",
+      "date": 1672954180793
+    },
+    {
+      "type": "remove",
+      "id": "63ad2e58eecdd9e5",
+      "date": 1672954186517
+    },
+    {
+      "type": "remove",
+      "id": "2bbd646ff3f44b51",
+      "date": 1672954193704
+    },
+    {
+      "item": {
+        "type": "paragraph",
+        "id": "da2ae5ee37cca58d",
+        "text": ""
+      },
+      "id": "da2ae5ee37cca58d",
+      "type": "add",
+      "after": "05e2fa92643677ca",
+      "date": 1672954196588
+    },
+    {
+      "type": "remove",
+      "id": "05e2fa92643677ca",
+      "date": 1672954200325
+    },
+    {
+      "item": {
+        "type": "pagefold",
+        "id": "2a8c3be632fa4d3f",
+        "text": "Recent Changes"
+      },
+      "id": "2a8c3be632fa4d3f",
+      "type": "add",
+      "after": "da2ae5ee37cca58d",
+      "date": 1672954202575
+    },
+    {
+      "type": "remove",
+      "id": "da2ae5ee37cca58d",
+      "date": 1672954212361
+    },
+    {
+      "type": "edit",
+      "id": "821827c99b90cfd1",
+      "item": {
+        "type": "paragraph",
+        "id": "821827c99b90cfd1",
+        "text": "Below, you can see recent activity on this and other wiki's in the [[Samizdapp Project]]. if you click \"wiki\" at the bottom of the screen, you'll enable editing. editing pages makes a copy that you own, and anyone can read and compare copies. checkout [[how to wiki]] for thorough overview of the app, or [[ask a question]]."
+      },
+      "date": 1672954223794
+    },
+    {
+      "type": "add",
+      "id": "fb5ad2252ab026a3",
+      "item": {
+        "type": "paragraph",
+        "id": "fb5ad2252ab026a3",
+        "text": "Enable editing by clicking \"wiki\" at the bottom of the screen (you'll see a checkmark appear). Then double click this paragraph to change it. Try typing in [[your name here]] to create a link to a page about you. follow the link to create the new page, and click '+' to make a new factory and start writing (see [[about factory plugin]] for more."
+      },
+      "after": "821827c99b90cfd1",
+      "date": 1672954383910
+    },
+    {
+      "type": "edit",
+      "id": "2a8c3be632fa4d3f",
+      "item": {
+        "type": "pagefold",
+        "id": "2a8c3be632fa4d3f",
+        "text": "Recent Changes"
+      },
+      "date": 1672954401060
+    },
+    {
+      "id": "2a8c3be632fa4d3f",
+      "type": "move",
+      "order": [
+        "7b56f22a4b9ee974",
+        "821827c99b90cfd1",
+        "fb5ad2252ab026a3",
+        "2a8c3be632fa4d3f",
+        "c43a88598cb67997"
+      ],
+      "date": 1672954413754
+    }
+  ]
+}
