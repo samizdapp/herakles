@@ -14,13 +14,20 @@ run_wiki() {
     cat /usr/src/athena/welcome-visitors.json > /wiki/pages/welcome-visitors;
     fi
     WIKIS="sites.fed.wiki.org"
+    SELFSEEN="false"
     while read p
     do
         if [[ $p == *"wiki."* ]]; then
-        echo "found wiki entry";
-        parts=($p);
-        WIKI="${parts[1]}";
-        WIKIS="$WIKIS,$WIKI";
+            #The first entry will always be ourselves, so we skip it
+            if [[ $SELFSEEN == "true" ]]; then
+            echo "found wiki entry";
+            parts=($p);
+            WIKI="${parts[1]}";
+            WIKIS="$WIKIS,$WIKI";
+            else 
+            echo "found self";
+            SELFSEEN="true";
+            fi
         fi
     done <<< "$(cat /etc/hosts)"
     echo "Starting wiki with $WIKIS"
