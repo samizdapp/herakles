@@ -13,13 +13,14 @@ run_wiki() {
     touch /wiki/init;
     cat /usr/src/athena/welcome-visitors.json > /wiki/pages/welcome-visitors;
     fi
+    WIKIS="http://sites.fed.wiki.org"
     while read p
     do
         if [[ $p == *"wiki."* ]]; then
         echo "found wiki entry";
         parts=($p);
         WIKI="http://${parts[1]}";
-        WIKIS="$WIKIS$WIKI,";
+        WIKIS="$WIKIS,$WIKI";
         fi
     done <<< "$(cat /etc/hosts)"
     echo "Starting wiki with $WIKIS"
