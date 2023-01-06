@@ -41,6 +41,11 @@ http://wiki.{{YGGDRASIL_TLD}} {
   reverse_proxy localhost:3000
 }
 
+wiki.{{YGGDRASIL_TLD}} {
+  import harnessify
+  reverse_proxy localhost:3000
+}
+
 http://samizdapp.localhost, http://localhost, http://{{MDNS_TLD}} {
 
     @options {
