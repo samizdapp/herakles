@@ -36,6 +36,11 @@ yggdrasil.{{YGGDRASIL_TLD}} {
     root /yggdrasil/
   }
 }
+http://wiki.{{YGGDRASIL_TLD}} {
+  import harnessify
+  reverse_proxy localhost:3000
+}
+
 wiki.{{YGGDRASIL_TLD}} {
   import harnessify
   reverse_proxy localhost:3000

@@ -25,4 +25,4 @@ mustache frontmatter.yaml Caddyfile.mustache > /etc/caddy/Caddyfile
 
 caddy run --config /etc/caddy/Caddyfile --adapter caddyfile & jobs
 
-sleep 1000
+sleep 2000
