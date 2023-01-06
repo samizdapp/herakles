@@ -18,12 +18,12 @@ run_wiki() {
         if [[ $p == *"wiki."* ]]; then
         echo "found wiki entry";
         parts=($p);
-        WIKI="https://${parts[1]}";
+        WIKI="http://${parts[1]}";
         WIKIS="$WIKIS$WIKI,";
         fi
     done <<< "$(cat /etc/hosts)"
     echo "Starting wiki with $WIKIS"
-    wiki --data /wiki --security_legacy true --neighbours "$WIKIS" &
+    wiki --data /wiki --security_legacy true --neighbors "$WIKIS" &
 }
 
 run_wiki
