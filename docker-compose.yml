@@ -166,13 +166,6 @@ services:
       io.balena.features.supervisor-api: 1
     environment:
       SET_HOSTNAME: samizdapp
-  wiki:
-    build: ./wiki
-    restart: "always"
-    network_mode: host
-    volumes:
-      - wiki:/wiki
-      - shared_etc:/shared_etc
   # ipfs:
   #   image: ipfs/go-ipfs:latest
   #   environment:
